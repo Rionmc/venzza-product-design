@@ -2392,7 +2392,7 @@ body{margin:0;background:var(--bg-canvas);color:var(--text-primary);font-family:
       if(popCard){popCard.classList.add('on');popCard.innerHTML='<svg class="vz-icon"><use href="#i-check"/></svg>Added';}
       if(window.vzAddToCampaign)window.vzAddToCampaign();
       setTimeout(closePop,320); return; }
-    if(e.target.closest('.pop-create')){ closePop(); } });
+    if(e.target.closest('.pop-create')){ closePop(); location.href='index.html?new=1'; } });
   document.addEventListener('click',function(e){ if(!pop.hidden&&!pop.contains(e.target)&&!e.target.closest('.mkc-add'))closePop(); });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&!pop.hidden)closePop(); });
   window.addEventListener('resize',function(){ if(!pop.hidden)closePop(); });
@@ -2405,6 +2405,30 @@ body{margin:0;background:var(--bg-canvas);color:var(--text-primary);font-family:
   function render(){var n=get();document.querySelectorAll('[data-camp-count]').forEach(function(b){ if(n>0){b.textContent=n>99?'99+':n;b.hidden=false;} else {b.hidden=true;} });}
   window.vzAddToCampaign=function(){try{localStorage.setItem('vzCampAdds',String(get()+1));}catch(e){} render();};
   render();
+})();
+</script>
+<script>
+/* ===== Marketplace: populate the "Add to" menu with real campaigns from the store ===== */
+(function(){
+  var pop=document.getElementById('popAdd'); if(!pop)return;
+  function esc(t){return (''+(t==null?'':t)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
+  function getStore(){try{return JSON.parse(localStorage.getItem('vzCampaigns')||'{}')||{};}catch(e){return {};}}
+  var GRAD=['linear-gradient(135deg,#6a2c70,#c0455e)','linear-gradient(135deg,#1f6f54,#3fae7d)','linear-gradient(135deg,#2b3a67,#5a7fd6)','linear-gradient(135deg,#7a5b1e,#d1a13a)','linear-gradient(135deg,#5a2d82,#a15bd6)','linear-gradient(135deg,#12484f,#2f9c9c)'];
+  function gradFor(id){var h=0,s=(''+id);for(var i=0;i<s.length;i++){h=(h*31+s.charCodeAt(i))>>>0;}return GRAD[h%GRAD.length];}
+  var store=getStore();
+  var active=null;try{active=localStorage.getItem('vzActiveCampaign');}catch(e){}
+  var camps=Object.keys(store).map(function(k){return store[k];}).filter(function(c){return c&&!c.archived;});
+  camps.sort(function(a,b){ if(a.id===active)return -1; if(b.id===active)return 1; return 0; });
+  // drop any existing campaign rows (e.g. the hardcoded seed); keep Favorites + Create
+  [].slice.call(pop.querySelectorAll('.pop-row[data-id]')).forEach(function(r){r.remove();});
+  var favTh=pop.querySelector('.pop-row .pop-th.fav');
+  var anchor=(favTh&&favTh.closest('.pop-row'))||pop.querySelector('.pop-div')||pop.querySelector('.pop-create');
+  camps.forEach(function(c){
+    var b=document.createElement('button');
+    b.type='button';b.className='pop-row';b.setAttribute('data-id',c.id);b.setAttribute('data-name',(c.name||'').toLowerCase());
+    b.innerHTML='<span class="pop-th" style="background:'+gradFor(c.id)+'"></span><span class="pop-rt">'+esc(c.name||'Untitled campaign')+'</span><svg class="vz-icon pop-check"><use href="#i-check"/></svg>';
+    if(anchor&&anchor.parentNode===pop)pop.insertBefore(b,anchor);else pop.appendChild(b);
+  });
 })();
 </script>
 <script>

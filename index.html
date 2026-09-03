@@ -2537,6 +2537,15 @@ html{scrollbar-width:thin;scrollbar-color:var(--border-strong) transparent}
   var stepItems=[].slice.call(stepsNav.querySelectorAll('.ob-stepitem'));
   var idx=0;
 
+  /* Returning user? Skip the role + "what's a campaign" intro screens and drop
+     straight into campaign Basics (data-step 2). Role is an account-level choice,
+     not a per-campaign one, so re-asking it every time is just friction. */
+  var params=new URLSearchParams(location.search);
+  var seedStore={};try{seedStore=JSON.parse(localStorage.getItem('vzCampaigns')||'{}')||{};}catch(e){}
+  var returning=(params.get('new')==='1')||Object.keys(seedStore).length>0;
+  var minIdx=returning?2:0;
+  window.__obMinStep=returning?2:0;
+
   function go(n){
     if(n<0||n>=steps.length) return;
     idx=n;
@@ -2549,13 +2558,13 @@ html{scrollbar-width:thin;scrollbar-color:var(--border-strong) transparent}
     stage.scrollTop=0;
   }
   function next(){ go(idx+1); }
-  function back(){ go(idx-1); }
+  function back(){ go(Math.max(minIdx, idx-1)); }
 
   document.addEventListener('click',function(e){
     var nx=e.target.closest('[data-next]'); if(nx){ if(nx.hasAttribute('disabled'))return; next(); return; }
     var bk=e.target.closest('[data-back]'); if(bk){ back(); return; }
     var sk=e.target.closest('[data-skip]'); if(sk){ next(); return; }
-    var ex=e.target.closest('.ob-exit'); if(ex){ go(0); return; }
+    var ex=e.target.closest('.ob-exit'); if(ex){ if(returning){ location.href='venzza-app-campaigns.html'; return; } go(0); return; }
   });
 
   /* role selection */
@@ -2638,7 +2647,8 @@ html{scrollbar-width:thin;scrollbar-color:var(--border-strong) transparent}
     countUp(document.querySelector('[data-count="projects"]'), 2+filled*2);
   }
 
-  go(0);
+  if(returning){ role='sponsor'; }
+  go(returning?2:0);
 })();
 </script>
 <script>
@@ -2665,8 +2675,9 @@ html{scrollbar-width:thin;scrollbar-color:var(--border-strong) transparent}
   function place(){
     var a=document.querySelector('.ob-step.active'); if(!a)return;
     var n=parseInt(a.getAttribute('data-step'),10)||0;
-    tb.classList.toggle('show', n>0);
-    if(n>0){ var eb=a.querySelector('.ob-eyebrow'), wrap=a.querySelector('.ob-wrap');
+    var minS=window.__obMinStep||0;
+    tb.classList.toggle('show', n>minS);
+    if(n>minS){ var eb=a.querySelector('.ob-eyebrow'), wrap=a.querySelector('.ob-wrap');
       if(eb&&wrap){ var r=eb.getBoundingClientRect(), wl=wrap.getBoundingClientRect().left;
         if(wl>110){ tb.classList.remove('above'); tb.style.left='32px'; tb.style.top=Math.max(78,Math.round(r.top))+'px'; }
         else { tb.classList.add('above'); tb.style.left=Math.round(wl)+'px'; tb.style.top=Math.max(60,Math.round(r.top)-40)+'px'; } } }

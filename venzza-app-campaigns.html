@@ -2258,6 +2258,12 @@ body{margin:0;background:var(--bg-canvas);color:var(--text-primary);font-family:
 .ptool .srch.tsearch .vz-input{width:100%}
 .vznav-count{margin-left:auto;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--cta-default);color:#0a0a0b;font-family:var(--font-mono);font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
 .vznav-count[hidden]{display:none}
+/* true empty state: no campaigns at all */
+.camp-empty{display:none;flex-direction:column;align-items:center;text-align:center;padding:80px 24px 90px;gap:2px}
+.camp-empty-ic{width:64px;height:64px;border-radius:var(--radius-xl);display:grid;place-items:center;background:var(--cta-subtle-bg);margin-bottom:16px;color:var(--cta-default)}
+.camp-empty-ic svg{width:30px;height:30px}
+.camp-empty h2{font-family:var(--font-marketing);font-size:20px;font-weight:600;letter-spacing:-.01em;color:var(--text-primary);margin:0}
+.camp-empty p{font-size:14px;line-height:1.6;color:var(--text-secondary);margin:6px 0 0;max-width:400px}
 </style>
 
 <style>@view-transition{navigation:auto}::view-transition-old(root),::view-transition-new(root){animation-duration:.22s}</style><style>#campList tbody tr[data-role]{cursor:pointer}#campGrid .vzcamp{cursor:pointer}</style></head>
@@ -2292,6 +2298,7 @@ body{margin:0;background:var(--bg-canvas);color:var(--text-primary);font-family:
 
     <main class="canvas">
 <div class="phdr"><h1>Campaigns</h1><button class="vz-btn vz-btn--primary"><svg class="vz-icon"><use href="#i-plus"/></svg>Create campaign</button></div><div class="ptool"><span class="srch tsearch"><svg class="vz-icon"><use href="#i-search"/></svg><input class="vz-input" id="campSearch" placeholder="Search campaigns" aria-label="Search campaigns"></span><div class="ptool__r"><div class="vzpop" id="campSortPop"><button class="vz-btn vz-btn--secondary sm" id="campSortBtn" aria-haspopup="menu" aria-expanded="false"><svg class="vz-icon"><use href="#i-arrow-up-down"/></svg>Sort</button><div class="vzpop-panel menu right" role="menu"><div class="vzmenu-label">Sort by</div><button class="vzopt" role="menuitemradio" data-sort="default" aria-selected="true">Recently updated<svg class="vz-icon vzopt-check"><use href="#i-check"/></svg></button><button class="vzopt" role="menuitemradio" data-sort="name-asc">Name A–Z<svg class="vz-icon vzopt-check"><use href="#i-check"/></svg></button><button class="vzopt" role="menuitemradio" data-sort="name-desc">Name Z–A<svg class="vz-icon vzopt-check"><use href="#i-check"/></svg></button><button class="vzopt" role="menuitemradio" data-sort="budget-desc">Budget: high to low<svg class="vz-icon vzopt-check"><use href="#i-check"/></svg></button></div></div><div class="vzseg vzviewtoggle" role="tablist" aria-label="View" id="campViewToggle"><button role="tab" aria-selected="true" data-view="list" title="List view" aria-label="List view"><svg class="vz-icon"><use href="#i-list"/></svg></button><button role="tab" aria-selected="false" data-view="grid" title="Card view" aria-label="Card view"><svg class="vz-icon"><use href="#i-layout-grid"/></svg></button></div></div></div><div class="tblwrap" id="campList"><table class="vz-table"><tbody><tr data-role="owner"><td><div class="pj"><span class="di"></span><span class="pj__t"><b>Desert Vibes Festival 2026</b><span>Coachella Festival</span></span></div></td><td><span class="vzrole owner">Owner</span></td><td><span class="mcell mono">Sept 1, 2026 – Choose</span></td><td>Select</td><td>$0</td><td class="tar"><a class="camp-go" href="venzza-app-campaign.html" aria-label="Open campaign"><svg class="vz-icon"><use href="#i-chevron-right"/></svg></a></td></tr><tr id="campEmptyRow" style="display:none"><td colspan="6" style="text-align:center;padding:44px 16px;color:var(--text-tertiary)">No campaigns match your filters.</td></tr></tbody></table></div><div class="vzcamp-grid" id="campGrid" style="display:none"><div class="vzcamp" data-role="owner" data-name="desert vibes festival 2026" data-budget="0"><div class="vzcamp-top"><span class="vzrole owner">Owner</span><span class="vzcamp-date">Sept 1, 2026 – Choose</span></div><div class="vzcamp-h"><h4>Desert Vibes Festival 2026</h4><div class="vzcamp-org">Coachella Festival</div></div><p class="vzcamp-desc">Promoting our annual music and arts festival experience.</p><div class="vzcamp-tags"><span class="vzcamp-tag">Music</span><span class="vzcamp-tag">Festival</span><span class="vzcamp-tag">Arts</span></div><div class="vzcamp-fin"><div class="col"><div class="k">Budget</div><div class="v">Select</div></div><div class="col right"><div class="k">Spent</div><div class="v">$0</div></div></div><div class="vzcamp-foot"><a class="vz-btn vz-btn--secondary" href="venzza-app-campaign.html">View details</a><button class="vzcamp-del" aria-label="Delete campaign"><svg class="vz-icon"><use href="#i-trash-2"/></svg></button></div></div><div id="campEmptyCards" style="display:none;grid-column:1/-1;text-align:center;padding:44px 16px;color:var(--text-tertiary)">No campaigns match your filters.</div></div>
+<div class="camp-empty" id="campEmpty"><div class="camp-empty-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h10a2 2 0 0 1 2 2v10"/><rect x="3" y="7" width="14" height="14" rx="2.5"/><path d="M10 11.1l.86 1.74 1.92.28-1.39 1.35.33 1.91L10 15.43l-1.72.9.33-1.91-1.39-1.35 1.92-.28z" fill="currentColor" stroke="none"/></svg></div><h2>No campaigns yet</h2><p>Use <b>Create campaign</b> above to set your goals, audience, and budget — Venzza starts matching creators and projects to it right away.</p></div>
     </main>
   </div>
 </div>
@@ -2309,8 +2316,19 @@ body{margin:0;background:var(--bg-canvas);color:var(--text-primary);font-family:
   function SEED(){return {'desert-vibes':{id:'desert-vibes',name:'Desert Vibes Festival 2026',role:'Coachella Festival (You)',status:'Active',desc:'Promoting our annual music and arts festival experience.',start:'2026-09-01',end:'',budget:'',currency:'USD ($)',tags:['Music','Festival','Arts'],interests:[],locations:[],ages:[],genders:[],media:[],primary:'',secondary:[],strategy:'',messaging:''}};}
   function getStore(){try{return JSON.parse(localStorage.getItem('vzCampaigns')||'{}')||{};}catch(e){return {};}}
   function setStore(o){try{localStorage.setItem('vzCampaigns',JSON.stringify(o));}catch(e){}}
+  function liveCount(){var s=getStore();return Object.keys(s).map(function(k){return s[k];}).filter(function(c){return c&&!c.archived;}).length;}
+  function refreshEmpty(){
+    var empty=liveCount()===0;
+    var panel=document.getElementById('campEmpty');
+    var tool=document.querySelector('.ptool');
+    var lv=document.getElementById('campList'), gv=document.getElementById('campGrid');
+    if(panel)panel.style.display=empty?'flex':'none';
+    if(tool)tool.style.display=empty?'none':'';
+    if(empty){ if(lv)lv.style.display='none'; if(gv)gv.style.display='none'; }
+  }
+  window.vzCampRefreshEmpty=refreshEmpty;
   var store=getStore();
-  if(!Object.keys(store).length){store=SEED();setStore(store);}
+  /* no auto-seed: an empty store shows the true empty state (Create campaign) */
   var camps=Object.keys(store).map(function(k){return store[k];}).filter(function(c){return c&&!c.archived;});
 
   var tbody=document.querySelector('#campList .vz-table tbody');
@@ -2409,7 +2427,7 @@ body{margin:0;background:var(--bg-canvas);color:var(--text-primary);font-family:
   ov.addEventListener('click',function(e){
     if(e.target===ov||e.target.closest('[data-del-cancel]')){closeDelete();return;}
     if(e.target.closest('[data-del-confirm]')&&pendingDel){
-      var id=pendingDel,s=getStore();delete s[id];setStore(s);removeFromViews(id);closeDelete();
+      var id=pendingDel,s=getStore();delete s[id];setStore(s);removeFromViews(id);closeDelete();refreshEmpty();
     }
   });
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&ov.classList.contains('open'))closeDelete();});
@@ -2417,12 +2435,12 @@ body{margin:0;background:var(--bg-canvas);color:var(--text-primary);font-family:
     var b=e.target&&e.target.closest?e.target.closest('[data-act]'):null; if(!b||!menuId)return;
     var id=menuId,act=b.getAttribute('data-act');
     closeMenu();
-    if(act==='archive'){ var s=getStore();if(s[id]){s[id].archived=true;setStore(s);}removeFromViews(id); }
+    if(act==='archive'){ var s=getStore();if(s[id]){s[id].archived=true;setStore(s);}removeFromViews(id);refreshEmpty(); }
     else if(act==='delete'){ askDelete(id); }
   });
   // Create campaign -> onboarding
   [].slice.call(document.querySelectorAll('button,a')).forEach(function(b){
-    if(/Create campaign/i.test(b.textContent||'')){b.addEventListener('click',function(ev){ev.preventDefault();location.href='index.html';});}
+    if(/Create campaign/i.test(b.textContent||'')){b.addEventListener('click',function(ev){ev.preventDefault();location.href='index.html?new=1';});}
   });
 })();
 </script>
@@ -2448,18 +2466,36 @@ body{margin:0;background:var(--bg-canvas);color:var(--text-primary);font-family:
   document.addEventListener('click',function(e){if(sp&&!sp.contains(e.target)){sp.classList.remove('open');if(sb)sb.setAttribute('aria-expanded','false');}});
   var vt=document.getElementById('campViewToggle'); if(vt)vt.addEventListener('click',function(e){var t=e.target.closest('button[data-view]'); if(!t)return; state.view=t.getAttribute('data-view'); vt.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-selected',x===t);}); if(listView)listView.style.display=state.view==='list'?'':'none'; if(gridView)gridView.style.display=state.view==='grid'?'':'none'; apply();});
   apply();
+  if(window.vzCampRefreshEmpty)window.vzCampRefreshEmpty();
 })();
 </script>
 <div class="coach" id="coach" role="dialog" aria-live="polite">
   <div class="coach-eyebrow"><svg class="vz-icon"><use href="#i-sparkle"/></svg>Your campaign is live</div>
   <h4>This is your campaign home</h4>
-  <p>Desert Vibes Festival 2026 is set up. Open it to add projects to your <b>wishlist</b> — Venzza starts matching creators to them right away.</p>
+  <p id="coachBody">Your campaign is set up. Open it to add projects to your <b>wishlist</b> — Venzza starts matching creators to them right away.</p>
   <div class="coach-foot"><span class="coach-step">Tip 1 of 1</span><button type="button" class="vz-btn vz-btn--primary sm" id="coachDone">Got it</button></div>
 </div>
 <script>
 (function(){
   var coach=document.getElementById('coach'); if(!coach)return;
   var done=document.getElementById('coachDone');
+  var SEEN='vzCoachSeen';
+  function seen(){try{return localStorage.getItem(SEEN)==='1';}catch(e){return false;}}
+  function markSeen(){try{localStorage.setItem(SEEN,'1');}catch(e){}}
+  if(seen())return; // first-time experience only
+  // reflect the real (active/most-recent) campaign name
+  function activeName(){
+    try{
+      var store=JSON.parse(localStorage.getItem('vzCampaigns')||'{}')||{};
+      var id=localStorage.getItem('vzActiveCampaign');
+      var c=(id&&store[id])?store[id]:null;
+      if(!c){var live=Object.keys(store).map(function(k){return store[k];}).filter(function(x){return x&&!x.archived;});c=live[0];}
+      return c&&c.name?c.name:'';
+    }catch(e){return '';}
+  }
+  var nm=activeName();
+  var body=document.getElementById('coachBody');
+  if(body&&nm)body.innerHTML=nm.replace(/</g,'&lt;')+' is set up. Open it to add projects to your <b>wishlist</b> — Venzza starts matching creators to them right away.';
   function target(){ return document.querySelector('#campList .vz-table tbody tr[data-role]') || document.querySelector('#campGrid .vzcamp'); }
   var shown=false;
   function place(){
@@ -2471,7 +2507,7 @@ body{margin:0;background:var(--bg-canvas);color:var(--text-primary);font-family:
     coach.style.top=(r.bottom+14)+'px';
   }
   function open(){ place(); coach.classList.add('show'); shown=true; }
-  function close(){ coach.classList.remove('show'); var t=target(); if(t)t.classList.remove('coach-target'); shown=false; }
+  function close(){ coach.classList.remove('show'); var t=target(); if(t)t.classList.remove('coach-target'); shown=false; markSeen(); }
   done.addEventListener('click',close);
   document.addEventListener('click',function(e){ if(shown && !coach.contains(e.target) && !e.target.closest('.coach-target')) close(); });
   window.addEventListener('resize',function(){ if(shown) place(); });
