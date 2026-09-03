@@ -2537,12 +2537,12 @@ html{scrollbar-width:thin;scrollbar-color:var(--border-strong) transparent}
   var stepItems=[].slice.call(stepsNav.querySelectorAll('.ob-stepitem'));
   var idx=0;
 
-  /* Returning user? Skip the role + "what's a campaign" intro screens and drop
-     straight into campaign Basics (data-step 2). Role is an account-level choice,
-     not a per-campaign one, so re-asking it every time is just friction. */
+  /* index.html is the entry point — always start with the role screen (creator/sponsor).
+     Only the in-app "Create campaign" action (which passes ?new=1) skips the role +
+     "what's a campaign" intro and drops straight into campaign Basics (data-step 2),
+     since role is an account-level choice, not a per-campaign one. */
   var params=new URLSearchParams(location.search);
-  var seedStore={};try{seedStore=JSON.parse(localStorage.getItem('vzCampaigns')||'{}')||{};}catch(e){}
-  var returning=(params.get('new')==='1')||Object.keys(seedStore).length>0;
+  var returning=(params.get('new')==='1');
   var minIdx=returning?2:0;
   window.__obMinStep=returning?2:0;
 
