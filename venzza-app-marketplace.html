@@ -2323,7 +2323,7 @@ body{margin:0;background:var(--bg-canvas);color:var(--text-primary);font-family:
     </div>
     <div class="vznav-foot">
       <span class="vzav sm c">CC</span>
-      <span class="vznav-who"><b>Cassiano Chen</b><span>Partnerships lead</span></span>
+      <span class="vznav-who"><b>Cassiano Coria</b><span>Partnerships lead</span></span>
     </div>
   </aside>
 
@@ -2385,10 +2385,32 @@ body{margin:0;background:var(--bg-canvas);color:var(--text-primary);font-family:
     pop.style.left=Math.round(left)+'px'; pop.style.top=Math.round(Math.max(12,top))+'px';
     pop.querySelectorAll('.pop-row.added').forEach(function(x){x.classList.remove('added');}); }
   function closePop(){ pop.hidden=true; popCard=null; }
+  /* Persist an added project into the chosen campaign's wishlist so it shows on the board. */
+  function vzSlug(n){return (n||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');}
+  function vzAddProjToCampaign(cid,mkc){
+    if(!cid||!mkc)return;
+    try{
+      var s=JSON.parse(localStorage.getItem('vzCampaigns')||'{}')||{};
+      if(!s[cid])return;
+      var nm=((mkc.querySelector('.mkc-name')||{}).textContent||'').trim();
+      var meta=((mkc.querySelector('.mkc-meta')||{}).textContent||'').trim();
+      var img=mkc.querySelector('.mkc-img'); var grad=img?(img.style.background||img.style.backgroundImage||''):'';
+      var fit=mkc.getAttribute('data-fit')||'';
+      var reach=((mkc.querySelector('.mkc-reach')||{}).textContent||'').trim();
+      var it={id:vzSlug(nm),name:nm,meta:meta,fit:fit,grad:grad,reach:reach};
+      var b=s[cid].board||(s[cid].board={wish:[],proj:[],neg:[],done:[]});
+      if(!b.wish)b.wish=[];
+      if(b.wish.some(function(x){return x.id===it.id;}))return; /* dedupe */
+      b.wish.push(it);
+      localStorage.setItem('vzCampaigns',JSON.stringify(s));
+    }catch(e){}
+  }
   grid.addEventListener('click',function(e){var a=e.target.closest('.mkc-add');if(!a)return;e.stopPropagation(); if(!pop.hidden&&popCard===a){closePop();return;} openPop(a);});
   pop.addEventListener('click',function(e){
     var row=e.target.closest('.pop-row');
     if(row){ row.classList.add('added');
+      var cid=row.getAttribute('data-id');
+      if(cid&&popCard){vzAddProjToCampaign(cid,popCard.closest('.mkc'));}
       if(popCard){popCard.classList.add('on');popCard.innerHTML='<svg class="vz-icon"><use href="#i-check"/></svg>Added';}
       if(window.vzAddToCampaign)window.vzAddToCampaign();
       setTimeout(closePop,320); return; }
