@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Home · Returning</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="ds/venzza/components/bundle.css">
+<link rel="stylesheet" href="shared/venzza-dark.css">
+<link rel="stylesheet" href="shared/venzza-app.css">
+<script src="ds/venzza/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:inherit}
+</style>
+</helmet>
+<div class="app">
+<dc-import name="TopNav" brand="{{brand}}" brand-tone="{{brandTone}}" brand-size="{{brandSize}}" nav-layout="{{navLayout}}" header-width="{{headerWidth}}" header-height="{{headerHeight}}" search-mode="{{searchMode}}" search-open="{{searchOpen}}" search-query="{{searchQuery}}" search-highlight="{{searchHighlight}}" search-status="{{searchStatus}}" search-history="{{searchHistory}}" tone="{{tone}}" account="{{account}}" flow-links="{{flowLinks}}" active="home" badge="{{badge}}" bell="{{bell}}" notif-role="{{notifRole}}" notif-empty="{{notifEmpty}}" hint-size="100%,59px"></dc-import>
+<main class="{{mainCls}}">
+<div class="fhome fhome-v2 hr">
+<div class="hr-head">
+<div><span class="eyebrow">Welcome back, Cassiano</span><h1>Pick up where you left off.</h1></div>
+<p>Here's the latest across your campaigns and projects.</p>
+</div>
+<sc-if value="{{attention}}" hint-placeholder-val="{{false}}"><dc-import name="NotifPanel" layout="strip" role="{{notifRole}}" hint-size="100%,230px"></dc-import></sc-if>
+<div class="{{panelsCls}}">
+<sc-if value="{{showCampaigns}}" hint-placeholder-val="{{true}}"><section class="hr-panel" aria-labelledby="hr-campaigns">
+<div class="hr-panel-h"><span class="hr-panel-ic"><svg class="vz-icon"><use href="#i-target"></use></svg></span><h2 id="hr-campaigns">Campaigns</h2><span class="hr-count">{{campaignsCount}}</span><a class="hr-all" href="{{lk.campaigns}}">View all<svg class="vz-icon"><use href="#i-arrow-right"></use></svg></a></div>
+<div class="hr-list" role="list">
+<sc-for list="{{campaigns}}" as="r" hint-placeholder-count="3"><a class="hr-row" role="listitem" href="{{r.href}}" data-proto-id="{{r.pid}}" data-proto-kind="campaign"><span class="hr-th" style="background: {{r.bg}}" aria-hidden="true"><sc-if value="{{r.isNew}}" hint-placeholder-val="{{false}}"><span class="hr-new"></span></sc-if></span><span class="hr-t"><b>{{r.name}}</b><span class="hr-sub"><span class="{{r.pstCls}}"><i></i>{{r.status}}</span><span class="hr-meta">{{r.meta}}</span><sc-if value="{{r.hasChip}}" hint-placeholder-val="{{false}}"><span class="{{r.chipCls}}"><svg class="vz-icon" aria-hidden="true"><use href="#{{r.chipIcon}}"></use></svg>{{r.chip}}</span></sc-if></span></span><span class="hr-next">{{r.next}}<svg class="vz-icon"><use href="#i-chevron-right"></use></svg></span></a></sc-for>
+</div>
+</section></sc-if>
+<sc-if value="{{showProjects}}" hint-placeholder-val="{{true}}"><section class="hr-panel" aria-labelledby="hr-projects">
+<div class="hr-panel-h"><span class="hr-panel-ic"><svg class="vz-icon"><use href="#i-briefcase"></use></svg></span><h2 id="hr-projects">Projects</h2><span class="hr-count">{{projectsCount}}</span><a class="hr-all" href="{{lk.projects}}">View all<svg class="vz-icon"><use href="#i-arrow-right"></use></svg></a></div>
+<div class="hr-list" role="list">
+<sc-for list="{{projects}}" as="r" hint-placeholder-count="3"><a class="hr-row" role="listitem" href="{{r.href}}" data-proto-id="{{r.pid}}" data-proto-kind="project"><span class="hr-th" style="background: {{r.bg}}" aria-hidden="true"><sc-if value="{{r.isNew}}" hint-placeholder-val="{{false}}"><span class="hr-new"></span></sc-if></span><span class="hr-t"><b>{{r.name}}</b><span class="hr-sub"><span class="{{r.pstCls}}"><i></i>{{r.status}}</span><span class="hr-meta">{{r.meta}}</span><sc-if value="{{r.hasChip}}" hint-placeholder-val="{{false}}"><span class="{{r.chipCls}}"><svg class="vz-icon" aria-hidden="true"><use href="#{{r.chipIcon}}"></use></svg>{{r.chip}}</span></sc-if></span></span><span class="hr-next">{{r.next}}<svg class="vz-icon"><use href="#i-chevron-right"></use></svg></span></a></sc-for>
+</div>
+</section></sc-if>
+</div>
+<h2 class="hr-sec">Start something new</h2>
+<div class="fh-primary compact">
+<a class="fh-card" href="{{hc.cHref}}"><span class="fh-ic"><svg class="vz-icon"><use href="#i-target"></use></svg></span><span class="fh-tt"><span class="fh-for">{{hc.cFor}}</span><h3>{{hc.cT}}</h3><p>{{hc.cP}}</p></span><span class="fh-go">{{hc.go}}<svg class="vz-icon"><use href="#i-arrow-right"></use></svg></span></a>
+<a class="fh-card" href="{{hc.pHref}}"><span class="fh-ic"><svg class="vz-icon"><use href="#i-briefcase"></use></svg></span><span class="fh-tt"><span class="fh-for">{{hc.pFor}}</span><h3>{{hc.pT}}</h3><p>{{hc.pP}}</p></span><span class="fh-go">{{hc.go}}<svg class="vz-icon"><use href="#i-arrow-right"></use></svg></span></a>
+</div>
+<a class="fh-alt" href="{{lk.market}}">
+<span class="fh-alt-ic"><svg class="vz-icon"><use href="#i-store"></use></svg></span>
+<span class="fh-alt-t"><b>Explore the marketplace</b><span>Discover creators and projects that fit your brand.</span></span>
+<span class="fh-alt-go">Explore<svg class="vz-icon"><use href="#i-arrow-right"></use></svg></span>
+</a>
+</div>
+</main>
+</div>
+<sc-if value="{{toast}}" hint-placeholder-val="{{false}}">
+<div class="vztoast-region nt-tr"><div class="vztoast warning" role="status"><span class="ti"><svg class="vz-icon"><use href="#i-arrow-left-right"></use></svg></span><div class="tc"><div class="tt">New counter-offer</div><div class="tm">Pulse Agency countered your Supporter package at $18,000 on Aurora Field Sessions.</div><div class="nt-tact"><a class="vz-btn vz-btn--secondary sm" href="PN-Project-Owner.dc.html">Review offer</a></div></div><button type="button" class="tx" aria-label="Dismiss" onClick="{{dismissToast}}"><svg class="vz-icon sm"><use href="#i-x"></use></svg></button></div></div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"brand":{"editor":"enum","options":["mark","lockup","stacked"],"default":"lockup","section":"Brand"},"brandTone":{"editor":"enum","options":["gray","white","gradient"],"default":"white","section":"Brand"},"brandSize":{"editor":"enum","options":["28","26","24","38","44","64"],"default":"24","section":"Brand"},"navLayout":{"editor":"enum","options":["left","centered","brand-center"],"default":"centered","section":"Header"},"headerWidth":{"editor":"enum","options":["default","wide"],"default":"default","section":"Header"},"headerHeight":{"editor":"enum","options":["60","88"],"default":"60","section":"Header"},"searchMode":{"editor":"enum","options":["field","takeover","page"],"default":"takeover","section":"Header"},"searchOpen":{"editor":"boolean","default":false,"section":"Header"},"searchQuery":{"editor":"string","default":"","section":"Header"},"searchHighlight":{"editor":"int","default":-1,"min":-1,"max":12,"section":"Header"},"searchStatus":{"editor":"enum","options":["ready","loading","error"],"default":"ready","section":"Header"},"searchHistory":{"editor":"boolean","default":true,"section":"Header"},"bell":{"editor":"enum","options":["unread","rest","arrive","hover","focus","open"],"default":"unread","section":"Notifications"},"notifRole":{"editor":"enum","options":["both","creator","sponsor"],"default":"both","section":"Notifications"},"notifEmpty":{"editor":"boolean","default":false,"section":"Notifications"},"attention":{"editor":"boolean","default":false,"section":"Notifications"},"activity":{"editor":"boolean","default":false,"section":"Notifications"},"toast":{"editor":"boolean","default":false,"section":"Notifications"},"flow":{"editor":"boolean","default":true,"section":"State"},"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  componentDidMount() { document.documentElement.setAttribute('data-theme', 'dark'); if (window.Venzza) window.Venzza.mountIcons(); }
+  // Notifications on Home: forwards bell state to TopNav; "activity" swaps in rows that carry the latest event as a chip (newest activity first).
+  renderVals() {
+    const v = this.renderVals0();
+    v.brand = this.props.brand || 'lockup'; v.brandTone = this.props.brandTone || 'white'; v.brandSize = String(this.props.brandSize || '24'); v.navLayout = this.props.navLayout || 'centered'; v.headerWidth = this.props.headerWidth || 'fluid'; v.headerHeight = String(this.props.headerHeight || '60'); v.searchMode = this.props.searchMode || 'takeover'; v.searchOpen = this.props.searchOpen === true || this.props.searchOpen === 'true'; v.searchQuery = this.props.searchQuery || ''; v.searchHighlight = this.props.searchHighlight ?? -1; v.searchStatus = this.props.searchStatus || 'ready'; v.searchHistory = String(this.props.searchHistory) !== 'false';
+    const p = this.props, s = this.state || {};
+    const role = p.notifRole || 'both';
+    Object.assign(v, { panelsCls: role === 'both' ? 'hr-panels' : 'hr-panels one', showCampaigns: role !== 'creator', showProjects: role !== 'sponsor', bell: p.bell || 'unread', notifRole: role, notifEmpty: !!p.notifEmpty, attention: !!p.attention && !p.notifEmpty, toast: !!p.toast && !s.toastHidden, dismissToast: () => this.setState({ toastHidden: true }) });
+    if (p.activity && !window.VzProto) {
+      const chip = (r, c) => Object.assign({}, r, c ? { meta: '' } : {}, { pstCls: 'pst ' + r.st, isNew: !!c, hasChip: !!c, chip: c ? c[0] : '', chipIcon: c ? c[1] : '', chipCls: c ? 'hr-chip ' + c[2] : '' });
+      const C = [
+        chip({ name: 'Desert Vibes Festival 2026', meta: '3 projects in wishlist', status: 'Active', st: 'published', next: 'Review', href: 'Campaign-Populated.dc.html', bg: 'linear-gradient(135deg,#6a2c70,#c0455e)' }, ['Needs reply', 'i-arrow-left-right', 'warn']),
+        chip({ name: 'Trail Shoe Launch', meta: '1 project in wishlist', status: 'Active', st: 'published', next: 'View matches', href: 'Campaign-FindOpen.dc.html', bg: 'linear-gradient(135deg,#1e6b5c,#2a9d8f)' }, ['3 new matches', 'i-sparkle', 'neutral']),
+        chip({ name: 'Summer Launch 2027', meta: 'Setup step 2 of 4 \u00b7 yesterday', status: 'Draft', st: 'draft', next: 'Continue setup', href: 'Onboarding-Audience.dc.html', bg: 'linear-gradient(135deg,#0f4c81,#2a9d8f)' })
+      ];
+      const P = [
+        chip({ name: 'Aurora Field Sessions', meta: 'Published \u00b7 3 updates today', status: 'Published', st: 'published', next: 'Review offer', href: 'ProjectDetail.dc.html', bg: 'linear-gradient(135deg,#0b3d5c,#2a9d8f)' }, ['Needs reply', 'i-arrow-left-right', 'warn']),
+        chip({ name: 'Summer Bass Series', meta: 'Ready to publish \u00b7 yesterday', status: 'Working', st: 'working', next: 'Publish', href: 'ProjectDetail-Working.dc.html', bg: 'linear-gradient(135deg,#0f4c81,#2a9d8f)' }),
+        chip({ name: 'Alpine Light Installation', meta: '3 of 5 sections done \u00b7 Sep 21', status: 'Draft', st: 'draft', next: 'Continue setup', href: 'ProjectDetail-DraftChecklist.dc.html', bg: 'linear-gradient(135deg,#1e6b5c,#3a1c71)' })
+      ];
+      const showC = role !== 'creator', showP = role !== 'sponsor';
+      Object.assign(v, { campaigns: showC ? C : [], projects: showP ? P : [], campaignsCount: showC ? '3' : '0', projectsCount: showP ? '3' : '0' });
+    }
+    // One Home: the current design is the default; pass flow="false" only to keep an archived board's old data and links.
+    const FL = p.flow !== false && p.flow !== 'false';
+    v.tone = p.tone || 'raised'; v.account = p.account || 'avatar'; v.flowLinks = FL ? 'true' : 'false'; v.mainCls = FL ? 'canvas canvas-fluid' : 'canvas';
+    v.hc = FL ? { cHref: 'OB-Campaign-Returning.dc.html', cFor: 'Guided setup · about 3 min', cT: 'Start a new campaign', cP: 'We’ll walk you through goals, audience and budget, step by step.', pHref: 'OB-Project-Returning.dc.html', pFor: 'Guided setup · about 3 min', pT: 'Start a new project', pP: 'We’ll walk you through the basics and your audience, step by step.', go: 'Start' }
+      : { cHref: 'Onboarding-BasicsEmpty.dc.html', cFor: 'For brands & sponsors', cT: 'Create a campaign', cP: 'Set goals, audience and budget to get matched.', pHref: 'ProjectOnboarding.dc.html', pFor: 'For creators & organizers', pT: 'Create a project', pP: 'Showcase your work so sponsors can find you.', go: 'Start' };
+    v.lk = { campaigns: FL ? 'CP-Campaigns.dc.html' : 'CampaignsList.dc.html', projects: FL ? 'PN-Projects.dc.html' : 'ProjectsList.dc.html', market: FL ? 'PN-Marketplace.dc.html' : 'Marketplace.dc.html' };
+    if (FL) {
+      Object.assign(v, { bell: p.bell || 'rest' });
+      const m = (r) => Object.assign({ pstCls: 'pst ' + r.st, isNew: false, hasChip: false, chip: '', chipIcon: '', chipCls: '' }, r);
+      v.campaigns = [
+        m({ name: 'Desert Vibes Festival 2026', meta: '3 in wishlist', status: 'Active', st: 'published', next: 'Review', href: 'CG-Campaign.dc.html', bg: 'linear-gradient(135deg,#6a2c70,#c0455e)', hasChip: true, chip: '2 added today', chipIcon: 'i-plus', chipCls: 'hr-chip neutral' }),
+        m({ name: 'Trail Shoe Launch', meta: '1 project in wishlist · yesterday', status: 'Active', st: 'published', next: 'Open', href: 'CG-Campaign.dc.html', bg: 'linear-gradient(135deg,#1e6b5c,#2a9d8f)' }),
+        m({ name: 'Summer Launch 2027', meta: 'Setup step 2 of 4 · yesterday', status: 'Draft', st: 'draft', next: 'Continue setup', href: 'OB-Campaign-Returning.dc.html', bg: 'linear-gradient(135deg,#0f4c81,#2a9d8f)' })
+      ];
+      v.projects = [
+        m({ name: 'Sahara Sound Festival 2027', meta: '4 sponsor requests · 2 new this week', status: 'Published', st: 'published', next: 'Open', href: 'PN-Project-Owner.dc.html', bg: 'url(assets/img/sahara-main-stage.jpg) center / cover' }),
+        m({ name: 'Summer Bass Series', meta: 'Ready to publish · 1h ago', status: 'Working', st: 'working', next: 'Publish', href: 'PN-Overview.dc.html', bg: 'linear-gradient(135deg,#0f4c81,#2a9d8f)' }),
+        m({ name: 'Alpine Light Installation', meta: '3 of 5 sections done · Sep 21', status: 'Draft', st: 'draft', next: 'Continue setup', href: 'PN-New-Overview.dc.html', bg: 'linear-gradient(135deg,#1e6b5c,#3a1c71)' })
+      ];
+      v.campaignsCount = '3'; v.projectsCount = '8';
+    }
+    return v;
+  }
+  renderVals0() {
+    const C = [
+      { name: 'Desert Vibes Festival 2026', meta: '3 projects in wishlist · 2h ago', status: 'Active', st: 'published', next: 'Open', href: 'Campaign-Populated.dc.html', bg: 'linear-gradient(135deg,#6a2c70,#c0455e)' },
+      { name: 'Summer Launch 2027', meta: 'Setup step 2 of 4 · yesterday', status: 'Draft', st: 'draft', next: 'Continue setup', href: 'Onboarding-Audience.dc.html', bg: 'linear-gradient(135deg,#0f4c81,#2a9d8f)' }
+    ];
+    const P = [
+      { name: 'Summer Bass Series', meta: 'Ready to publish · 1h ago', status: 'Working', st: 'working', next: 'Publish', href: 'ProjectDetail-Working.dc.html', bg: 'linear-gradient(135deg,#0f4c81,#2a9d8f)' },
+      { name: '3D Projection mapping', meta: '3 sponsors interested · 2h ago', status: 'Published', st: 'published', next: 'View', href: 'ProjectDetail.dc.html', bg: 'url(assets/img/robot-glowing-eye.jpg) center / cover' },
+      { name: 'Alpine Light Installation', meta: '3 of 5 sections done · Sep 21', status: 'Draft', st: 'draft', next: 'Continue setup', href: 'ProjectDetail-DraftChecklist.dc.html', bg: 'linear-gradient(135deg,#1e6b5c,#3a1c71)' }
+    ];
+    const map = (r) => Object.assign({}, r, { pstCls: 'pst ' + r.st });
+    if (window.VzProto) {
+      const V = window.VzProto, D = V.data();
+      const CC = D.campaigns.slice().reverse().map((c) => { const draft = c.status === 'draft'; const n = ((c.board || {}).wish || []).length;
+        return { pid: c.id, name: (c.d && c.d.name) || 'Untitled campaign', meta: (draft ? 'Setup in progress' : n + (n === 1 ? ' project' : ' projects') + ' in wishlist') + ' · ' + V.ago(c.updated), status: draft ? 'Draft' : 'Active', st: draft ? 'draft' : 'published', next: draft ? 'Continue setup' : 'Open', href: draft ? 'Onboarding-Audience.dc.html' : 'Campaign.dc.html', bg: V.grad(c.id) }; });
+      const LBL = { draft: 'Draft', working: 'Working', published: 'Published' };
+      const PP = D.projects.slice().reverse().map((p) => { const st = p.status || 'draft'; const setup = p.setup && p.setup !== 'done';
+        return { pid: p.id, name: p.name || 'Untitled project', meta: (setup ? 'Setup in progress' : st === 'draft' ? 'Finish setup to go Working' : st === 'working' ? 'Private to your team' : 'Live in the marketplace') + ' · ' + V.ago(p.updated), status: LBL[st], st, next: setup || st === 'draft' ? 'Continue setup' : st === 'working' ? 'Publish' : 'View', href: setup ? 'ProjectOnboarding-Audience.dc.html' : st === 'draft' ? 'ProjectDetail-DraftChecklist.dc.html' : 'ProjectDetail.dc.html', bg: V.grad(p.id) }; });
+      return { badge: 0, campaigns: CC.map(map), projects: PP.map(map), campaignsCount: String(CC.length), projectsCount: String(PP.length) };
+    }
+    return { badge: 0, campaigns: C.map(map), projects: P.map(map), campaignsCount: '2', projectsCount: '7' };
+  }
+}
+</script>
+<script src="assets/components.js"></script><script>(function(m){var o={};for(var k in m)o["./"+k]=new Blob([m[k]],{type:"text/html"});window.__resourceBlobs=o;window.__resources={};})(window.__VZ_SRC||{});</script><script src="assets/vendor/react.production.min.js"></script><script src="assets/vendor/react-dom.production.min.js"></script><script src="assets/vendor/dc-runtime.js"></script><script src="assets/prototype-map.js"></script><script src="assets/proto-bar.js"></script>
+</body>
+</html>

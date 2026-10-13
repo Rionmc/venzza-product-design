@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Header &amp; search · spec</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="ds/venzza/components/bundle.css">
+<link rel="stylesheet" href="shared/venzza-dark.css">
+<link rel="stylesheet" href="shared/venzza-app.css">
+<script src="ds/venzza/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--bg-canvas)}
+.hs{padding:56px 64px 72px;color:var(--text-primary);font-family:var(--font-product)}
+.hs-eyebrow{margin:0 0 10px;font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-tertiary)}
+.hs h1{margin:0;font-family:var(--font-marketing);font-size:30px;font-weight:700;letter-spacing:-.02em}
+.hs-lead{margin:10px 0 0;max-width:860px;font-size:15px;line-height:1.6;color:var(--text-secondary)}
+.hs-hdr{margin-top:32px;border:var(--bw-hairline) solid var(--border-subtle);border-radius:var(--radius-lg);overflow:hidden}
+.hs-anat{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:14px}
+.hs-anat div{font-size:12.5px;line-height:1.5;color:var(--text-secondary)}
+.hs-anat b{display:block;color:var(--text-primary);font-size:13px;margin-bottom:2px}
+.hs-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:36px}
+.hs-card{border:var(--bw-hairline) solid var(--border-subtle);border-radius:var(--radius-xl);padding:22px 24px;background:var(--bg-surface)}
+.hs-card.wide{grid-column:span 2}
+.hs-card h2{margin:0 0 14px;font-size:15px;font-weight:700}
+.hs-states{display:flex;gap:28px;align-items:flex-start}
+.hs-states figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:10px;font-size:12px;color:var(--text-tertiary)}
+.hs-states .iconbtn.is-hover{border-color:var(--border-hover);color:var(--text-primary)}
+.hs-states .iconbtn.is-focus{box-shadow:var(--focus-ring);color:var(--text-primary)}
+.hs-t{width:100%;border-collapse:collapse;font-size:12.5px}
+.hs-t th{text-align:left;font-weight:600;color:var(--text-tertiary);font-family:var(--font-mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;padding:0 10px 8px 0;border-bottom:var(--bw-hairline) solid var(--border-subtle)}
+.hs-t td{padding:9px 10px 9px 0;border-bottom:var(--bw-hairline) solid var(--border-subtle);color:var(--text-secondary);vertical-align:top;line-height:1.45}
+.hs-t td:first-child{color:var(--text-primary);font-weight:600;white-space:nowrap}
+.hs-t tr:last-child td{border-bottom:0}
+.hs-t .kbd{margin:0}
+.hs ul{margin:0;padding-left:18px;display:grid;gap:7px}
+.hs li{font-size:13px;line-height:1.5;color:var(--text-secondary)}
+.hs li b{color:var(--text-primary)}
+</style>
+</helmet>
+<div class="hs">
+<p class="hs-eyebrow">Header &amp; search</p>
+<h1>Centred navigation with a search takeover</h1>
+<p class="hs-lead">The approved header: 24px lockup on the left, navigation in the true centre, and search tucked into an icon. Opening search swaps the navigation for a field and suggestions, so nothing on the page shifts.</p>
+
+<div class="hs-hdr"><dc-import name="TopNav" active="campaigns" bell="rest" brand="lockup" brand-tone="white" brand-size="24" nav-layout="centered" search-mode="takeover" hint-size="100%,60px"></dc-import></div>
+<div class="hs-anat">
+<div><b>Lockup · 24px</b>Gray V, white wordmark. Links to Home; the V turns lime on Home.</div>
+<div><b>Navigation · true centre</b>Three-column grid (1fr · auto · 1fr), so the nav stays centred whatever the sides contain.</div>
+<div><b>Search trigger · 38px</b>Icon in a field-style pill so it still reads as search. Tooltip: Search · ⌘K.</div>
+<div><b>Notifications</b>Unchanged: bell with the 8px lime dot.</div>
+<div><b>Account</b>Name truncates at 140px so the right column never grows into the nav.</div>
+</div>
+
+<div class="hs-grid">
+<section class="hs-card">
+<h2>Trigger states</h2>
+<div class="hs-states">
+<figure><span class="iconbtn vzs-btn"><svg class="vz-icon"><use href="#i-search"></use></svg></span>Rest</figure>
+<figure><span class="iconbtn vzs-btn is-hover"><svg class="vz-icon"><use href="#i-search"></use></svg></span>Hover</figure>
+<figure><span class="iconbtn vzs-btn is-focus"><svg class="vz-icon"><use href="#i-search"></use></svg></span>Focus</figure>
+<figure><span class="iconbtn vzs-btn" aria-expanded="true"><svg class="vz-icon"><use href="#i-x"></use></svg></span>Open (closes)</figure>
+</div>
+</section>
+<section class="hs-card wide">
+<h2>Motion</h2>
+<table class="hs-t"><thead><tr><th>Element</th><th>Open</th><th>Close</th></tr></thead><tbody>
+<tr><td>Navigation</td><td>Fades out and scales to 96%, 120–200ms</td><td>Returns after 100ms, 200–300ms</td></tr>
+<tr><td>Search field</td><td>Grows from the centre (clip), 400ms ease-out, 60ms delay</td><td>Shrinks to the centre, 260ms</td></tr>
+<tr><td>Suggestions</td><td>Fades in and slides down 8px, 320ms, 160ms delay</td><td>Fades out, 120ms</td></tr>
+<tr><td>Page behind</td><td>Dims to 60%, 260ms</td><td>Clears, 200ms</td></tr>
+<tr><td>Reduced motion</td><td colspan="2">All transitions off; open and close are instant.</td></tr>
+</tbody></table>
+</section>
+<section class="hs-card">
+<h2>Keyboard</h2>
+<table class="hs-t"><tbody>
+<tr><td><span class="kbd">⌘K</span> / <span class="kbd">Ctrl K</span></td><td>Open search from any screen</td></tr>
+<tr><td><span class="kbd">↑</span> <span class="kbd">↓</span></td><td>Move through suggestions and results</td></tr>
+<tr><td><span class="kbd">Enter</span></td><td>Open the highlighted item, or “See all results”</td></tr>
+<tr><td><span class="kbd">Esc</span></td><td>Close and return focus to the search icon</td></tr>
+</tbody></table>
+</section>
+<section class="hs-card">
+<h2>Content rules</h2>
+<ul>
+<li><b>Searches</b> your campaigns, your projects, and marketplace creators and organizers.</li>
+<li><b>Groups</b> in the order Campaigns, Projects, Marketplace; up to 3 each in the panel. Creator-only accounts don’t see Campaigns; sponsor-only accounts don’t see Projects.</li>
+<li><b>Empty field</b> shows 3 recent searches and 3 recently viewed items; first-time users see example searches.</li>
+<li><b>“See all results”</b> opens the full Search page with type filters.</li>
+<li>The query is kept if search is closed, and cleared after opening a result.</li>
+</ul>
+</section>
+<section class="hs-card">
+<h2>Accessibility &amp; sizes</h2>
+<ul>
+<li>Field is a <b>combobox</b> with a listbox of options; the result count is announced politely.</li>
+<li>Navigation is hidden from screen readers while search is open.</li>
+<li><b>≥ 1300px</b>: everything visible. <b>1000–1300px</b>: the account name hides while search is open. <b>&lt; 1000px</b>: the grid relaxes and the field fills the centre.</li>
+<li>Lime stays reserved for the notification dot, the Home V and the system focus ring.</li>
+</ul>
+</section>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1200}}'>
+class Component extends DCLogic {
+  componentDidMount() { document.documentElement.setAttribute('data-theme', 'dark'); if (window.Venzza) window.Venzza.mountIcons(); }
+  renderVals() { return {}; }
+}
+</script>
+<script src="assets/components.js"></script><script>(function(m){var o={};for(var k in m)o["./"+k]=new Blob([m[k]],{type:"text/html"});window.__resourceBlobs=o;window.__resources={};})(window.__VZ_SRC||{});</script><script src="assets/vendor/react.production.min.js"></script><script src="assets/vendor/react-dom.production.min.js"></script><script src="assets/vendor/dc-runtime.js"></script><script src="assets/prototype-map.js"></script><script src="assets/proto-bar.js"></script>
+</body>
+</html>

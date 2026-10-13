@@ -1,0 +1,127 @@
+/* ============================================================
+   VENZZA DESIGN SYSTEM — DESIGN TOKENS  (single source of truth)
+   Electric-lime brand on a dark product theme. System font stacks.
+
+   HOW TO USE THIS FILE (read before building):
+   • Build all PRODUCT UI from the PRODUCT CANON tokens below
+     (primitives → semantic roles). Prefer the SEMANTIC role tokens
+     (--bg-*, --text-*, --border-*, --cta-*, --status-*) over raw
+     ramp values (--lime-400 etc.) so light/dark stays correct.
+   • Dark theme is the default (<html data-theme="dark">). A full
+     light theme ships in the same file.
+   • The BRAND / MARKETING LAYER at the bottom (--signal-*, --mk-*,
+     --warm-*) powers the .mk-* brand-showcase classes ONLY. Do NOT
+     reach for these when building standard product screens.
+   • Accent is electric lime: --cta-default → --lime-400 → #C8FF2C.
+     (--signal-* is a lime alias for the marketing layer, not a
+     second accent. There is no teal/mint in this system.)
+   ============================================================ */
+
+/* ===========================================================
+   1 · PRODUCT CANON — PRIMITIVES
+   Raw ramps. Don't apply these directly to product UI; they feed
+   the semantic role tokens in section 3. Use the roles instead.
+   =========================================================== */
+:root{
+  --black:#000;--white:#fff;--logo-ink:#0A0A0B;--logo-white:#FFFFFF;
+  --neutral-50:#F6F7F8;--neutral-100:#ECEEF0;--neutral-200:#D9DCDF;--neutral-300:#C4C9CD;
+  --neutral-400:#ABB1B8;--neutral-500:#8E959C;--neutral-600:#737A81;--neutral-700:#585E64;
+  --neutral-800:#3D4247;--neutral-900:#24272B;--neutral-950:#131517;
+  --lime-50:#FBFFE9;--lime-100:#F4FFC7;--lime-200:#EAFF95;--lime-300:#DBFF5E;
+  --lime-400:#C8FF2C;--lime-500:#A6E600;--lime-600:#82B800;--lime-700:#618A00;
+  --lime-800:#435E00;--lime-900:#2A3B00;--lime-950:#182100;
+  --success-50:#E9F9EF;--success-100:#C9F0D8;--success-200:#9FE3BB;--success-300:#6FD89A;
+  --success-400:#38C173;--success-500:#16A34A;--success-600:#12873D;--success-700:#0F7A37;
+  --success-800:#0B5A28;--success-900:#0A4D23;--success-950:#052E15;
+  --warning-50:#FFF7E6;--warning-100:#FDECC2;--warning-200:#FADD93;--warning-300:#F9C74F;
+  --warning-400:#F7B01F;--warning-500:#F59E0B;--warning-600:#D97E06;--warning-700:#B76E00;
+  --warning-800:#8F5500;--warning-900:#7A4500;--warning-950:#4A2900;
+  --error-50:#FDECEC;--error-100:#FAC9C9;--error-200:#F5A3A3;--error-300:#F07171;
+  --error-400:#E84545;--error-500:#DC2626;--error-600:#C01D1D;--error-700:#A11313;
+  --error-800:#7E0F0F;--error-900:#6B0D0D;--error-950:#400707;
+  --info-50:#E9F2FE;--info-100:#C6DCFB;--info-200:#9CC1F8;--info-300:#6FA8F5;
+  --info-400:#4383F0;--info-500:#2563EB;--info-600:#1D4FCC;--info-700:#1A47AD;
+  --info-800:#143680;--info-900:#102C6E;--info-950:#0A1B44;
+
+  /* ---- 2 · PRODUCT CANON — TYPE, SPACE, RADIUS, BORDER, ICON ---- */
+  --font-marketing:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  --font-mono:ui-monospace,"SF Mono",Menlo,monospace;
+  --font-product:-apple-system,"SF Pro Text","Segoe UI",Roboto,system-ui,sans-serif;
+  --brand-display:"Space Grotesk","Helvetica Neue",Arial,sans-serif;--brand-ink:var(--neutral-950);--brand-paper:var(--white);--brand-accent:var(--lime-400);
+
+  --space-1:2px;--space-2:4px;--space-3:8px;--space-4:12px;--space-5:16px;--space-6:20px;
+  --space-7:24px;--space-8:32px;--space-9:40px;--space-10:48px;--space-11:64px;--space-12:80px;--space-13:96px;
+  --radius-xs:2px;--radius-sm:4px;--radius-md:8px;--radius-lg:12px;--radius-xl:16px;--radius-2xl:24px;--radius-pill:999px;
+  --bw-hairline:1px;--bw-thick:2px;--bw-focus:2px;
+  --icon-sm:16px;--icon-md:20px;--icon-lg:24px;--icon-stroke:2;--icon-knockout:var(--bg-canvas);
+
+  /* ---- 3 · PRODUCT CANON — SEMANTIC ROLES (LIGHT) ----
+     These are the tokens to build product UI with. ---- */
+  --bg-canvas:var(--white);--bg-surface:var(--neutral-50);--bg-surface-raised:var(--white);--field-bg:var(--bg-surface-raised);
+  --bg-inset:var(--neutral-100);--bg-overlay:rgba(19,21,23,.6);
+  --text-primary:var(--neutral-950);--text-secondary:var(--neutral-700);--text-tertiary:var(--neutral-500);
+  --text-disabled:var(--neutral-400);--text-inverse:var(--white);--text-on-cta:var(--neutral-950);--text-link:var(--info-600);
+  --border-subtle:var(--neutral-200);--border-default:var(--neutral-300);--border-strong:var(--neutral-400);--border-hover:var(--neutral-500);--border-focus:var(--lime-400);
+  --cta-default:var(--lime-400);--cta-hover:var(--lime-500);--cta-active:var(--lime-600);--cta-disabled:var(--neutral-200);--cta-subtle-bg:var(--lime-50);
+  --status-success-bg:var(--success-50);--status-success-border:var(--success-200);--status-success-solid:var(--success-500);--status-success-text:var(--success-700);
+  --status-warning-bg:var(--warning-50);--status-warning-border:var(--warning-200);--status-warning-solid:var(--warning-500);--status-warning-text:var(--warning-700);
+  --status-error-bg:var(--error-50);--status-error-border:var(--error-200);--status-error-solid:var(--error-500);--status-error-text:var(--error-700);
+  --status-info-bg:var(--info-50);--status-info-border:var(--info-200);--status-info-solid:var(--info-500);--status-info-text:var(--info-700);
+  --shadow-1:0 1px 2px rgba(19,21,23,.06);--shadow-2:0 4px 8px rgba(19,21,23,.08);--shadow-3:0 12px 24px rgba(19,21,23,.12);
+  --focus-ring:0 0 0 2px var(--border-focus),0 0 0 4px color-mix(in srgb,var(--lime-400) 25%,transparent);
+}
+
+/* ---- 3b · PRODUCT CANON — SEMANTIC ROLES (DARK, DEFAULT) ---- */
+:root[data-theme="dark"]{
+  --bg-canvas:var(--neutral-950);--bg-surface:var(--neutral-900);--bg-surface-raised:var(--neutral-800);--field-bg:var(--neutral-950);
+  --bg-inset:var(--neutral-950);--bg-overlay:rgba(0,0,0,.7);
+  --text-primary:var(--neutral-50);--text-secondary:var(--neutral-300);--text-tertiary:var(--neutral-400);
+  --text-disabled:var(--neutral-600);--text-inverse:var(--neutral-950);--text-on-cta:var(--neutral-950);--text-link:var(--info-300);
+  --border-subtle:var(--neutral-800);--border-default:var(--neutral-700);--border-strong:var(--neutral-600);--border-focus:var(--lime-400);
+  --cta-default:var(--lime-400);--cta-hover:var(--lime-300);--cta-active:var(--lime-500);--cta-disabled:var(--neutral-800);--cta-subtle-bg:var(--lime-950);
+  --status-success-bg:var(--success-950);--status-success-border:var(--success-800);--status-success-text:var(--success-200);
+  --status-warning-bg:var(--warning-950);--status-warning-border:var(--warning-800);--status-warning-text:var(--warning-200);
+  --status-error-bg:var(--error-950);--status-error-border:var(--error-800);--status-error-text:var(--error-200);
+  --status-info-bg:var(--info-950);--status-info-border:var(--info-800);--status-info-text:var(--info-200);
+  --shadow-1:0 1px 2px rgba(0,0,0,.5);--shadow-2:0 4px 10px rgba(0,0,0,.55);--shadow-3:0 16px 32px rgba(0,0,0,.6);
+}
+
+/* ---- 4 · OPT-IN RADIUS PREVIEWS ----
+   Only active when <html data-radius="tight|sharp"> is set.
+   Not part of the default look — leave off unless deliberately previewing. */
+:root[data-radius="tight"]{--radius-sm:3px;--radius-md:5px;--radius-lg:7px;--radius-xl:9px;--radius-2xl:12px}
+:root[data-radius="sharp"]{--radius-xs:1px;--radius-sm:2px;--radius-md:2px;--radius-lg:3px;--radius-xl:4px;--radius-2xl:6px}
+
+/* ╔══════════════════════════════════════════════════════════╗
+   ║  NON-CANON · BRAND / MARKETING LAYER                      ║
+   ║  Everything below powers the .mk-* / .mkc-* brand-showcase║
+   ║  components ONLY. Do NOT use these tokens to build product║
+   ║  UI — use the PRODUCT CANON roles above instead.          ║
+   ╚══════════════════════════════════════════════════════════╝ */
+:root{
+  /* Signal = lime alias for the marketing layer (NOT a second accent). */
+  --signal:var(--lime-400); --signal-hover:var(--lime-300); --signal-active:var(--lime-600);
+  --signal-deep:var(--lime-700); --signal-subtle:var(--lime-950); --signal-text:var(--lime-300);
+  --signal-ink:var(--lime-600); --signal-on-light:var(--lime-800);
+  --signal-rgb:200,255,44; --text-on-signal:var(--neutral-950);
+  /* Marketing-only structural/motion tokens (--mk-) */
+  --mk-void:#000; --mk-void-lift:#07090A;
+  --mk-display-1:clamp(2.6rem,8vw,6.75rem); --mk-display-2:clamp(1.9rem,4.2vw,3.4rem);
+  --mk-display-3:clamp(1.45rem,2.7vw,2.1rem); --mk-lead:clamp(1rem,1.1vw,1.0625rem);
+  --mk-tracking-display:-.035em; --mk-leading-display:.94;
+  --mk-space-14:128px; --mk-space-15:168px; --mk-space-16:216px;
+  --mk-measure:48ch; --mk-container:1200px; --mk-gutter:clamp(20px,5vw,56px);
+  --mk-glass:rgba(255,255,255,.055); --mk-glass-line:rgba(255,255,255,.11);
+  --mk-blur:saturate(150%) blur(22px); --mk-card:linear-gradient(157deg,#17191C 0%,#0B0C0E 62%);
+  --mk-edge:inset 0 1px 0 rgba(255,255,255,.075);
+  --mk-ease:cubic-bezier(.22,1,.36,1); --mk-dur:420ms; --mk-dur-slow:680ms;
+}
+
+:root{
+  /* MARKETING IMAGERY PLACEHOLDERS — stand-ins for photography only.
+     Never final assets; do not use as UI surfaces. */
+  --warm-1:linear-gradient(140deg,#E7B48A,#B4705A); --warm-2:linear-gradient(140deg,#D9C3A5,#8E7B63);
+  --warm-3:linear-gradient(140deg,#C99AA6,#7C5566); --warm-4:linear-gradient(140deg,#A9BBC4,#5E6E7A);
+  --warm-5:linear-gradient(150deg,#CFA98C,#7A5A48); --warm-6:linear-gradient(150deg,#B8C4B0,#5C6B59);
+  --warm-7:linear-gradient(150deg,#E0B9B0,#8A6A6E); --warm-8:linear-gradient(150deg,#BFB2C9,#5F5670);
+}

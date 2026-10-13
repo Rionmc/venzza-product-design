@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Notifications · Bell states</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="ds/venzza/components/bundle.css">
+<link rel="stylesheet" href="shared/venzza-dark.css">
+<link rel="stylesheet" href="shared/venzza-app.css">
+<script src="ds/venzza/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--bg-canvas)}
+.bs{padding:56px 64px 72px;color:var(--text-primary);font-family:var(--font-product)}
+.bs h1{margin:0 0 8px;font-family:var(--font-marketing);font-size:28px;font-weight:700;letter-spacing:-.02em}
+.bs>p{margin:0 0 36px;font-size:15px;line-height:1.6;color:var(--text-secondary);max-width:820px}
+.bs-row{display:grid;grid-template-columns:260px minmax(0,1fr);gap:28px;align-items:center;margin-bottom:22px}
+.bs-l b{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.bs-l span{display:block;font-size:13px;line-height:1.5;color:var(--text-tertiary)}
+.bs-frame{border:var(--bw-hairline) solid var(--border-subtle);border-radius:var(--radius-lg);overflow:visible;position:relative}
+.bs-frame .vzhdr{border-radius:var(--radius-lg)}
+.bs-rules{margin-top:44px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.bs-rules div{border:var(--bw-hairline) solid var(--border-subtle);border-radius:var(--radius-xl);padding:18px 20px}
+.bs-rules h3{margin:0 0 6px;font-size:14px;font-weight:700}
+.bs-rules p{margin:0;font-size:13px;line-height:1.55;color:var(--text-secondary)}
+</style>
+</helmet>
+<div class="bs">
+<h1>Notification bell</h1>
+<p>The bell lives in the global header, so every screen gets the same behavior. A lime dot means something new you haven't seen. There's no number: one dot is enough to say "look here", and the count lives inside the panel.</p>
+<div class="bs-row"><div class="bs-l"><b>Rest</b><span>Nothing new. Plain bell in secondary text.</span></div><div class="bs-frame"><dc-import name="TopNav" active="projects" bell="rest" hint-size="100%,60px"></dc-import></div></div>
+<div class="bs-row"><div class="bs-l"><b>Unread</b><span>Something arrived that you haven't seen. The dot stays until you open the panel.</span></div><div class="bs-frame"><dc-import name="TopNav" active="projects" bell="unread" hint-size="100%,60px"></dc-import></div></div>
+<div class="bs-row"><div class="bs-l"><b>Arriving</b><span>The moment a new one lands: the bell gives one short ring and the dot pulses once. No motion when the user prefers reduced motion.</span></div><div class="bs-frame"><dc-import name="TopNav" active="projects" bell="arrive" hint-size="100%,60px"></dc-import></div></div>
+<div class="bs-row"><div class="bs-l"><b>Hover</b><span>Tooltip says how many are unread, so you can decide whether to open it.</span></div><div class="bs-frame" style="margin-bottom:28px"><dc-import name="TopNav" active="projects" bell="hover" hint-size="100%,60px"></dc-import></div></div>
+<div class="bs-row"><div class="bs-l"><b>Keyboard focus</b><span>Standard focus ring. Enter or Space opens; Esc closes and returns focus to the bell.</span></div><div class="bs-frame" style="margin-bottom:28px"><dc-import name="TopNav" active="projects" bell="focus" hint-size="100%,60px"></dc-import></div></div>
+<div class="bs-rules">
+<div><h3>Seen vs. read</h3><p>Opening the panel marks everything <b>seen</b>, so the dot clears. Each row stays <b>unread</b> (bold, lime marker) until you open it or choose Mark all as read.</p></div>
+<div><h3>Where things show up</h3><p><b>Bell:</b> everything. <b>Home:</b> only what needs a decision, plus a chip on the campaign or project it belongs to. <b>Toast:</b> only for something that needs you, and only while you're in the app.</p></div>
+<div><h3>Lime means new</h3><p>Lime appears only as the bell dot and the unread markers. Every action in notifications is a secondary button, so the page’s one lime primary action keeps its weight.</p></div><div><h3>Accessibility</h3><p>The bell's label changes to "Notifications, new activity" when the dot is on. New arrivals are announced politely, never interrupting. Everything works by keyboard.</p></div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  componentDidMount() { document.documentElement.setAttribute('data-theme', 'dark'); if (window.Venzza) window.Venzza.mountIcons(); }
+  renderVals() { return {}; }
+}
+</script>
+<script src="assets/components.js"></script><script>(function(m){var o={};for(var k in m)o["./"+k]=new Blob([m[k]],{type:"text/html"});window.__resourceBlobs=o;window.__resources={};})(window.__VZ_SRC||{});</script><script src="assets/vendor/react.production.min.js"></script><script src="assets/vendor/react-dom.production.min.js"></script><script src="assets/vendor/dc-runtime.js"></script><script src="assets/prototype-map.js"></script><script src="assets/proto-bar.js"></script>
+</body>
+</html>

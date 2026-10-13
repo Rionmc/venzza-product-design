@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Package choice and negotiation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="ds/venzza/components/bundle.css">
+<link rel="stylesheet" href="shared/venzza-dark.css">
+<link rel="stylesheet" href="shared/venzza-app.css">
+<script src="ds/venzza/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="cf-scrim" onClick="{{close}}"></div>
+<section class="cf nd" role="dialog" aria-modal="true" aria-labelledby="nd-h" tabIndex="-1">
+<header class="rv-hd">
+<span class="cg-th nd-th" style="background: {{d.bg}}"></span>
+<div class="rv-ht"><span class="rv-crumb">{{crumb}}</span><h2 id="nd-h">{{title}}</h2></div>
+<sc-if value="{{isChoose}}" hint-placeholder-val="{{true}}"><div class="pe-seg" role="group" aria-label="View"><button type="button" aria-pressed="{{vCards}}" data-v="cards" onClick="{{setView}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-layout-grid"></use></svg>Cards</button><button type="button" aria-pressed="{{vCmp}}" data-v="compare" onClick="{{setView}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-list"></use></svg>Compare</button></div></sc-if>
+<sc-if value="{{hasProjLink}}" hint-placeholder-val="{{true}}"><a class="vz-btn vz-btn--ghost sm" href="{{d.href}}">View project page<svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-up-right"></use></svg></a></sc-if>
+<button type="button" class="pe-ibtn" aria-label="Close" onClick="{{close}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-x"></use></svg></button>
+</header>
+
+<div class="rv-body nd-body">
+<div class="nd-main">
+<sc-if value="{{isChoose}}" hint-placeholder-val="{{true}}">
+<p class="nd-lead">{{d.lead}}</p>
+<sc-if value="{{vCardsB}}" hint-placeholder-val="{{true}}"><div class="spv-cards nd-cards" role="radiogroup" aria-label="Choose a package"><sc-for list="{{cards}}" as="c" hint-placeholder-count="3"><div class="spv-card" style="--pk: {{c.tone}}" role="radio" tabIndex="0" aria-checked="{{c.sel}}" data-id="{{c.id}}" onClick="{{pick}}" onKeyDown="{{pickKey}}"><span class="spv-radio" aria-hidden="true"></span><span class="pe-chip spv-tag">{{c.tag}}</span><h3 style="margin:14px 0 4px;font-size:17px;font-weight:700"><i class="pk-dot" aria-hidden="true"></i>{{c.name}}</h3><span class="pq-desc">{{c.desc}}</span><span class="pq-price"><b>{{c.price}}</b><span>{{c.terms}}</span></span><ul class="pq-inc"><sc-for list="{{c.incs}}" as="i" hint-placeholder-count="3"><li><svg class="vz-icon" aria-hidden="true"><use href="#i-check"></use></svg><span class="nm">{{i.name}}</span><b>{{i.q}}</b></li></sc-for></ul></div></sc-for></div></sc-if>
+<sc-if value="{{vCmpB}}" hint-placeholder-val="{{false}}"><div class="cq spv-cmp nd-cmp" role="table" aria-label="Compare packages" style="grid-template-columns: {{cmpCols}}">
+<div role="row"><div class="cell rh hd" role="columnheader"><span class="pe-eyebrow">Deliverable</span></div><sc-for list="{{cards}}" as="c" hint-placeholder-count="3"><div class="{{c.hdCls}}" style="--pk: {{c.tone}}" role="columnheader" data-id="{{c.id}}" onClick="{{pick}}"><i class="pk-dot" aria-hidden="true"></i>{{c.name}}</div></sc-for></div>
+<div role="row"><div class="cell rh" role="rowheader"><b style="font-weight:650">Price</b><span class="cq-rd">Payment terms</span></div><sc-for list="{{cards}}" as="c" hint-placeholder-count="3"><div class="{{c.cellCls}}" role="cell" data-id="{{c.id}}" onClick="{{pick}}"><span class="pr">{{c.price}}</span><small>{{c.short}}</small></div></sc-for></div>
+<div role="row"><div class="cell rh" role="rowheader"><b style="font-weight:650">Available</b></div><sc-for list="{{cards}}" as="c" hint-placeholder-count="3"><div class="{{c.cellCls}}" role="cell" data-id="{{c.id}}" onClick="{{pick}}">{{c.avail}}</div></sc-for></div>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="4"><div role="row"><div class="cell rh" role="rowheader"><b style="font-weight:650">{{r.label}}</b><span class="cq-rd">{{r.desc}}</span></div><sc-for list="{{r.cells}}" as="x" hint-placeholder-count="3"><div class="{{x.cls}}" role="cell" data-id="{{x.id}}" onClick="{{pick}}"><span>{{x.v}}</span><sc-if value="{{x.on}}" hint-placeholder-val="{{true}}"><small>{{x.u}}</small></sc-if></div></sc-for></div></sc-for>
+</div><p class="nd-hint">Click a column to choose that package.</p></sc-if>
+</sc-if>
+
+<sc-if value="{{isThread}}" hint-placeholder-val="{{false}}">
+<sc-if value="{{hasEvents}}" hint-placeholder-val="{{true}}"><ol class="nd-tl">
+<sc-for list="{{events}}" as="e" hint-placeholder-count="2"><li class="{{e.cls}}"><span class="av">{{e.ini}}</span><div class="nd-ev"><div class="nd-evh"><b>{{e.who}}</b><span class="{{e.kCls}}">{{e.kind}}</span><small>{{e.when}}</small></div>
+<sc-if value="{{e.hasPrice}}" hint-placeholder-val="{{true}}"><div class="nd-offer"><i class="pk-dot" style="--pk: {{e.tone}}"></i><span>{{e.pk}}</span><b>{{e.price}}</b><small>{{e.vs}}</small></div></sc-if>
+<sc-if value="{{e.hasDiff}}" hint-placeholder-val="{{false}}"><ul class="nd-diff"><sc-for list="{{e.diff}}" as="x" hint-placeholder-count="1"><li>{{x}}</li></sc-for></ul></sc-if>
+<sc-if value="{{e.hasNote}}" hint-placeholder-val="{{true}}"><p>{{e.note}}</p></sc-if>
+</div></li></sc-for>
+</ol></sc-if>
+<sc-if value="{{noEvents}}" hint-placeholder-val="{{false}}"><div class="rv-none nd-empty"><span class="ic"><svg class="vz-icon" aria-hidden="true"><use href="#i-mail"></use></svg></span><b>Ask {{d.party}} anything</b><p>Questions don’t commit you to anything. When you’re ready, choose a package to send a request.</p><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{toChoose}}">Choose a package</button></div></sc-if>
+<div class="nd-say"><input class="pe-in" placeholder="{{sayPh}}" aria-label="Write a message" value="{{say}}" onInput="{{onSay}}" onKeyDown="{{sayKey}}"><button type="button" class="vz-btn vz-btn--secondary sm" disabled="{{noSay}}" onClick="{{send}}">Send</button></div>
+</sc-if>
+</div>
+
+<aside class="rv-side nd-side">
+<div class="rv-sc">
+<sc-if value="{{isChoose}}" hint-placeholder-val="{{true}}">
+<sc-if value="{{noSel}}" hint-placeholder-val="{{false}}"><div class="nd-pick"><svg class="vz-icon" aria-hidden="true"><use href="#i-package"></use></svg><b>Choose a package</b><p>Pick one on the left to see the terms and send a request. Nothing is binding until you both accept.</p></div></sc-if>
+<sc-if value="{{hasSel}}" hint-placeholder-val="{{true}}">
+<span class="pe-eyebrow">Your request</span>
+<h3 class="nd-pk"><i class="pk-dot" style="--pk: {{sp.tone}}"></i>{{sp.name}}</h3>
+<dl class="nd-terms"><div><dt>Listed price</dt><dd>{{sp.price}}</dd></div><div><dt>Payment</dt><dd>{{sp.terms}}</dd></div><div><dt>Available</dt><dd>{{sp.avail}}</dd></div></dl>
+<div class="pe-swrow nd-sw"><div><b>Offer a different price</b><span>The creator can accept, counter or decline.</span></div><label class="pe-sw"><input type="checkbox" aria-label="Offer a different price" checked="{{offerOn}}" onChange="{{toggleOffer}}"><i></i></label></div>
+<sc-if value="{{offerOn}}" hint-placeholder-val="{{false}}"><div class="pe-f"><label for="nd-offer">Your offer</label><span class="cge-money"><i>$</i><input id="nd-offer" class="pe-in" inputmode="numeric" value="{{offerTxt}}" onInput="{{onOffer}}"></span><p class="nd-delta">{{deltaTxt}}</p></div></sc-if>
+<div class="pe-f"><label for="nd-note">Message to {{d.party}} <small>Optional</small></label><textarea id="nd-note" class="pe-in" rows="3" placeholder="What you’d like to get out of it, timing, anything to tailor" value="{{note}}" onInput="{{onNote}}"></textarea></div>
+<div class="{{budCls}}"><div class="nd-bud-t"><span>Budget</span><b>{{budLeftLbl}}</b></div><p>{{budTxt}}</p><sc-if value="{{overBudget}}" hint-placeholder-val="{{false}}"><a class="rv-link" href="CG-Edit-Budget.dc.html">Edit budget<svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-up-right"></use></svg></a></sc-if></div>
+</sc-if>
+</sc-if>
+
+<sc-if value="{{isThread}}" hint-placeholder-val="{{false}}">
+<div class="rv-st"><span class="{{stCls}}">{{stTxt}}</span><span class="rv-due">{{stSub}}</span></div>
+<sc-if value="{{hasCur}}" hint-placeholder-val="{{true}}">
+<h3 class="nd-pk"><i class="pk-dot" style="--pk: {{cur.tone}}"></i>{{cur.pk}}</h3>
+<dl class="nd-terms"><div><dt>Listed price</dt><dd>{{cur.list}}</dd></div><div><dt>{{cur.offerLbl}}</dt><dd class="hl">{{cur.price}}</dd></div><div><dt>Payment</dt><dd>{{cur.pay}}</dd></div></dl>
+<div class="rv-blk"><h3>Includes</h3><ul class="nd-inc"><sc-for list="{{cur.incs}}" as="i" hint-placeholder-count="4"><li class="{{i.cls}}"><span>{{i.name}}</span><b>{{i.q}}</b></li></sc-for></ul></div>
+<sc-if value="{{showBud}}" hint-placeholder-val="{{true}}"><div class="{{budCls}}"><div class="nd-bud-t"><span>Budget if accepted</span><b>{{budAfterTxt}} left</b></div><p>{{budTxt}}</p></div></sc-if>
+<sc-if value="{{isCreator}}" hint-placeholder-val="{{false}}"><div class="nd-bud"><div class="nd-bud-t"><span>Availability</span><b>9 of 10 left after this</b></div><p>Accepting reserves one Desert Oasis package for Coachella Festival.</p></div></sc-if>
+</sc-if>
+<sc-if value="{{askOnly}}" hint-placeholder-val="{{false}}"><div class="nd-pick"><svg class="vz-icon" aria-hidden="true"><use href="#i-package"></use></svg><b>Questions only</b><p>Nothing is requested yet. When you know what you want, choose a package and send a request from here.</p><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{toChoose}}">Choose a package</button></div></sc-if><sc-if value="{{isAccepted}}" hint-placeholder-val="{{false}}"><div class="nd-done"><svg class="vz-icon" aria-hidden="true"><use href="#i-check-circle"></use></svg><b>Contract created</b><p>{{doneTxt}}</p></div></sc-if>
+<sc-if value="{{isDeclined}}" hint-placeholder-val="{{false}}"><div class="nd-done no"><svg class="vz-icon" aria-hidden="true"><use href="#i-circle-x"></use></svg><b>Declined</b><p>{{declTxt}}</p></div></sc-if>
+</sc-if>
+</div>
+
+<sc-if value="{{showFoot}}" hint-placeholder-val="{{true}}"><div class="rv-acts nd-acts">
+<sc-if value="{{isChoose}}" hint-placeholder-val="{{true}}"><button type="button" class="vz-btn pe-solid rv-wide" disabled="{{noSel}}" onClick="{{sendRequest}}">{{sendLbl}}</button><p class="nd-fine">Nothing is binding until you both accept.</p></sc-if>
+<sc-if value="{{showTurn}}" hint-placeholder-val="{{false}}"><button type="button" class="vz-btn pe-solid rv-wide" onClick="{{askAccept}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-check"></use></svg>{{acceptLbl}}</button><button type="button" class="vz-btn vz-btn--secondary" onClick="{{askCounter}}">Counter</button><button type="button" class="vz-btn vz-btn--ghost pe-danger-ghost" onClick="{{askDecline}}">Decline</button></sc-if>
+<sc-if value="{{showWait}}" hint-placeholder-val="{{false}}"><p class="nd-fine rv-wide">{{waitTxt}}</p><button type="button" class="vz-btn vz-btn--ghost pe-danger-ghost rv-wide" onClick="{{askWithdraw}}">{{withdrawLbl}}</button></sc-if>
+<sc-if value="{{mConfirm}}" hint-placeholder-val="{{false}}"><div class="rv-chg"><b class="nd-q">{{confirmQ}}</b><p class="nd-fine">{{confirmTxt}}</p><div class="rv-chg-a"><button type="button" class="vz-btn vz-btn--ghost sm" onClick="{{cancelMode}}">Cancel</button><button type="button" class="vz-btn pe-solid sm" onClick="{{accept}}">{{confirmBtn}}</button></div></div></sc-if>
+<sc-if value="{{mCounter}}" hint-placeholder-val="{{false}}"><div class="rv-chg"><label for="nd-cp">Your counter-offer</label><span class="cge-money"><i>$</i><input id="nd-cp" class="pe-in" inputmode="numeric" value="{{ctrTxt}}" onInput="{{onCtr}}"></span><p class="nd-delta">{{ctrDelta}}</p><textarea class="pe-in" rows="2" aria-label="Note" placeholder="Explain your number (optional)" value="{{note}}" onInput="{{onNote}}"></textarea><div class="rv-chg-a"><button type="button" class="vz-btn vz-btn--ghost sm" onClick="{{cancelMode}}">Cancel</button><button type="button" class="vz-btn pe-solid sm" disabled="{{ctrBad}}" onClick="{{counter}}">Send counter-offer</button></div></div></sc-if>
+<sc-if value="{{mDecline}}" hint-placeholder-val="{{false}}"><div class="rv-chg"><label for="nd-why">Why are you declining?</label><select id="nd-why" class="pe-in" value="{{why}}" onChange="{{onWhy}}"><option value="">Choose a reason</option><option>The price doesn’t work</option><option>The timing doesn’t work</option><option>Not the right fit</option><option>Something else</option></select><textarea class="pe-in" rows="2" aria-label="Note" placeholder="Add a note (optional)" value="{{note}}" onInput="{{onNote}}"></textarea><div class="rv-chg-a"><button type="button" class="vz-btn vz-btn--ghost sm" onClick="{{cancelMode}}">Cancel</button><button type="button" class="vz-btn cg-danger sm" disabled="{{noWhy}}" onClick="{{decline}}">{{declineBtn}}</button></div></div></sc-if>
+<sc-if value="{{isAccepted}}" hint-placeholder-val="{{false}}"><button type="button" class="vz-btn pe-solid rv-wide" onClick="{{close}}">{{doneBtn}}</button></sc-if>
+</div></sc-if>
+</aside>
+</div>
+<sc-if value="{{hasToast}}" hint-placeholder-val="{{false}}"><div class="pe-toast rv-toast" role="status"><svg class="vz-icon" aria-hidden="true"><use href="#i-check-circle"></use></svg>{{toast}}</div></sc-if>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"deal":{"editor":"enum","options":["sahara","neon","nordlys","pulse","creator"],"default":"pulse","section":"State"},"step":{"editor":"enum","options":["choose","thread"],"default":"thread","section":"State"},"view":{"editor":"enum","options":["cards","compare"],"default":"cards","section":"State"},"sel":{"editor":"string","default":"","section":"State"},"offer":{"editor":"boolean","default":false,"section":"State"},"mode":{"editor":"enum","options":["none","confirm","counter","decline"],"default":"none","section":"State"},"status":{"editor":"enum","options":["open","accepted","declined"],"default":"open","section":"State"},"left":{"editor":"string","default":"","section":"Fallback"},"dname":{"editor":"string","default":"","section":"Fallback"},"dparty":{"editor":"string","default":"","section":"Fallback"},"dbg":{"editor":"string","default":"","section":"Fallback"},"dfrom":{"editor":"string","default":"","section":"Fallback"},"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    if (window.Venzza) window.Venzza.mountIcons();
+    document.documentElement.style.overflow = 'hidden';
+    this.ft = setTimeout(() => { const el = document.querySelector('.nd'); if (el) el.focus(); }, 40);
+    this.onDocKey = (e) => { if (e.key === 'Escape') { e.preventDefault(); const s = this.state || {}; if (s.mode && s.mode !== 'none') this.setState({ mode: 'none' }); else this.closeIt(); } };
+    document.addEventListener('keydown', this.onDocKey);
+  }
+  componentWillUnmount() { document.removeEventListener('keydown', this.onDocKey); document.documentElement.style.overflow = ''; clearTimeout(this.ft); clearTimeout(this.tt); }
+  closeIt() { window.dispatchEvent(new CustomEvent('cg-deal-close', {})); }
+  flash(t) { this.setState({ toast: t }); clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({ toast: '' }), 3200); }
+  renderVals() {
+    const P = this.props, s = this.state || {};
+    const id = P.deal || 'pulse', CR = id === 'creator';
+    const money = (n) => '$' + Math.round(n).toLocaleString('en-US');
+    const DLS = { fga: ['Festival ground activation', 'Branded booth or lounge', 'activation', 'activations'], smc: ['Social media coverage', 'Instagram and TikTok content', 'post', 'posts'], stb: ['Stage branding', 'Logo on stage screens', 'placement', 'placements'], vip: ['VIP passes', 'All-access passes', 'pass', 'passes'], bar: ['Branded bar', 'Your bar on the main floor, both nights', 'bar', 'bars'], scr: ['Logo on screens', 'Between sets, both nights', 'placement', 'placements'], gl: ['Guest list', 'Entry for your guests', 'guest', 'guests'], aft: ['Aftermovie credit', 'Logo in the official aftermovie', 'credit', 'credits'] };
+    const SAH = [{ id: 'p1', name: 'Desert Oasis', desc: 'Festival ground activation with a branded lounge', avail: 10, price: 50000, inst: 1, inc: { fga: 1, smc: 3 }, tone: '#D9A66B' }, { id: 'p2', name: 'Sahara Tent', desc: 'Tent sponsorship with visibility all weekend', avail: 5, price: 125000, inst: 5, inc: { fga: 1, smc: 8, stb: 1 }, tone: '#6EA8DE', tag: 'Most requested' }, { id: 'p3', name: 'Main Stage Experience', desc: 'Main stage presence with VIP hospitality', avail: 2, price: 250000, inst: 10, inc: { fga: 1, smc: 15, stb: 1, vip: 20 }, tone: '#A18FE6', tag: 'Only 2 left' }];
+    const PUL = [{ id: 'q1', name: 'Night Partner', desc: 'Your bar and logo across both nights', avail: 4, price: 25000, inst: 2, inc: { bar: 1, smc: 4, scr: 1, gl: 10 }, tone: '#D9A66B' }, { id: 'q2', name: 'Weekend Presenting', desc: '“Presented by” naming and the aftermovie', avail: 1, price: 60000, inst: 3, inc: { bar: 2, smc: 10, scr: 1, gl: 30, aft: 1 }, tone: '#6EA8DE', tag: 'Only 1' }];
+    const NEO = [{ id: 'n1', name: 'Light Partner', desc: 'Logo on one installation and social posts', avail: 6, price: 35000, inst: 2, inc: { scr: 1, smc: 4 }, tone: '#D9A66B' }, { id: 'n2', name: 'Night Program', desc: 'Presenting partner for the night openings', avail: 3, price: 60000, inst: 3, inc: { scr: 2, smc: 8, gl: 40 }, tone: '#6EA8DE' }, { id: 'n3', name: 'Pavilion', desc: 'Your own branded pavilion on the port', avail: 1, price: 90000, inst: 4, inc: { fga: 1, smc: 12, gl: 60 }, tone: '#A18FE6', tag: 'Only 1' }];
+    const D = {
+      sahara: { name: 'Sahara Sound Festival 2027', party: 'Sahara Sound Collective', ini: 'SS', bg: 'url(assets/img/sahara-main-stage.jpg) center 42% / cover', href: 'PN-Project-Live.dc.html', pk: SAH, lead: 'Three packages from Sahara Sound Collective. Prices are what they list; you can offer a different amount.', events: [] },
+      neon: { name: 'Neon Lotus Biennale', party: 'Neon Lotus', ini: 'NL', bg: 'linear-gradient(140deg,#0f4c81,#2a9d8f)', href: 'PN-Market-Match.dc.html', pk: NEO, lead: 'Three packages from Neon Lotus.', events: [] },
+      nordlys: { name: 'Studio Nordlys', party: 'Studio Nordlys', ini: 'SN', bg: 'linear-gradient(140deg,#4a3f8c,#1e6b5c)', href: 'PN-Market-Match.dc.html', pk: [{ id: 'm1', name: 'Plaza Partner', desc: 'Logo at one public sculpture site', avail: 3, price: 45000, inst: 3, inc: { scr: 1, smc: 6 }, tone: '#D9A66B' }, { id: 'm2', name: 'Commission', desc: 'A sculpture commissioned with your brand', avail: 1, price: 140000, inst: 5, inc: { fga: 1, smc: 12, aft: 1 }, tone: '#6EA8DE' }], lead: 'Two packages from Studio Nordlys.', events: [] },
+      pulse: { name: 'Pulse Weekender', party: 'Pulse Collective', ini: 'PC', bg: 'linear-gradient(140deg,#41295a,#2f0743)', href: 'PN-Market-Match.dc.html', pk: PUL, lead: 'Two packages from Pulse Collective.',
+        events: [{ by: 'me', kind: 'request', pk: 'q1', price: 20000, when: 'Feb 6', note: 'Love the Saturday line-up. Could we do $20K if we skip the guest list?' }, { by: 'them', kind: 'counter', pk: 'q1', price: 23000, when: 'Feb 8', diff: ['Guest list: 10 → 4 guests'], note: 'We can meet you at $23K with a smaller guest list of 4. The bar and screens stay as listed.', inc: { gl: 4 } }] },
+      creator: { name: 'Desert Vibes Festival 2026', party: 'Coachella Festival', ini: 'CF', bg: 'url(assets/img/sahara-main-stage.jpg) center 42% / cover', href: '', pk: SAH, lead: '',
+        events: [{ by: 'them', kind: 'request', pk: 'p1', price: 45000, when: 'Today', note: 'We’d love the Desert Oasis lounge for both weekends. Could you do $45K? We’ll bring our own bar team.' }] }
+    };
+    const d = D[id] || { name: P.dname || 'This project', party: P.dparty || 'The creator', ini: (P.dparty || 'CR').split(' ').map((w) => w[0]).slice(0, 2).join(''), bg: P.dbg || 'var(--bg-inset)', href: 'PN-Market-Match.dc.html', pk: [{ id: 'g1', name: 'Partner', desc: 'Logo and social coverage', avail: 4, price: Number(P.dfrom) || 10000, inst: 1, inc: { smc: 4, scr: 1 }, tone: '#D9A66B' }, { id: 'g2', name: 'Presenting', desc: 'Naming, social and guest list', avail: 1, price: (Number(P.dfrom) || 10000) * 2, inst: 2, inc: { smc: 8, scr: 1, gl: 10 }, tone: '#6EA8DE' }], lead: 'Packages from ' + (P.dparty || 'the creator') + '.', events: [] };
+    const MEM = (window.__nd = window.__nd || {})[id] || {};
+    const me = CR ? 'Sahara Sound Collective' : 'You';
+    const step = s.step || P.step || (d.events.length ? 'thread' : 'choose');
+    const view = s.view || P.view || 'cards';
+    const sel = s.sel !== undefined ? s.sel : (P.sel || '');
+    const sp0 = d.pk.find((p) => p.id === sel);
+    const offerOn = s.offerOn !== undefined ? s.offerOn : (P.offer === true || P.offer === 'true');
+    const evs = (s.events || MEM.events || d.events).slice();
+    const status = s.status || MEM.status || P.status || 'open';
+    const mode = s.mode || P.mode || 'none';
+    const LEFT = P.left !== undefined && P.left !== '' ? Number(P.left) : 5000;
+    const q = (k, n) => n + ' ' + (n === 1 ? DLS[k][2] : DLS[k][3]);
+    const cards = d.pk.map((p) => ({ id: p.id, tone: p.tone, name: p.name, desc: p.desc, sel: p.id === sel ? 'true' : 'false', tag: p.tag || p.avail + ' available', price: money(p.price), terms: p.inst > 1 ? p.inst + ' payments of ' + money(p.price / p.inst) : 'One payment', short: p.inst > 1 ? p.inst + ' × ' + money(p.price / p.inst) : 'One payment', avail: p.avail + ' left', incs: Object.keys(p.inc).map((k) => ({ name: DLS[k][0], q: q(k, p.inc[k]) })), hdCls: 'cell hd c' + (p.id === sel ? ' sel' : ''), cellCls: 'cell c' + (p.id === sel ? ' sel' : '') }));
+    const keys = []; d.pk.forEach((p) => Object.keys(p.inc).forEach((k) => { if (keys.indexOf(k) < 0) keys.push(k); }));
+    const rows = keys.map((k) => ({ label: DLS[k][0], desc: DLS[k][1], cells: d.pk.map((p) => { const n = p.inc[k] || 0; return { id: p.id, v: n ? String(n) : 'Not included', on: !!n, u: n === 1 ? DLS[k][2] : DLS[k][3], cls: 'cell c' + (n ? '' : ' no') + (p.id === sel ? ' sel' : '') }; }) }));
+    const offerN = s.offerN !== undefined ? s.offerN : sp0 ? Math.round(sp0.price * 0.9 / 1000) * 1000 : 0;
+    const reqPrice = sp0 ? (offerOn ? offerN : sp0.price) : 0;
+    const last = evs[evs.length - 1];
+    const lastPriced = evs.slice().reverse().find((e) => e.price);
+    const myLast = evs.slice().reverse().find((e) => e.price && e.by === 'me');
+    const curPk = lastPriced ? d.pk.find((p) => p.id === lastPriced.pk) : null;
+    const curInc = curPk ? Object.assign({}, curPk.inc, (evs.filter((e) => e.inc).slice(-1)[0] || {}).inc || {}) : {};
+    const myTurn = status === 'open' && last && last.by === 'them';
+    const waiting = status === 'open' && last && last.by === 'me' && !!lastPriced;
+    const curPrice = lastPriced ? lastPriced.price : 0;
+    const ctrN = s.ctrN !== undefined ? s.ctrN : Math.round(((myLast ? myLast.price : curPrice * 0.9) + curPrice) / 2 / 500) * 500;
+    const KIND = { request: ['Request', 'nd-k req'], counter: ['Counter-offer', 'nd-k ctr'], message: ['Message', 'nd-k'], accept: ['Accepted', 'nd-k ok'], decline: ['Declined', 'nd-k no'], withdraw: ['Withdrawn', 'nd-k no'] };
+    const evOut = evs.map((e) => { const pk = d.pk.find((p) => p.id === e.pk); const mine = e.by === 'me'; return { cls: 'nd-e' + (mine ? ' me' : ''), ini: mine ? (CR ? 'SS' : 'CF') : d.ini, who: mine ? 'You' : d.party, kind: KIND[e.kind][0], kCls: KIND[e.kind][1], when: e.when, hasPrice: !!e.price, tone: pk ? pk.tone : '', pk: pk ? pk.name : '', price: e.price ? money(e.price) : '', vs: pk && e.price ? (e.price === pk.price ? 'listed price' : money(Math.abs(pk.price - e.price)) + (e.price < pk.price ? ' below' : ' above') + ' listed') : '', hasDiff: !!(e.diff && e.diff.length), diff: e.diff || [], hasNote: !!e.note, note: e.note || '' }; });
+    const emit = (detail) => window.dispatchEvent(new CustomEvent('cg-deal', { detail: Object.assign({ id }, detail) }));
+    const add = (e, extra) => { const ne = evs.concat([Object.assign({ when: 'Just now' }, e)]); window.__nd[id] = { events: ne, status: (extra && extra.status) || status }; this.setState(Object.assign({ events: ne, mode: 'none', note: '' }, extra || {})); };
+    const party = d.party;
+    const budAfter = LEFT - curPrice;
+    const stTxt = status === 'accepted' ? 'Contract active' : status === 'declined' ? 'Declined' : myTurn ? 'Your turn' : waiting ? 'Waiting for ' + party : 'No request yet';
+    const stCls = status === 'accepted' ? 'cg-s ok' : status === 'declined' ? 'cg-s bad' : myTurn ? 'cg-s warn' : 'cg-s';
+    return {
+      d, crumb: CR ? 'Sahara Sound Festival 2027 › Sponsor requests' : 'Desert Vibes Festival 2026 › ' + (step === 'choose' ? 'Wishlist' : 'Negotiating'),
+      title: step === 'choose' ? 'Choose a package · ' + d.name : (CR ? 'Request from Coachella Festival · ' + d.name : d.name),
+      isChoose: step === 'choose', isThread: step === 'thread', hasProjLink: !CR && !!d.href, isCreator: CR,
+      vCards: view === 'cards' ? 'true' : 'false', vCmp: view === 'compare' ? 'true' : 'false', vCardsB: view === 'cards', vCmpB: view === 'compare',
+      cards, rows, cmpCols: 'minmax(200px, 260px) repeat(' + d.pk.length + ', minmax(0, 1fr))',
+      noSel: !sp0, hasSel: !!sp0, sp: sp0 ? { name: sp0.name, tone: sp0.tone, price: money(sp0.price), terms: sp0.inst > 1 ? sp0.inst + ' payments of ' + money(sp0.price / sp0.inst) : 'One payment', avail: sp0.avail + ' left' } : { name: '', tone: '', price: '', terms: '', avail: '' },
+      offerOn, offerTxt: offerN ? offerN.toLocaleString('en-US') : '', deltaTxt: sp0 ? (offerN === sp0.price ? 'Same as the listed price' : money(Math.abs(sp0.price - offerN)) + (offerN < sp0.price ? ' below' : ' above') + ' the listed price · ' + Math.round(Math.abs(sp0.price - offerN) / sp0.price * 100) + '%') : '',
+      note: s.note || '', budLeftLbl: LEFT < 0 ? money(-LEFT) + ' over' : money(LEFT) + ' left', overBudget: reqPrice > LEFT,
+      budCls: 'nd-bud' + ((step === 'choose' ? reqPrice > LEFT : budAfter < 0) ? ' over' : ''),
+      budTxt: step === 'choose' ? (reqPrice > LEFT ? 'This request is ' + money(reqPrice - LEFT) + ' more than you have left. You can still send it; the creator never sees your budget.' : 'Fits your remaining budget.') : budAfter < 0 ? 'Accepting goes ' + money(-budAfter) + ' over your budget.' : (myLast ? 'Accepting ' + money(curPrice) + ' replaces your ' + money(myLast.price) + ' offer' : 'Accepting ' + money(curPrice)) + ' and leaves ' + money(budAfter) + '.',
+      sendLbl: sp0 ? 'Send request · ' + money(reqPrice) : 'Send request',
+      hasEvents: evs.length > 0, noEvents: evs.length === 0, events: evOut,
+      say: s.say || '', noSay: !(s.say || '').trim(), sayPh: 'Message ' + party,
+      stTxt, stCls, stSub: myTurn ? (CR ? 'Sent today' : 'Countered ' + last.when) : waiting ? 'Sent ' + last.when.toLowerCase() : '',
+      hasCur: !!curPk, cur: curPk ? { pk: curPk.name, tone: curPk.tone, list: money(curPk.price), price: money(curPrice), offerLbl: status === 'accepted' ? 'Agreed price' : lastPriced.by === 'me' ? 'Your offer' : (CR ? 'Their offer' : 'Their counter-offer'), pay: curPk.inst > 1 ? curPk.inst + ' payments of ' + money(curPrice / curPk.inst) : 'One payment', incs: Object.keys(curInc).map((k) => ({ name: DLS[k][0], q: q(k, curInc[k]), cls: curInc[k] !== curPk.inc[k] ? 'chg' : '' })) } : { pk: '', tone: '', list: '', price: '', offerLbl: '', pay: '', incs: [] },
+      showBud: !CR && status === 'open' && !!curPk, budAfterTxt: money(Math.max(budAfter, 0)),
+      askOnly: !curPk && status === 'open' && !CR,
+      isAccepted: status === 'accepted', isDeclined: status === 'declined',
+      doneTxt: CR ? 'Coachella Festival has been notified. Deliverables for Desert Oasis are in the campaign, ready for you to upload.' : 'Pulse Collective has been notified. ' + (curPk ? Object.keys(curInc).length : 0) + ' deliverables were added to the campaign, with due dates from the package.',
+      declTxt: (s.why ? 'Reason: ' + s.why + '. ' : '') + (CR ? 'Coachella Festival has been told. The request is closed.' : 'The project is back in your wishlist, so you can try another package later.'),
+      doneBtn: CR ? 'Done' : 'Track deliverables',
+      showFoot: step === 'choose' || myTurn || waiting || status === 'accepted' || mode !== 'none',
+      showTurn: myTurn && mode === 'none', showWait: waiting && mode === 'none' && step === 'thread', waitTxt: party + ' usually replies within 2 days. You’ll get a notification.', withdrawLbl: 'Withdraw offer',
+      acceptLbl: 'Accept ' + money(curPrice), mConfirm: mode === 'confirm', mCounter: mode === 'counter', mDecline: mode === 'decline',
+      confirmQ: 'Accept ' + money(curPrice) + ' for ' + (curPk ? curPk.name : '') + '?', confirmTxt: CR ? 'This creates the contract with Coachella Festival and reserves one package.' : 'This creates the contract with ' + party + ' and adds its deliverables to this campaign. Payment: ' + (curPk && curPk.inst > 1 ? curPk.inst + ' × ' + money(curPrice / curPk.inst) : 'one payment') + '.', confirmBtn: 'Accept and create contract',
+      ctrTxt: ctrN.toLocaleString('en-US'), ctrDelta: curPrice ? (ctrN === curPrice ? 'Same as theirs. Accept instead?' : money(Math.abs(curPrice - ctrN)) + (ctrN < curPrice ? ' below' : ' above') + ' their ' + (CR ? 'offer' : 'counter') + (curPk ? ' · listed at ' + money(curPk.price) : '')) : '', ctrBad: !ctrN || ctrN === curPrice,
+      why: s.why || '', noWhy: !s.why, declineBtn: waiting ? 'Withdraw offer' : 'Decline',
+      hasToast: !!s.toast, toast: s.toast || '',
+      setView: (e) => this.setState({ view: e.currentTarget.getAttribute('data-v') }),
+      pick: (e) => this.setState({ sel: e.currentTarget.getAttribute('data-id') }),
+      pickKey: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.setState({ sel: e.currentTarget.getAttribute('data-id') }); } },
+      toggleOffer: () => this.setState({ offerOn: !offerOn }),
+      onOffer: (e) => this.setState({ offerN: Number(String(e.target.value).replace(/[^0-9]/g, '')) || 0 }),
+      onNote: (e) => this.setState({ note: e.target.value }),
+      sendRequest: () => { if (!sp0) return; const e = { by: 'me', kind: 'request', pk: sp0.id, price: reqPrice, note: s.note || '' }; add(e, { step: 'thread' }); emit({ st: 'wait', pk: sp0.name, tone: sp0.tone, list: sp0.price, offer: reqPrice }); this.flash('Request sent to ' + party); },
+      toChoose: () => this.setState({ step: 'choose' }),
+      onSay: (e) => this.setState({ say: e.target.value }),
+      send: () => { const t = (s.say || '').trim(); if (!t) return; this.setState({ events: evs.concat([{ by: 'me', kind: 'message', when: 'Just now', note: t }]), say: '' }); },
+      sayKey: (e) => { if (e.key === 'Enter') { e.preventDefault(); const t = (s.say || '').trim(); if (!t) return; this.setState({ events: evs.concat([{ by: 'me', kind: 'message', when: 'Just now', note: t }]), say: '' }); } },
+      askAccept: () => this.setState({ mode: 'confirm' }), askCounter: () => this.setState({ mode: 'counter' }), askDecline: () => this.setState({ mode: 'decline' }), askWithdraw: () => this.setState({ mode: 'decline' }), cancelMode: () => this.setState({ mode: 'none' }),
+      onCtr: (e) => this.setState({ ctrN: Number(String(e.target.value).replace(/[^0-9]/g, '')) || 0 }),
+      onWhy: (e) => this.setState({ why: e.target.value }),
+      accept: () => { add({ by: 'me', kind: 'accept', note: '' }, { status: 'accepted' }); emit({ st: 'sponsored', pk: curPk ? curPk.name : '', tone: curPk ? curPk.tone : '', price: curPrice, inst: curPk ? curPk.inst : 1, n: Object.keys(curInc).length }); this.flash('Contract created'); },
+      counter: () => { add({ by: 'me', kind: 'counter', pk: lastPriced.pk, price: ctrN, note: s.note || '' }); emit({ st: 'wait', pk: curPk.name, tone: curPk.tone, list: curPk.price, offer: ctrN }); this.flash('Counter-offer sent to ' + party); },
+      decline: () => { add({ by: 'me', kind: waiting ? 'withdraw' : 'decline', note: s.note || '' }, { status: 'declined' }); emit({ st: 'declined' }); },
+      close: () => this.closeIt()
+    };
+  }
+}
+</script>
+<script src="assets/components.js"></script><script>(function(m){var o={};for(var k in m)o["./"+k]=new Blob([m[k]],{type:"text/html"});window.__resourceBlobs=o;window.__resources={};})(window.__VZ_SRC||{});</script><script src="assets/vendor/react.production.min.js"></script><script src="assets/vendor/react-dom.production.min.js"></script><script src="assets/vendor/dc-runtime.js"></script><script src="assets/prototype-map.js"></script><script src="assets/proto-bar.js"></script>
+</body>
+</html>

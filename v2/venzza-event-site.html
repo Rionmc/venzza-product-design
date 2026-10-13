@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Event site</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0a0b0d; --ink-2:#101215; --surface:#16191d; --surface-2:#1d2126;
+  --line:rgba(255,255,255,.10); --line-2:rgba(255,255,255,.16);
+  --lime:#C8FF2C; --lime-deep:#a4e400;
+  --violet:#8b7bff; --teal:#39e0c8;
+  --text:#f5f6f3; --muted:rgba(245,246,243,.60); --faint:rgba(245,246,243,.38);
+  --disp:'Space Grotesk',sans-serif; --body:'Inter',sans-serif;
+  --max:1200px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ink);color:var(--text);font-family:var(--body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+h1,h2,h3{font-family:var(--disp);font-weight:700;letter-spacing:-.02em;line-height:1.02;margin:0}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+.eyebrow{font-family:var(--disp);font-size:13px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--lime)}
+
+/* nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;backdrop-filter:blur(12px);background:linear-gradient(to bottom,rgba(10,11,13,.82),rgba(10,11,13,.35));border-bottom:1px solid transparent;transition:border-color .3s,background .3s}
+.nav.scrolled{border-color:var(--line);background:rgba(10,11,13,.9)}
+.nav-in{max-width:var(--max);margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--disp);font-weight:600;font-size:15px}
+.brand .dia{width:22px;height:22px;transform:rotate(45deg);border-radius:5px;background:var(--lime);box-shadow:0 0 22px rgba(200,255,44,.5)}
+.nav-sp{flex:1}
+.nav .btn{padding:9px 18px;font-size:13.5px}
+.nav-powered{font-size:12px;color:var(--faint);letter-spacing:.02em}
+@media(max-width:640px){.nav-powered{display:none}}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:9px;font-family:var(--disp);font-weight:600;font-size:15px;padding:15px 28px;border-radius:100px;cursor:pointer;border:1px solid transparent;transition:transform .15s cubic-bezier(.33,0,.2,1),background .2s,box-shadow .2s,color .2s;white-space:nowrap}
+.btn-primary{background:var(--lime);color:#0a0b0d;box-shadow:0 6px 30px -6px rgba(200,255,44,.55)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 40px -6px rgba(200,255,44,.7)}
+.btn-ghost{background:rgba(255,255,255,.05);border-color:var(--line-2);color:var(--text)}
+.btn-ghost:hover{background:rgba(255,255,255,.1);transform:translateY(-2px)}
+.btn-dark{background:#0a0b0d;color:var(--text);border-color:var(--line-2)}
+
+/* hero */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 0 40px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0;pointer-events:none}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5;animation:float 18s ease-in-out infinite}
+.blob.b1{width:520px;height:520px;background:radial-gradient(circle,var(--violet),transparent 70%);top:-120px;left:-80px}
+.blob.b2{width:600px;height:600px;background:radial-gradient(circle,var(--teal),transparent 70%);bottom:-200px;right:-140px;animation-delay:-6s}
+.blob.b3{width:360px;height:360px;background:radial-gradient(circle,var(--lime),transparent 70%);opacity:.22;top:30%;right:24%;animation-delay:-11s}
+.grid-ovl{position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:64px 64px;opacity:.35;mask-image:radial-gradient(ellipse 80% 70% at 50% 40%,#000,transparent 75%)}
+.dia-float{position:absolute;transform:rotate(45deg);border:1.5px solid var(--lime);border-radius:6px;opacity:.5;animation:spin 20s linear infinite}
+.df1{width:60px;height:60px;top:22%;left:12%}
+.df2{width:34px;height:34px;top:64%;left:22%;animation-duration:14s}
+.df3{width:46px;height:46px;top:30%;right:14%;animation-direction:reverse}
+.hero-in{position:relative;z-index:1;width:100%}
+.hero-eyebrow{opacity:0;animation:rise .7s .1s forwards}
+.hero-title{font-size:clamp(52px,11vw,148px);margin:18px 0 0;letter-spacing:-.03em}
+.hero-title .ln{display:block;overflow:hidden}
+.hero-title .ln span{display:block;transform:translateY(110%);animation:reveal .9s cubic-bezier(.16,1,.3,1) forwards}
+.hero-title .ln:nth-child(2) span{animation-delay:.12s}
+.hero-title .grad{background:linear-gradient(100deg,var(--lime),var(--teal) 60%,var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-tag{max-width:640px;font-size:clamp(17px,2.3vw,22px);color:var(--muted);margin:28px 0 0;opacity:0;animation:rise .8s .5s forwards}
+.hero-meta{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px;opacity:0;animation:rise .8s .62s forwards}
+.chip{display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:100px;padding:9px 16px;font-size:14px;font-weight:500}
+.chip .ic{width:16px;height:16px;color:var(--lime)}
+.hero-cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:38px;opacity:0;animation:rise .8s .74s forwards}
+
+/* marquee */
+.marquee{position:relative;z-index:1;margin-top:64px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;overflow:hidden;white-space:nowrap;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.marquee-track{display:inline-block;animation:marq 26s linear infinite;font-family:var(--disp);font-weight:700;font-size:26px;letter-spacing:-.01em;color:var(--faint)}
+.marquee-track span{margin:0 24px}
+.marquee-track .star{color:var(--lime)}
+
+/* sections */
+.section{padding:110px 0;position:relative}
+.sec-head{max-width:720px;margin-bottom:52px}
+.sec-head h2{font-size:clamp(34px,5.5vw,60px);margin-top:14px}
+.sec-head p{color:var(--muted);font-size:18px;margin:18px 0 0}
+
+/* stat strip */
+.stats{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--ink-2)}
+.stats-in{display:grid;grid-template-columns:repeat(3,1fr)}
+.stat{padding:44px 24px;text-align:center;border-right:1px solid var(--line)}
+.stat:last-child{border-right:0}
+.stat .n{font-family:var(--disp);font-weight:700;font-size:clamp(40px,6vw,64px);letter-spacing:-.03em;background:linear-gradient(120deg,#fff,var(--lime));-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
+.stat .l{color:var(--muted);font-size:13.5px;letter-spacing:.14em;text-transform:uppercase;margin-top:12px}
+@media(max-width:680px){.stats-in{grid-template-columns:1fr}.stat{border-right:0;border-bottom:1px solid var(--line);padding:32px}.stat:last-child{border-bottom:0}}
+
+/* about */
+.about-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center}
+@media(max-width:860px){.about-grid{grid-template-columns:1fr;gap:36px}}
+.about-copy p{font-size:19px;line-height:1.7;color:rgba(245,246,243,.82)}
+.about-art{position:relative;aspect-ratio:4/5;border-radius:22px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(150deg,#2a1c5c,#123a44 60%,#0a0b0d)}
+.about-art::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 30% 20%,rgba(200,255,44,.28),transparent 55%)}
+.about-art .badge{position:absolute;left:20px;bottom:20px;z-index:1;font-family:var(--disp);font-weight:600;font-size:13px;letter-spacing:.14em;text-transform:uppercase;background:rgba(10,11,13,.55);backdrop-filter:blur(6px);border:1px solid var(--line-2);border-radius:100px;padding:8px 16px}
+.about-art .dia-lg{position:absolute;top:50%;left:50%;width:120px;height:120px;transform:translate(-50%,-50%) rotate(45deg);border:2px solid rgba(255,255,255,.7);border-radius:16px;animation:spin 24s linear infinite}
+.about-art .dia-lg::after{content:"";position:absolute;inset:16px;border:2px solid var(--lime);border-radius:10px}
+
+/* highlights */
+.hl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:860px){.hl-grid{grid-template-columns:1fr}}
+.hl{position:relative;overflow:hidden;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:34px 30px 30px;transition:transform .25s,border-color .25s,background .25s}
+.hl:hover{transform:translateY(-6px);border-color:var(--line-2);background:var(--surface-2)}
+.hl .num{font-family:var(--disp);font-weight:700;font-size:15px;color:var(--lime);letter-spacing:.1em}
+.hl h3{font-size:23px;margin:18px 0 10px}
+.hl p{color:var(--muted);font-size:15.5px;margin:0}
+.hl .glow{position:absolute;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(200,255,44,.16),transparent 70%);top:-60px;right:-40px;opacity:0;transition:opacity .3s}
+.hl:hover .glow{opacity:1}
+
+/* dates */
+.date-row{display:flex;align-items:center;gap:24px;padding:26px 8px;border-top:1px solid var(--line);transition:padding-left .2s,background .2s}
+.date-row:last-child{border-bottom:1px solid var(--line)}
+.date-row:hover{padding-left:20px;background:linear-gradient(90deg,rgba(200,255,44,.05),transparent)}
+.date-when{font-family:var(--disp);font-weight:700;font-size:20px;min-width:130px;flex:none}
+.date-when .d{color:var(--lime)}
+.date-where{flex:1;min-width:0}
+.date-where b{display:block;font-size:18px;font-weight:600;font-family:var(--disp)}
+.date-where span{color:var(--muted);font-size:14.5px}
+.date-status{flex:none;font-size:13px;font-weight:600;font-family:var(--disp);letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border-radius:100px;border:1px solid var(--line-2);color:var(--muted)}
+.date-status.live{color:var(--lime);border-color:rgba(200,255,44,.4);background:rgba(200,255,44,.08)}
+@media(max-width:640px){.date-row{flex-wrap:wrap;gap:10px}.date-when{min-width:0;font-size:17px}.date-status{order:3}}
+
+/* access */
+.access{background:radial-gradient(120% 80% at 50% 0%,rgba(139,123,255,.14),transparent 60%),var(--ink-2);border-top:1px solid var(--line)}
+.access-head{text-align:center;max-width:640px;margin:0 auto 52px}
+.access-head h2{font-size:clamp(36px,6vw,66px)}
+.access-head p{color:var(--muted);font-size:18px;margin-top:16px}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:960px;margin:0 auto}
+@media(max-width:860px){.tiers{grid-template-columns:1fr;max-width:440px}}
+.tier{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:32px 28px;display:flex;flex-direction:column;gap:6px;position:relative;transition:transform .25s,border-color .25s}
+.tier:hover{transform:translateY(-6px)}
+.tier.feat{border-color:var(--lime);background:linear-gradient(180deg,rgba(200,255,44,.08),var(--surface))}
+.tier .tag{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--lime);color:#0a0b0d;font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px;border-radius:100px}
+.tier .tname{font-family:var(--disp);font-weight:600;font-size:16px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.tier .price{font-family:var(--disp);font-weight:700;font-size:44px;letter-spacing:-.02em;margin:6px 0 2px}
+.tier .price small{font-size:15px;color:var(--faint);font-weight:500}
+.tier ul{list-style:none;padding:0;margin:16px 0 24px;display:flex;flex-direction:column;gap:11px}
+.tier li{display:flex;gap:10px;font-size:14.5px;color:rgba(245,246,243,.82)}
+.tier li .ck{color:var(--lime);flex:none;font-weight:700}
+.tier .btn{margin-top:auto;width:100%;justify-content:center}
+
+/* final cta */
+.finale{text-align:center;padding:130px 0}
+.finale h2{font-size:clamp(44px,9vw,110px);letter-spacing:-.03em}
+.finale h2 .grad{background:linear-gradient(100deg,var(--lime),var(--teal));-webkit-background-clip:text;background-clip:text;color:transparent}
+.finale p{color:var(--muted);font-size:19px;margin:20px auto 36px;max-width:520px}
+
+/* footer */
+.foot{border-top:1px solid var(--line);padding:44px 0;background:var(--ink-2)}
+.foot-in{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.foot .brand{font-size:14px}
+.foot-sp{flex:1}
+.foot a.f{color:var(--muted);font-size:14px;margin-left:20px;transition:color .15s}
+.foot a.f:hover{color:var(--text)}
+.foot-note{width:100%;color:var(--faint);font-size:12.5px;margin-top:18px;border-top:1px solid var(--line);padding-top:18px}
+
+/* reveal on scroll */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+.reveal.in{opacity:1;transform:none}
+
+@keyframes reveal{to{transform:translateY(0)}}
+@keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,-40px)}}
+@keyframes spin{to{transform:rotate(405deg)}}
+@keyframes marq{to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .hero-title .ln span,.hero-eyebrow,.hero-tag,.hero-meta,.hero-cta{opacity:1;transform:none}
+  .reveal{opacity:1;transform:none}
+}
+
+.ev-preview{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:60;display:inline-flex;align-items:center;gap:9px;background:rgba(24,20,8,.86);backdrop-filter:blur(10px);border:1px solid rgba(255,205,80,.42);color:#ffd66b;font-family:var(--disp);font-size:12.5px;font-weight:600;letter-spacing:.03em;padding:8px 16px;border-radius:100px;box-shadow:0 8px 26px -8px rgba(0,0,0,.7)}
+.ev-preview[hidden]{display:none}
+.ev-preview .pdot{width:7px;height:7px;border-radius:50%;background:#ffd66b;box-shadow:0 0 10px #ffd66b}
+</style>
+</head>
+<body>
+<div class="ev-preview" id="evPreview" hidden><span class="pdot"></span>Preview · Not published yet</div>
+
+<nav class="nav" id="nav">
+  <div class="nav-in">
+    <a class="brand" href="#top"><span class="dia"></span><span data-ev="brandname">Aurora Field Sessions</span></a>
+    <span class="nav-sp"></span>
+    <span class="nav-powered">Powered by <b>Venzza</b></span>
+    <a class="btn btn-primary" href="#access">Get access</a>
+  </div>
+</nav>
+
+<span id="top"></span>
+<header class="hero">
+  <div class="hero-bg" aria-hidden="true">
+    <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+    <span class="grid-ovl"></span>
+    <span class="dia-float df1"></span><span class="dia-float df2"></span><span class="dia-float df3"></span>
+  </div>
+  <div class="wrap hero-in">
+    <div class="hero-eyebrow eyebrow" data-ev="eyebrow">Live audiovisual experience</div>
+    <h1 class="hero-title" data-ev="titlewrap"><span class="ln"><span>Aurora Field</span></span><span class="ln"><span class="grad">Sessions</span></span></h1>
+    <p class="hero-tag" data-ev="tagline">A touring light-and-sound experience in the world's most remote landscapes.</p>
+    <div class="hero-meta">
+      <span class="chip"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v4M16 2v4M3 10h18"/><rect x="3" y="4" width="18" height="18" rx="2"/></svg><span data-ev="daterange">Mar – Jun 2026</span></span>
+      <span class="chip"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg><span data-ev="location">São Paulo · Brazil</span></span>
+      <span class="chip"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 7h6v6M22 7l-8.5 8.5-5-5L2 17"/></svg><span data-ev="reachchip">480K reached</span></span>
+    </div>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#access">Get access
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="btn btn-ghost" href="#about">Event details</a>
+    </div>
+  </div>
+  <div class="marquee" aria-hidden="true"><div class="marquee-track" id="marq"></div></div>
+</header>
+
+<section class="stats"><div class="stats-in wrap" style="padding-left:0;padding-right:0">
+  <div class="stat"><div class="n" data-ev="s1n">480K</div><div class="l" data-ev="s1l">Combined reach</div></div>
+  <div class="stat"><div class="n" data-ev="s2n">6</div><div class="l" data-ev="s2l">Tour stops</div></div>
+  <div class="stat"><div class="n" data-ev="s3n">3</div><div class="l" data-ev="s3l">Months live</div></div>
+</div></section>
+
+<section class="section" id="about"><div class="wrap about-grid">
+  <div class="about-copy reveal">
+    <div class="eyebrow">The experience</div>
+    <h2 style="font-size:clamp(34px,5.5vw,60px);margin-top:14px" data-ev="abouth">More than a show. A place you step into.</h2>
+    <p data-ev="about" style="margin-top:22px">A touring live audiovisual series staged in remote landscapes — a fusion of ambient performance, projection art, and place.</p>
+  </div>
+  <div class="about-art reveal"><span class="dia-lg"></span><span class="badge" data-ev="genrebadge">Music</span></div>
+</div></section>
+
+<section class="section" style="padding-top:0"><div class="wrap">
+  <div class="sec-head reveal"><div class="eyebrow">Why you'll want in</div><h2>Built to be unforgettable.</h2></div>
+  <div class="hl-grid">
+    <div class="hl reveal"><span class="glow"></span><div class="num">01</div><h3 data-ev="h1t">Immersive by design</h3><p data-ev="h1p">Projection-mapped sets and spatial sound turn every venue into a living canvas.</p></div>
+    <div class="hl reveal"><span class="glow"></span><div class="num">02</div><h3 data-ev="h2t">Made for the moment</h3><p data-ev="h2p">Every stop is filmed and released as a short film — you're part of the story.</p></div>
+    <div class="hl reveal"><span class="glow"></span><div class="num">03</div><h3 data-ev="h3t">A crowd like you</h3><p data-ev="h3p">An engaged culture audience that shows up for something real.</p></div>
+  </div>
+</div></section>
+
+<section class="section" style="padding-top:0"><div class="wrap">
+  <div class="sec-head reveal"><div class="eyebrow">Where &amp; when</div><h2>Catch it near you.</h2></div>
+  <div id="dates"></div>
+</div></section>
+
+<section class="access section" id="access"><div class="wrap">
+  <div class="access-head reveal"><div class="eyebrow">Get access</div><h2>Pick your way in.</h2><p>Secure your spot, then check your inbox for the full event details, venue maps, and set times.</p></div>
+  <div class="tiers">
+    <div class="tier reveal"><div class="tname">General</div><div class="price" data-ev="p_gen">$39</div><ul><li><span class="ck">✓</span>Full event access</li><li><span class="ck">✓</span>Standing floor</li><li><span class="ck">✓</span>Digital short-film drop</li></ul><a class="btn btn-ghost" href="#register" data-reg>Register</a></div>
+    <div class="tier feat reveal"><span class="tag">Most popular</span><div class="tname">Insider</div><div class="price" data-ev="p_vip">$89</div><ul><li><span class="ck">✓</span>Priority entry</li><li><span class="ck">✓</span>Elevated viewing deck</li><li><span class="ck">✓</span>Behind-the-scenes reel</li><li><span class="ck">✓</span>Limited event print</li></ul><a class="btn btn-primary" href="#register" data-reg>Get Insider</a></div>
+    <div class="tier reveal"><div class="tname">Partner</div><div class="price" data-ev="p_part">Let's talk</div><ul><li><span class="ck">✓</span>Brand integration</li><li><span class="ck">✓</span><span data-ev="pkgline">Title Partner package</span></li><li><span class="ck">✓</span>On-site + on-film presence</li></ul><a class="btn btn-dark" href="#register" data-reg>Partner with us</a></div>
+  </div>
+</div></section>
+
+<section class="finale" id="register"><div class="wrap reveal">
+  <div class="eyebrow">Don't miss it</div>
+  <h2 data-ev="finaletitle">See you<br><span class="grad">there.</span></h2>
+  <p data-ev="finalep">Join the list and be first to get event details, set times, and access the moment it opens.</p>
+  <form class="hero-cta" style="justify-content:center;animation:none;opacity:1" onsubmit="return false">
+    <a class="btn btn-primary" href="#top" id="regBtn">Reserve your access
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </form>
+</div></section>
+
+<footer class="foot"><div class="wrap foot-in">
+  <span class="brand"><span class="dia" style="width:18px;height:18px"></span><span data-ev="brandname2">Aurora Field Sessions</span></span>
+  <span class="foot-sp"></span>
+  <a class="f" href="#about">About</a><a class="f" href="#dates">Dates</a><a class="f" href="#access">Access</a>
+  <div class="foot-note">© 2026 <span data-ev="brandname3">Aurora Field Sessions</span>. Event site generated on <b>Venzza</b> · This is a demo marketing page.</div>
+</div></footer>
+
+<script>
+(function(){
+  var DEMO={name:'Aurora Field Sessions',status:'Published',category:'Music',desc:"A touring live audiovisual series staged in remote landscapes — a fusion of ambient performance, projection art, and place. Each stop is filmed and released as a short film, giving audiences a premium, story-driven moment.",reach:'480000',audience:['Music','Travel','Art'],locations:['São Paulo','Brazil (national)','Europe'],package:'Title Partner',price:'25000',includes:'On-stage banner, 3 social posts, a backstage reel.'};
+  function read(){try{var s=JSON.parse(localStorage.getItem('vzProjects')||'{}')||{};var a=localStorage.getItem('vzActiveProject');if(a&&s[a])return s[a];var k=Object.keys(s);if(k.length)return s[k[k.length-1]];}catch(e){}return DEMO;}
+  var p=read();
+  (function(){try{var pv=document.getElementById("evPreview");if(pv){var published=!!(p&&p.site&&p.site.published);pv.hidden=published;}}catch(e){}})();
+  function digits(v){return parseFloat((''+(v==null?'':v)).replace(/[^0-9.]/g,''))||0;}
+  function fmtReach(v){var n=digits(v);if(!n)return '';if(n>=1e6)return (n/1e6).toFixed(n%1e6?1:0)+'M';if(n>=1e3)return Math.round(n/1e3)+'K';return n.toLocaleString();}
+  function set(k,v){document.querySelectorAll('[data-ev="'+k+'"]').forEach(function(e){e.textContent=v;});}
+  var name=p.name||'Your Event';
+  var genre=p.category||'Live experience';
+  var locs=(p.locations&&p.locations.length)?p.locations:['Your city'];
+  document.title=name+' — Live';
+  set('brandname',name);set('brandname2',name);set('brandname3',name);
+  set('eyebrow',genre+' · Live experience');
+  // hero title: split into two lines
+  (function(){
+    var words=name.trim().split(/\s+/);var mid=Math.ceil(words.length/2);
+    var l1=words.slice(0,mid).join(' '),l2=words.slice(mid).join(' ')||'Live';
+    var w=document.querySelector('[data-ev="titlewrap"]');
+    if(w)w.innerHTML='<span class="ln"><span>'+l1+'</span></span><span class="ln"><span class="grad">'+(l2||'')+'</span></span>';
+  })();
+  // tagline from desc (first sentence) else generated
+  var tag=(p.desc||'').split(/(?<=[.!?])\s/)[0];
+  if(!tag||tag.length<8)tag='An unforgettable '+genre.toLowerCase()+' experience you have to be there for.';
+  set('tagline',tag);
+  set('about',p.desc||tag);
+  set('genrebadge',genre);
+  // meta
+  set('location',locs[0]);
+  var reach=fmtReach(p.reach);
+  set('reachchip',reach?reach+' reached':'A growing audience');
+  // dates: derive a run from locations
+  var MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var startM=2; // Mar
+  var stops=locs.slice(0,5).map(function(loc,i){
+    var day=8+i*11;var m=startM+Math.floor((i*11+8)/30);
+    return {when:MONTHS[m%12]+' '+((day%28)+1),city:loc,venue:['The Glasshouse','Ibirapuera Field','Warehouse 9','Basin Arts','Open Air Stage','Riverside Dome'][i%6],live:i===0};
+  });
+  set('daterange',stops[0].when+' – '+stops[stops.length-1].when+' 2026');
+  set('s1n',reach||'—');set('s1l','Combined reach');
+  set('s2n',String(stops.length));set('s2l',stops.length===1?'Tour stop':'Tour stops');
+  set('s3n',String(Math.max(1,Math.min(6,stops.length))));set('s3l','Cities');
+  var dwrap=document.getElementById('dates');
+  if(dwrap)dwrap.innerHTML=stops.map(function(s){
+    return '<div class="date-row reveal"><div class="date-when"><span class="d">'+s.when.split(' ')[0]+'</span> '+s.when.split(' ')[1]+'</div><div class="date-where"><b>'+s.city+'</b><span>'+s.venue+'</span></div><div class="date-status'+(s.live?' live':'')+'">'+(s.live?'On sale':'Notify me')+'</div></div>';
+  }).join('');
+  // partner tier from package
+  if(p.package)set('pkgline',p.package+(p.price?' · $'+digits(p.price).toLocaleString('en-US'):' package'));
+  // finale
+  set('finalep','Join the list and be first to get '+name+' event details, set times, and access the moment it opens.');
+  // marquee
+  var mt=document.getElementById('marq');
+  if(mt){var unit='';for(var i=0;i<8;i++){unit+='<span>'+name+'</span><span class="star">◆</span>';}mt.innerHTML=unit+unit;}
+  // nav scrolled
+  var nav=document.getElementById('nav');
+  window.addEventListener('scroll',function(){nav.classList.toggle('scrolled',window.scrollY>20);},{passive:true});
+  // reveal observer
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Campaign edit workspace</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="ds/venzza/components/bundle.css">
+<link rel="stylesheet" href="shared/venzza-dark.css">
+<link rel="stylesheet" href="shared/venzza-app.css">
+<script src="ds/venzza/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--bg-canvas)}
+</style>
+</helmet>
+<dc-import name="TopNav" flow-links="true" active="campaigns" bell="rest" brand="lockup" brand-tone="white" brand-size="24" nav-layout="centered" search-mode="takeover" header-width="app" tone="raised" account="avatar" hint-size="100%,60px"></dc-import>
+<div class="pe hdr-app cge">
+<aside class="pe-rail" aria-label="Campaign sections">
+<a class="pe-back" href="{{backHref}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-left"></use></svg><span>Back to campaign</span></a>
+<div class="{{projCls}}"><span class="th" aria-hidden="true" style="background: {{thBg}}"></span><span class="t"><b>{{f.name}}</b><span><i></i>{{projSt}}</span></span></div>
+<div class="pe-str"><div class="pe-str-top"><span>Match quality</span><b>{{quality}}%</b></div><div class="pe-bar-track"><i style="width: {{quality}}%"></i></div><p>{{qualityTxt}}</p></div>
+<nav class="pe-nav">
+<sc-for list="{{nav}}" as="n" hint-placeholder-count="9"><sc-if value="{{n.g}}" hint-placeholder-val="{{false}}"><div class="pe-grp">{{n.g}}</div></sc-if><button type="button" class="pe-item" aria-current="{{n.cur}}" title="{{n.l}}" data-s="{{n.k}}" onClick="{{go}}"><svg class="vz-icon" aria-hidden="true"><use href="#{{n.i}}"></use></svg><span class="l">{{n.l}}</span><span class="{{n.stCls}}" aria-label="{{n.stLbl}}"><sc-if value="{{n.ok}}" hint-placeholder-val="{{true}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-check"></use></svg></sc-if></span></button></sc-for>
+</nav>
+<div class="pe-rail-foot"><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{importDoc}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-upload"></use></svg>Import from a brief</button></div>
+</aside>
+
+<main class="pe-main">
+<div class="pe-top">
+<div class="pe-crumb"><span>Edit campaign</span><svg class="vz-icon" aria-hidden="true"><use href="#i-chevron-right"></use></svg><b>{{secLabel}}</b></div>
+<div class="pe-top-end">
+<span class="{{saveCls}}" role="status"><sc-if value="{{isSaved}}" hint-placeholder-val="{{true}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-check"></use></svg></sc-if><sc-if value="{{notSaved}}" hint-placeholder-val="{{false}}"><i></i></sc-if>{{saveTxt}}</span>
+<a class="vz-btn pe-solid sm" href="{{backHref}}">Done</a>
+</div>
+</div>
+
+<div class="pe-body">
+<sc-if value="{{s.overview}}" hint-placeholder-val="{{false}}">
+<div class="pe-head"><div><h1>Overview</h1><p>Your brief, section by section. The more complete it is, the better the marketplace can rank projects for this campaign. Changes save as you go.</p></div></div>
+<div class="pe-ov">
+<div class="pe-card"><div class="pe-ring"><div class="{{ringCls}}"><svg viewBox="0 0 92 92" aria-hidden="true"><circle class="bg" cx="46" cy="46" r="40"></circle><circle class="fg" cx="46" cy="46" r="40" stroke-dasharray="{{ringDash}}"></circle></svg><b>{{quality}}%</b></div><div><h3>Match quality</h3><p>{{qualityTxt}}. Projects in Find projects are ranked by how well they fit this brief.</p><sc-if value="{{hasNext}}" hint-placeholder-val="{{true}}"><button type="button" class="vz-btn vz-btn--secondary sm" data-s="{{nextK}}" onClick="{{go}}"><svg class="vz-icon" aria-hidden="true"><use href="#{{nextI}}"></use></svg>{{nextL}}</button></sc-if></div></div></div>
+<div class="pe-card"><h2>Improve your matches</h2><p class="sub">{{todoSub}}</p>
+<div class="pe-todo">
+<sc-for list="{{todo}}" as="t" hint-placeholder-count="3"><div class="pe-todo-r"><svg class="{{t.icCls}}" aria-hidden="true"><use href="#{{t.ic}}"></use></svg><span class="t">{{t.title}}<span>{{t.sub}}</span></span><sc-if value="{{t.hasGo}}" hint-placeholder-val="{{true}}"><button type="button" class="pe-go" data-s="{{t.s}}" onClick="{{go}}">{{t.act}}<svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></button></sc-if></div></sc-for>
+</div></div>
+</div>
+<div class="pe-secs"><sc-for list="{{secCards}}" as="c" hint-placeholder-count="8"><button type="button" class="pe-sc" data-s="{{c.k}}" onClick="{{go}}"><span class="pe-sc-h"><svg class="vz-icon" aria-hidden="true"><use href="#{{c.i}}"></use></svg>{{c.l}}<span class="{{c.stCls}}"><sc-if value="{{c.ok}}" hint-placeholder-val="{{true}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-check"></use></svg></sc-if></span></span><span>{{c.sum}}</span></button></sc-for></div>
+</sc-if>
+
+<sc-if value="{{s.basics}}" hint-placeholder-val="{{false}}">
+<div class="pe-head"><div><h1>Basics</h1><p>The name and dates your team works to, and the one-paragraph brief creators read when you send a request.</p></div></div>
+<div class="pe-split"><div class="pe-card"><div class="pe-form">
+<div class="pe-f"><label for="g-name">Campaign name <small>{{f.nameN}}/60</small></label><input id="g-name" class="pe-in" maxlength="60" value="{{f.name}}" data-k="name" onChange="{{field}}" onInput="{{field}}"></div>
+<div class="pe-f"><label for="g-brand">Brand</label><select id="g-brand" class="pe-in" value="{{f.brand}}" data-k="brand" onChange="{{field}}"><option>Coachella Festival</option><option>Coachella Merch</option></select></div>
+<div class="pe-2"><div class="pe-f"><label for="g-s">Starts</label><input id="g-s" class="pe-in" value="{{f.start}}" data-k="start" onChange="{{field}}" onInput="{{field}}"></div><div class="pe-f"><label for="g-e">Ends</label><input id="g-e" class="pe-in" value="{{f.end}}" data-k="end" onChange="{{field}}" onInput="{{field}}"></div></div>
+<p class="cge-note">{{statusNote}}</p>
+<div class="pe-f"><label for="g-desc">Brief <small>{{f.descN}}/600</small></label><textarea id="g-desc" class="pe-in" rows="4" maxlength="600" value="{{f.desc}}" data-k="desc" onChange="{{field}}" onInput="{{field}}"></textarea></div>
+</div></div>
+<div class="pe-aside"><div class="pe-tip"><b><svg class="vz-icon" aria-hidden="true"><use href="#i-sparkle"></use></svg>What works</b>Say what you want people to do or feel: “Get 18–34 festival fans to try our VIP experience” beats “Brand awareness”.</div><div class="pe-tip"><b><svg class="vz-icon" aria-hidden="true"><use href="#i-eye"></use></svg>Creators see</b>The name, dates and brief, only after you send them a request. Your budget and other projects stay private.</div></div>
+</div>
+</sc-if>
+
+<sc-if value="{{s.tags}}" hint-placeholder-val="{{false}}">
+<div class="pe-head"><div><h1>Tags &amp; mood</h1><p>What the campaign is about and how it should feel. Projects with matching tags rank higher when you find projects.</p></div></div>
+<div class="pe-split"><div class="pe-card"><div class="pe-form">
+<div class="pe-f"><div class="lb">Categories <small>{{catN}} selected · up to 5</small></div><div class="pe-togs"><sc-for list="{{cats}}" as="a" hint-placeholder-count="12"><button type="button" class="pe-tog" aria-pressed="{{a.on}}" data-g="cats" data-v="{{a.v}}" onClick="{{chip}}">{{a.v}}</button></sc-for></div></div>
+<div class="pe-f"><div class="lb">Main mood <small>{{mdMainHint}}</small></div><div class="pe-togs" role="radiogroup" aria-label="Main mood"><sc-for list="{{mdP}}" as="m" hint-placeholder-count="12"><button type="button" class="pe-tog mdp" role="radio" aria-checked="{{m.on}}" aria-pressed="{{m.on}}" data-v="{{m.id}}" onClick="{{mdPick}}" style="--c1: {{m.c1}}"><i class="mdp-dot" aria-hidden="true"></i>{{m.n}}</button></sc-for></div></div>
+<div class="pe-f"><div class="lb">Supporting moods <small>{{mdSupN}} of 3 · optional</small></div><div class="pe-togs" role="group" aria-label="Supporting moods"><sc-for list="{{mdS}}" as="m" hint-placeholder-count="11"><button type="button" class="{{m.cls}}" aria-pressed="{{m.on}}" aria-disabled="{{m.full}}" data-v="{{m.id}}" onClick="{{mdSupT}}" style="--c1: {{m.c1}}"><i class="mdp-dot" aria-hidden="true"></i>{{m.n}}</button></sc-for></div><sc-if value="{{mdHintOn}}" hint-placeholder-val="{{false}}"><p class="mdp-hint" role="status">Up to 3 supporting moods. Remove one to add another.</p></sc-if></div>
+<div class="mdp-open"><span>Prefer the visual picker from setup?</span><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{mdOpenFn}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-sparkle"></use></svg>Open mood picker</button></div>
+</div></div>
+<div class="pe-aside"><div class="pe-tip"><b><svg class="vz-icon" aria-hidden="true"><use href="#i-target"></use></svg>How tags are used</b>Categories filter and rank projects. Projects that share your main mood rank higher; supporting moods are a softer signal and never hide anything.</div></div>
+</div>
+</sc-if>
+
+<sc-if value="{{s.budget}}" hint-placeholder-val="{{false}}">
+<div class="pe-head"><div><h1>Budget</h1><p>What you can spend across all projects in this campaign. Creators never see it.</p></div></div>
+<div class="pe-split"><div class="pe-card"><div class="pe-form">
+<div class="pe-2"><div class="pe-f"><label for="g-bud">Total budget</label><span class="cge-money"><i>$</i><input id="g-bud" class="pe-in" inputmode="numeric" value="{{f.budget}}" data-k="budget" onChange="{{field}}" onInput="{{field}}"></span></div><div class="pe-f"><label for="g-max">Most per project <small>Optional</small></label><span class="cge-money"><i>$</i><input id="g-max" class="pe-in" inputmode="numeric" placeholder="No limit" value="{{f.max}}" data-k="max" onChange="{{field}}" onInput="{{field}}"></span></div></div>
+<sc-if value="{{hasSpend}}" hint-placeholder-val="{{true}}"><div class="cge-bk"><div class="cge-bk-t"><b>{{leftTxt}} left</b><span>of {{budgetTxt}}</span></div><span class="cg-bud"><i class="a" style="width: {{b1}}%"></i><i class="b" style="width: {{b2}}%"></i></span>
+<div class="cge-bk-r"><i class="a"></i><span>Committed · Aurora Field Sessions</span><b>$15,000</b></div><div class="cge-bk-r"><i class="b"></i><span>Open offer · Pulse Weekender</span><b>$20,000</b></div><div class="cge-bk-r"><i></i><span>Left to spend</span><b>{{leftTxt}}</b></div>
+<sc-if value="{{overBud}}" hint-placeholder-val="{{false}}"><div class="cv-warn" role="status"><svg class="vz-icon" aria-hidden="true"><use href="#i-alert-triangle"></use></svg><span><b>This is less than you’ve already committed and offered.</b> Lower budgets don’t change existing contracts; withdraw an offer if you need to.</span></div></sc-if></div></sc-if>
+<div class="pe-swrow"><div><b>Show projects above budget</b><span>{{overHelp}}</span></div><label class="pe-sw"><input type="checkbox" aria-label="Show projects above budget" checked="{{f.showOver}}" data-k="showOver" onChange="{{field}}"><i></i></label></div>
+</div></div>
+<div class="pe-aside"><div class="pe-tip"><b><svg class="vz-icon" aria-hidden="true"><use href="#i-lock"></use></svg>Private to your team</b>Creators see the price of the package you request, never your total budget.</div></div>
+</div>
+</sc-if>
+
+<sc-if value="{{s.audience}}" hint-placeholder-val="{{false}}">
+<div class="pe-head"><div><h1>Audience</h1><p>Who you want to reach. Projects whose audience overlaps most with this rank highest.</p></div></div>
+<div class="pe-split"><div class="pe-card"><div class="pe-form">
+<div class="pe-f"><div class="lb">Age groups <small class="{{ageTotCls}}">{{ageTotTxt}}</small></div>
+<div class="cge-rows"><sc-for list="{{ages}}" as="a" hint-placeholder-count="5"><div class="cge-row"><label for="{{a.id}}">{{a.v}}</label><input id="{{a.id}}" class="cge-rng" type="range" min="0" max="100" step="5" value="{{a.n}}" style="--v: {{a.n}}%" data-v="{{a.v}}" onInput="{{ageSet}}" onChange="{{ageSet}}"><b>{{a.pct}}</b></div></sc-for></div>
+<sc-if value="{{ageOff}}" hint-placeholder-val="{{false}}"><div class="cge-fix"><span>{{ageFixTxt}}</span><button type="button" class="pe-go" onClick="{{ageFix}}">Balance to 100%</button></div></sc-if></div>
+<div class="pe-f"><div class="lb">Gender</div><div class="cge-row g"><span>Female {{fem}}%</span><input class="cge-rng" type="range" aria-label="Female share" min="0" max="100" step="5" value="{{fem}}" style="--v: {{fem}}%" onInput="{{genSet}}" onChange="{{genSet}}"><span>Male {{male}}%</span></div></div>
+<div class="pe-f"><div class="lb">Interests <small>Same list as setup and projects</small></div><div class="pe-togs"><sc-for list="{{ints}}" as="a" hint-placeholder-count="12"><button type="button" class="pe-tog" aria-pressed="{{a.on}}" data-g="ints" data-v="{{a.v}}" onClick="{{chip}}">{{a.v}}</button></sc-for></div></div>
+<div class="pe-f"><div class="lb">Locations</div><div class="pe-togs"><button type="button" class="pe-tog sel" aria-label="Remove United States">United States<svg class="vz-icon" aria-hidden="true"><use href="#i-x"></use></svg></button><button type="button" class="pe-tog sel" aria-label="Remove Los Angeles">Los Angeles<svg class="vz-icon" aria-hidden="true"><use href="#i-x"></use></svg></button><button type="button" class="pe-tog sel" aria-label="Remove Palm Springs">Palm Springs<svg class="vz-icon" aria-hidden="true"><use href="#i-x"></use></svg></button><button type="button" class="pe-tog"><svg class="vz-icon" aria-hidden="true"><use href="#i-plus"></use></svg>Add location</button></div></div>
+</div></div>
+<div class="pe-aside"><div class="pe-eyebrow">Preview</div><div class="cge-chart" aria-label="Audience preview"><b>Age</b><sc-for list="{{ages}}" as="a" hint-placeholder-count="5"><div class="cge-bar"><span>{{a.v}}</span><i><em style="width: {{a.w}}%"></em></i><small>{{a.pct}}</small></div></sc-for><b>Gender</b><div class="cge-split"><i style="width: {{fem}}%"></i></div><div class="cge-split-l"><span>Female {{fem}}%</span><span>Male {{male}}%</span></div></div><div class="pe-tip"><b><svg class="vz-icon" aria-hidden="true"><use href="#i-target"></use></svg>Matching</b>Sahara Sound Festival’s audience is 82% aged 18–34, so it fits this campaign well.</div></div>
+</div>
+</sc-if>
+
+<sc-if value="{{s.media}}" hint-placeholder-val="{{false}}">
+<div class="pe-head"><div><h1>Media</h1><p>Where you want your brand to show up, and in what formats.</p></div></div>
+<div class="pe-card"><div class="pe-form">
+<div class="pe-f"><div class="lb">Channels <small>{{chN}} selected</small></div><div class="cge-ch"><sc-for list="{{chans}}" as="a" hint-placeholder-count="9"><button type="button" class="cge-chb" aria-pressed="{{a.on}}" data-g="chans" data-v="{{a.v}}" onClick="{{chip}}"><svg class="vz-icon" aria-hidden="true"><use href="#{{a.i}}"></use></svg>{{a.v}}<sc-if value="{{a.sel}}" hint-placeholder-val="{{false}}"><svg class="vz-icon ck" aria-hidden="true"><use href="#i-check"></use></svg></sc-if></button></sc-for></div></div>
+<div class="pe-f"><div class="lb">Formats</div><div class="pe-togs"><sc-for list="{{fmts}}" as="a" hint-placeholder-count="6"><button type="button" class="pe-tog" aria-pressed="{{a.on}}" data-g="fmts" data-v="{{a.v}}" onClick="{{chip}}">{{a.v}}</button></sc-for></div></div>
+</div></div>
+</sc-if>
+
+<sc-if value="{{s.metrics}}" hint-placeholder-val="{{false}}">
+<div class="pe-head"><div><h1>Success metrics</h1><p>The same KPIs you chose in setup. Pick a primary one, add any others, and set targets if you have them.</p></div></div>
+<div class="pe-card"><div class="pe-form">
+<div class="pe-f"><div class="lb">Primary KPI <small>Pick one</small></div><div class="pe-togs" role="radiogroup" aria-label="Primary KPI"><sc-for list="{{kpiP}}" as="k" hint-placeholder-count="10"><button type="button" class="pe-tog" role="radio" aria-checked="{{k.on}}" aria-pressed="{{k.on}}" data-v="{{k.v}}" onClick="{{pickPrimary}}">{{k.v}}</button></sc-for></div></div>
+<div class="pe-f"><div class="lb">Secondary KPIs <small>Optional</small></div><div class="pe-togs" role="group" aria-label="Secondary KPIs"><sc-for list="{{kpiS}}" as="k" hint-placeholder-count="9"><button type="button" class="pe-tog" aria-pressed="{{k.on}}" data-v="{{k.v}}" onClick="{{toggleSec}}">{{k.v}}</button></sc-for><sc-for list="{{kpiC}}" as="k" hint-placeholder-count="1"><button type="button" class="pe-tog sel" aria-label="{{k.rm}}" data-v="{{k.v}}" onClick="{{rmCustom}}">{{k.v}}<svg class="vz-icon" aria-hidden="true"><use href="#i-x"></use></svg></button></sc-for><sc-if value="{{noDraft}}" hint-placeholder-val="{{true}}"><button type="button" class="pe-tog cge-addk" onClick="{{openCustom}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-plus"></use></svg>Custom</button></sc-if><sc-if value="{{hasDraft}}" hint-placeholder-val="{{false}}"><span class="cge-kin"><input id="g-ck" class="pe-in" placeholder="For example, VIP passes sold" aria-label="Custom metric name" value="{{draft}}" onInput="{{onDraft}}" onKeyDown="{{draftKey}}"><button type="button" class="vz-btn vz-btn--secondary sm" disabled="{{noDraftTxt}}" onClick="{{addCustom}}">Add</button><button type="button" class="pe-ibtn bare" aria-label="Cancel" onClick="{{closeCustom}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-x"></use></svg></button></span></sc-if></div></div>
+</div></div>
+<sc-if value="{{hasKpis}}" hint-placeholder-val="{{true}}"><div class="cge-th"><h2>Targets <small>Optional</small></h2><p>Creators see these in their contract, so everyone works to the same numbers.</p></div>
+<div class="pe-list">
+<div class="cge-m h"><span>KPI</span><span>Target</span><span>How it’s measured</span></div>
+<sc-for list="{{kpiRows}}" as="m" hint-placeholder-count="3"><div class="cge-m"><span><b>{{m.v}}</b><sc-if value="{{m.prim}}" hint-placeholder-val="{{false}}"><em class="cge-prim">Primary</em></sc-if></span><input class="pe-in" aria-label="{{m.tl}}" placeholder="No target" value="{{m.t}}" data-v="{{m.v}}" data-k="t" onInput="{{setTarget}}"><input class="pe-in" aria-label="{{m.hl}}" value="{{m.h}}" data-v="{{m.v}}" data-k="h" onInput="{{setTarget}}"></div></sc-for>
+</div></sc-if>
+<sc-if value="{{noKpis}}" hint-placeholder-val="{{false}}"><p class="cge-note" style="margin-top:14px">Choose a primary KPI to add targets.</p></sc-if>
+</sc-if>
+
+<sc-if value="{{s.strategy}}" hint-placeholder-val="{{false}}">
+<div class="pe-head"><div><h1>Strategy &amp; messaging</h1><p>What creators should say about you, and what to avoid. Shared with a creator when a contract starts.</p></div></div>
+<sc-if value="{{noStrat}}" hint-placeholder-val="{{true}}"><div class="pe-drop"><span class="ic"><svg class="vz-icon" aria-hidden="true"><use href="#i-megaphone"></use></svg></span><h3>Tell creators what to say</h3><p>A key message and a few dos and don’ts save rounds of changes later. Adds 15% to match quality.</p><div class="cv-drop-a"><button type="button" class="vz-btn pe-solid sm" onClick="{{stratTpl}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-sparkle"></use></svg>Start from a template</button><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{stratBlank}}">Write my own</button></div></div></sc-if>
+<sc-if value="{{hasStrat}}" hint-placeholder-val="{{false}}"><div class="pe-split"><div class="pe-card"><div class="pe-form">
+<div class="pe-f"><label for="g-strat">Campaign strategy <small>Your team only</small></label><textarea id="g-strat" class="pe-in" rows="3" placeholder="Your approach and how you’ll reach your goals" value="{{f.strategy}}" data-k="strategy" onChange="{{field}}" onInput="{{field}}"></textarea></div>
+<div class="pe-f"><label for="g-key">Key messaging</label><textarea id="g-key" class="pe-in" rows="3" placeholder="Core message, tone and key points for your audience" value="{{f.key}}" data-k="key" onChange="{{field}}" onInput="{{field}}"></textarea></div>
+<div class="cge-sub"><h3>Guidance for creators</h3><p>Shown next to every deliverable they upload, and in the brief checklist when you review.</p></div>
+<div class="pe-f"><label for="g-do">Please mention</label><textarea id="g-do" class="pe-in" rows="3" value="{{f.dos}}" data-k="dos" onChange="{{field}}" onInput="{{field}}"></textarea></div>
+<div class="pe-f"><label for="g-dont">Please avoid</label><textarea id="g-dont" class="pe-in" rows="3" value="{{f.donts}}" data-k="donts" onChange="{{field}}" onInput="{{field}}"></textarea></div>
+<div class="pe-2"><div class="pe-f"><label for="g-tagh">Hashtags</label><input id="g-tagh" class="pe-in" value="{{f.hash}}" data-k="hash" onChange="{{field}}" onInput="{{field}}"></div><div class="pe-f"><label for="g-han">Handles to tag</label><input id="g-han" class="pe-in" value="{{f.handles}}" data-k="handles" onChange="{{field}}" onInput="{{field}}"></div></div>
+</div></div><div class="pe-aside"><div class="pe-tip"><b><svg class="vz-icon" aria-hidden="true"><use href="#i-eye"></use></svg>Creators see</b>Key messaging and the guidance below, word for word, in their contract and next to every deliverable they upload. Campaign strategy stays with your team.</div></div></div></sc-if>
+</sc-if>
+
+<sc-if value="{{s.documents}}" hint-placeholder-val="{{false}}">
+<div class="pe-head"><div><h1>Documents</h1><p>Brand guidelines, logos and anything else creators need. Choose what’s shared when a contract starts.</p></div><div class="pe-head-end"><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{addDoc}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-upload"></use></svg>Upload</button></div></div>
+<sc-if value="{{hasDocs}}" hint-placeholder-val="{{true}}"><div class="pe-list">
+<sc-for list="{{docs}}" as="d" hint-placeholder-count="3"><div class="cge-doc"><span class="av"><svg class="vz-icon" aria-hidden="true"><use href="#i-file-text"></use></svg></span><span class="t"><b>{{d.n}}</b><small>{{d.m}}</small></span><span class="cge-share">{{d.shareTxt}}</span><label class="pe-sw"><input type="checkbox" aria-label="{{d.lbl}}" checked="{{d.on}}" data-i="{{d.i}}" onChange="{{docShare}}"><i></i></label><button type="button" class="pe-ibtn bare" aria-label="{{d.rm}}" data-i="{{d.i}}" onClick="{{docRm}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-x"></use></svg></button></div></sc-for>
+</div></sc-if>
+<sc-if value="{{noDocs}}" hint-placeholder-val="{{false}}"><div class="pe-drop"><span class="ic"><svg class="vz-icon" aria-hidden="true"><use href="#i-folder"></use></svg></span><h3>Add brand files</h3><p>Guidelines and logos mean fewer questions from creators. PDF, images or ZIP, up to 100 MB each.</p><button type="button" class="vz-btn pe-solid sm" onClick="{{addDoc}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-upload"></use></svg>Upload files</button></div></sc-if>
+</sc-if>
+</div>
+</main>
+</div>
+<sc-if value="{{mdModal}}" hint-placeholder-val="{{false}}"><div class="cf-scrim" onClick="{{mdCloseFn}}"></div><section class="cf mdm" role="dialog" aria-modal="true" aria-labelledby="mdm-h"><header class="rv-hd"><div class="rv-ht"><span class="rv-crumb">{{mdCrumb}}</span><h2 id="mdm-h">{{mdTitle}}</h2></div><button type="button" class="vz-btn pe-solid sm" onClick="{{mdCloseFn}}">Done</button></header><div class="mdm-body"><dc-import name="MD-Moods" embed="true" primary="{{mdPri}}" sup="{{mdSupCsv}}" suggest="{{mdSuggest}}" hint-size="100%,620px"></dc-import></div></section></sc-if>
+<sc-if value="{{hasToast}}" hint-placeholder-val="{{false}}"><div class="pe-toast" role="status"><svg class="vz-icon" aria-hidden="true"><use href="#i-check-circle"></use></svg>{{toast}}<sc-if value="{{toastUndo}}" hint-placeholder-val="{{false}}"><button type="button" class="pe-toast-act" onClick="{{undo}}">Undo</button></sc-if></div></sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"section":{"editor":"enum","options":["overview","basics","tags","budget","audience","media","metrics","strategy","documents"],"default":"overview","section":"State"},"newCampaign":{"editor":"boolean","default":false,"section":"State"},"moodPicker":{"editor":"boolean","default":false,"section":"State"},"ageWarn":{"editor":"boolean","default":false,"section":"State"},"strategyFilled":{"editor":"boolean","default":false,"section":"State"},"saveState":{"editor":"enum","options":["saved","saving"],"default":"saved","section":"State"},"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.documentElement.classList.add('vz-color');
+    if (window.Venzza) window.Venzza.mountIcons();
+    this.onMd = (e) => { const x = (e && e.detail) || {}; if (!(this.state || {}).mdOpen) return; this.setState({ md: { p: x.p || '', sup: x.sup || [] } }); this.changed(); }; window.addEventListener('md-change', this.onMd); this.onMdKey = (e) => { if (e.key === 'Escape' && (this.state || {}).mdOpen) this.setState({ mdOpen: false }); }; document.addEventListener('keydown', this.onMdKey); if (this.props.moodPicker === true || this.props.moodPicker === 'true') this.setState({ mdOpen: true });
+  }
+  componentWillUnmount() { window.removeEventListener('md-change', this.onMd); document.removeEventListener('keydown', this.onMdKey); clearTimeout(this.st); clearTimeout(this.tt); }
+  componentDidUpdate(prev) { const P = this.props; if (prev.section !== P.section || prev.newCampaign !== P.newCampaign || prev.ageWarn !== P.ageWarn) this.setState({ kp: undefined, draft: null, sec: undefined, ages: undefined, f: undefined, strat: undefined }); }
+  changed() { this.setState({ save: 'saving' }); clearTimeout(this.st); this.st = setTimeout(() => this.setState({ save: 'saved' }), 700); }
+  flash(t, undo) { this.setState({ toast: t, tUndo: !!undo }); clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({ toast: '' }), 4000); }
+  renderVals() {
+    const P = this.props, s = this.state || {};
+    const NEW = P.newCampaign === true || P.newCampaign === 'true';
+    const sec = s.sec || P.section || 'overview';
+    const save = s.save || P.saveState || 'saved';
+    const base = NEW ? { name: 'Summer Road Trip', brand: 'Coachella Festival', start: 'Jun 1, 2027', end: 'Aug 31, 2027', desc: 'Reach 18–34 travellers and music fans on the road this summer with creators who film long-form trips.', budget: '45,000', max: '', showOver: true, key: '', strategy: '', dos: '', donts: '', hash: '', handles: '' }
+      : { name: 'Desert Vibes Festival 2026', brand: 'Coachella Festival', start: 'Jan 1, 2027', end: 'Apr 30, 2027', desc: 'Promoting our annual music and arts festival experience to young, creative audiences in Southern California.', budget: '40,000', max: '', showOver: true, key: '', dos: '', donts: '', hash: '', handles: '' };
+    const SF = P.strategyFilled === true || P.strategyFilled === 'true';
+    const f = Object.assign({}, base, SF ? { strategy: 'Partner with music and art creators our audience already follows, and show Desert Vibes as the place to be seen this spring.', key: 'Desert Vibes is where Southern California’s creative crowd spends its spring.', dos: 'Show the art and the people, not just the stage. Mention early-bird VIP passes and tag the official account.', donts: 'No alcohol in shots with under-21s. Don’t show competitor logos or wristbands.', hash: '#DesertVibes2027', handles: '@desertvibesfest' } : {}, s.f || {});
+    const TPL = { strategy: 'Partner with music and art creators our audience already follows, and show Desert Vibes as the place to be seen this spring.', key: 'Desert Vibes is where Southern California’s creative crowd spends its spring.', dos: 'Show the art and the people, not just the stage. Mention early-bird VIP passes and tag the official account.', donts: 'No alcohol in shots with under-21s. Don’t show competitor logos or wristbands.', hash: '#DesertVibes2027', handles: '@desertvibesfest' };
+    const strat = s.strat !== undefined ? s.strat : SF;
+    const AGE0 = P.ageWarn === true || P.ageWarn === 'true' ? { '18–24': 55, '25–34': 45, '35–44': 10, '45–54': 0, '55+': 0 } : NEW ? { '18–24': 50, '25–34': 50, '35–44': 0, '45–54': 0, '55+': 0 } : { '18–24': 55, '25–34': 45, '35–44': 0, '45–54': 0, '55+': 0 };
+    const ageMap = s.ages || AGE0;
+    const AK = ['18–24', '25–34', '35–44', '45–54', '55+'];
+    const ageTot = AK.reduce((a, x) => a + ageMap[x], 0);
+    const fem = s.fem !== undefined ? s.fem : 55;
+    const cats = s.cats || (NEW ? ['Travel', 'Music', 'Outdoors'] : ['Music', 'Festivals', 'Art & culture']);
+    const moods = s.moods || (NEW ? [] : ['Energetic', 'Creative']);
+    const ints = s.ints || (NEW ? ['Travel', 'Music'] : ['Music', 'Art & culture', 'Fashion']);
+    const chans = s.chans || (NEW ? [] : ['Instagram', 'TikTok', 'YouTube']);
+    const fmts = s.fmts || (NEW ? [] : ['Posts', 'Short video', 'On-site activation']);
+    const KPIS = ['Reach', 'Engagement rate', 'Conversions', 'Brand awareness', 'Website traffic', 'Sales revenue', 'Lead generation', 'Social followers', 'Video views', 'Click-through rate'];
+    const HOW = { 'Reach': 'Unique accounts reached, from platform insights', 'Engagement rate': 'Average across all posts', 'Conversions': 'Purchases or sign-ups from creator links', 'Brand awareness': 'Brand lift survey before and after', 'Website traffic': 'Visits from creator links (UTM)', 'Sales revenue': 'Sales with creator codes', 'Lead generation': 'Sign-ups from creator links', 'Social followers': 'New followers on your accounts', 'Video views': '3-second views across platforms', 'Click-through rate': 'Link clicks ÷ impressions' };
+    const kp = s.kp || (NEW ? { p: '', sec: [], cus: [], t: {} } : { p: 'Reach', sec: ['Engagement rate', 'Video views'], cus: ['VIP passes sold with code DESERT27'], t: { 'Reach': { t: '2,000,000' }, 'Engagement rate': { t: '4%' }, 'VIP passes sold with code DESERT27': { t: '1,500', h: 'Promo code DESERT27 at checkout' } } });
+    const kpAll = (kp.p ? [kp.p] : []).concat(kp.sec.filter((x) => x !== kp.p), kp.cus);
+    const metrics = s.metrics || (NEW ? [] : [{ n: 'Impressions', t: '2,000,000', h: 'Reported by creators, checked against platform stats' }, { n: 'Engagement rate', t: '4%', h: 'Average across all posts' }, { n: 'VIP passes sold with promo code', t: '1,500', h: 'Promo code DESERT27 at checkout' }]);
+    const docsBase = NEW ? [] : [{ n: 'Brand guidelines 2027.pdf', m: 'PDF · 2.4 MB', on: true }, { n: 'Logo pack.zip', m: 'ZIP · 18 MB', on: true }, { n: 'Media plan Q1.xlsx', m: 'Spreadsheet · 140 KB', on: false }];
+    const docs = s.docs || docsBase;
+    const stratOk = strat || !!(s.f && (s.f.key || s.f.strategy));
+    const st = {
+      basics: f.name && f.start && f.end ? 'ok' : 'warn', tags: cats.length ? 'ok' : 'empty', budget: f.budget ? 'ok' : 'empty',
+      audience: ageTot !== 100 ? 'warn' : 'ok', media: chans.length ? 'ok' : 'empty', metrics: kp.p ? 'ok' : 'empty', strategy: stratOk ? 'ok' : 'empty', documents: docs.length ? 'ok' : 'empty'
+    };
+    const W = { basics: 15, tags: 15, budget: 10, audience: 20, media: 10, metrics: 10, strategy: 15, documents: 5 };
+    const quality = Object.keys(W).reduce((a, k) => a + (st[k] === 'ok' ? W[k] : 0), 0);
+    const MOODS = [{ id: 'energetic', n: 'Energetic', c1: '#FF6A3D' }, { id: 'euphoric', n: 'Euphoric', c1: '#FF4FB0' }, { id: 'chill', n: 'Chill', c1: '#46C7F0' }, { id: 'dreamy', n: 'Dreamy', c1: '#C8A8F0' }, { id: 'bold', n: 'Bold', c1: '#FF3B5C' }, { id: 'underground', n: 'Underground', c1: '#8A8A96' }, { id: 'premium', n: 'Premium', c1: '#D9B77A' }, { id: 'playful', n: 'Playful', c1: '#FFC94A' }, { id: 'wholesome', n: 'Wholesome', c1: '#7FD48A' }, { id: 'artsy', n: 'Artsy', c1: '#8E8CF0' }, { id: 'adventurous', n: 'Adventurous', c1: '#2FB7A0' }, { id: 'nocturnal', n: 'Nocturnal', c1: '#5B6BFF' }];
+    const mdDef = NEW ? { p: '', sup: [] } : { p: 'euphoric', sup: ['energetic', 'artsy'] };
+    const md = s.md || mdDef;
+    const mdName = (id) => (MOODS.find((x) => x.id === id) || {}).n || '';
+    const mdSumTxt = md.p ? mdName(md.p) + (md.sup.length ? ' · with ' + md.sup.map(mdName).join(', ') : '') : '';
+    const SECS = [
+      { k: 'overview', l: 'Overview', i: 'i-layout-dashboard', st: '' },
+      { g: 'About', k: 'basics', l: 'Basics', i: 'i-file-text', sum: f.start + ' – ' + f.end },
+      { k: 'tags', l: 'Tags & mood', i: 'i-sparkle', sum: (cats.length ? cats.join(', ') : 'No tags yet') + (md.p ? ' · ' + mdName(md.p) : '') },
+      { k: 'budget', l: 'Budget', i: 'i-dollar-sign', sum: '$' + f.budget + (NEW ? ' · nothing committed' : ' · $5,000 left') },
+      { g: 'Who to reach', k: 'audience', l: 'Audience', i: 'i-users', sum: ageTot !== 100 ? 'Age groups add up to ' + ageTot + '%' : (NEW ? '18–34 · United States' : '18–34 · 55% female · LA, Palm Springs') },
+      { k: 'media', l: 'Media', i: 'i-camera', sum: chans.length ? chans.join(', ') : 'Not started · adds 10%' },
+      { g: 'Goals', k: 'metrics', l: 'Success metrics', i: 'i-target', sum: kp.p ? kp.p + (kpAll.length > 1 ? ' + ' + (kpAll.length - 1) + ' more' : '') : 'Not started · adds 10%' },
+      { k: 'strategy', l: 'Strategy & messaging', i: 'i-megaphone', sum: stratOk ? 'Key message and guidelines' : 'Not started · adds 15%' },
+      { g: 'Files', k: 'documents', l: 'Documents', i: 'i-folder', sum: docs.length ? docs.length + ' files · ' + docs.filter((d) => d.on).length + ' shared with creators' : 'Not started · adds 5%' }
+    ].map((x) => Object.assign(x, { st: x.k === 'overview' ? '' : st[x.k] }));
+    const countable = SECS.filter((x) => x.st), done = countable.filter((x) => x.st === 'ok').length;
+    const cur = SECS.find((x) => x.k === sec) || SECS[0];
+    const S = {}; SECS.forEach((x) => { S[x.k] = x.k === sec; });
+    const stCls = (v) => 'pe-st' + (v ? ' ' + v : '');
+    const stLbl = (v) => (v === 'ok' ? 'Complete' : v === 'warn' ? 'Needs attention' : v === 'empty' ? 'Not started' : '');
+    const missing = Object.keys(W).filter((k) => st[k] !== 'ok').sort((a, b) => W[b] - W[a]);
+    const LBL = { basics: 'Basics', tags: 'Tags', budget: 'Budget', audience: 'Audience', media: 'Media', metrics: 'Success metrics', strategy: 'Strategy & messaging', documents: 'Documents' };
+    const ACT = { basics: 'Fix basics', tags: 'Add tags', budget: 'Set a budget', audience: 'Fix audience', media: 'Add media', metrics: 'Add metrics', strategy: 'Add a strategy', documents: 'Add files' };
+    const ICN = { basics: 'i-file-text', tags: 'i-sparkle', budget: 'i-dollar-sign', audience: 'i-users', media: 'i-camera', metrics: 'i-target', strategy: 'i-megaphone', documents: 'i-folder' };
+    const WHY = { media: 'Matches projects that post where you want to be seen.', metrics: 'Creators see the targets in their contract.', strategy: 'Creators get your message and dos and don’ts up front.', documents: 'Logos and guidelines mean fewer questions later.', audience: 'Age groups need to add up to 100%.', tags: 'Tags are the strongest matching signal.', budget: 'Labels projects above budget.', basics: 'Name and dates are required.' };
+    const todo = missing.slice(0, 3).map((k) => ({ ic: 'i-alert-circle', icCls: 'vz-icon ' + (st[k] === 'warn' ? 'ic-warn' : 'ic-info'), title: LBL[k] + ' · +' + W[k] + '%', sub: WHY[k], s: k, act: ACT[k], hasGo: true }));
+    if (!missing.length) todo.push({ ic: 'i-check-circle', icCls: 'vz-icon ic-ok', title: 'Your brief is complete', sub: 'Every section is filled in. Matches are as good as they get.', s: '', act: '', hasGo: false });
+    if (!NEW && missing.length) todo.push({ ic: 'i-check-circle', icCls: 'vz-icon ic-ok', title: 'Audience, tags and media are set', sub: 'These drive most of the ranking in Find projects.', s: '', act: '', hasGo: false });
+    const nx = missing[0];
+    const budN = Number(String(f.budget).replace(/[^0-9]/g, '')) || 0;
+    const money = (n) => '$' + n.toLocaleString('en-US');
+    const left = budN - 35000;
+    const go = (e) => { const k = e.currentTarget.getAttribute('data-s'); if (!k) return; this.setState({ sec: k }); try { window.scrollTo(0, 0); } catch (x) {} };
+    const tog = (list, v) => (list.indexOf(v) > -1 ? list.filter((x) => x !== v) : list.concat([v]));
+    const CH = [['Instagram', 'i-camera'], ['TikTok', 'i-video'], ['YouTube', 'i-tv'], ['Twitch', 'i-radio'], ['Podcasts', 'i-disc-3'], ['Newsletter', 'i-mail'], ['Livestream', 'i-satellite-dish'], ['On-site', 'i-map-pin'], ['Press', 'i-megaphone']];
+    return {
+      mdP: MOODS.map((m) => ({ id: m.id, n: m.n, c1: m.c1, on: md.p === m.id ? 'true' : 'false' })),
+      mdS: MOODS.filter((m) => m.id !== md.p).map((m) => { const on = md.sup.indexOf(m.id) > -1; const full = !on && md.sup.length >= 3; return { id: m.id, n: m.n, c1: m.c1, on: on ? 'true' : 'false', full: full ? 'true' : 'false', cls: 'pe-tog mdp' + (full ? ' off' : '') }; }),
+      mdSupN: String(md.sup.length), mdMainHint: md.p ? 'Sponsors match on this' : 'Pick one · sponsors match on this', mdHintOn: !!s.mdHint,
+      mdModal: !!s.mdOpen, mdPri: md.p, mdSupCsv: md.sup.join(','), mdSuggest: 'euphoric,energetic,artsy', mdCrumb: 'Edit campaign · Tags & mood', mdTitle: 'What should it feel like?',
+      mdPick: (e) => { const v = e.currentTarget.getAttribute('data-v'); this.setState({ md: { p: md.p === v ? '' : v, sup: md.sup.filter((x) => x !== v) } }); this.changed(); },
+      mdSupT: (e) => { const v = e.currentTarget.getAttribute('data-v'); if (md.sup.indexOf(v) > -1) { this.setState({ md: { p: md.p, sup: md.sup.filter((x) => x !== v) }, mdHint: false }); this.changed(); return; } if (md.sup.length >= 3) { this.setState({ mdHint: true }); clearTimeout(this.mdT); this.mdT = setTimeout(() => this.setState({ mdHint: false }), 2600); return; } this.setState({ md: { p: md.p, sup: md.sup.concat([v]) } }); this.changed(); },
+      mdOpenFn: () => this.setState({ mdOpen: true }), mdCloseFn: () => this.setState({ mdOpen: false }),
+      backHref: NEW ? 'CG-Campaign-New.dc.html' : 'CG-Campaign.dc.html', thBg: NEW ? 'linear-gradient(135deg,#136a8a,#267871)' : 'linear-gradient(135deg,#6a2c70,#c0455e)',
+      projCls: 'pe-proj' + (NEW ? ' draft' : ''), projSt: NEW ? 'Not started · starts Jun 1' : 'Active · Jan – Apr 2027',
+      f: Object.assign({}, f, { nameN: f.name.length, descN: f.desc.length }),
+      quality: String(quality), qualityTxt: done + ' of ' + countable.length + ' sections complete', ringCls: 'pe-ring-v' + (quality === 100 ? ' full' : ''), ringDash: (2 * Math.PI * 40 * quality / 100).toFixed(1) + ' 999',
+      hasNext: !!nx, nextK: nx || '', nextI: nx ? ICN[nx] : 'i-check', nextL: nx ? ACT[nx] : '',
+      todoSub: missing.length ? 'Each section adds to match quality. Biggest gains first.' : 'Nothing left to add.', todo,
+      nav: SECS.map((x) => ({ g: x.g || '', k: x.k, l: x.l, i: x.i, cur: x.k === sec ? 'page' : undefined, stCls: stCls(x.st), stLbl: stLbl(x.st), ok: x.st === 'ok' })),
+      secCards: SECS.filter((x) => x.k !== 'overview').map((x) => ({ k: x.k, l: x.l, i: x.i, sum: x.sum, stCls: stCls(x.st), ok: x.st === 'ok' })),
+      s: S, secLabel: cur.l,
+      saveCls: 'pe-save' + (save === 'saving' ? ' saving' : ''), isSaved: save === 'saved', notSaved: save !== 'saved', saveTxt: save === 'saving' ? 'Saving…' : 'All changes saved',
+      statusNote: NEW ? 'Status follows the dates: this campaign becomes Active on ' + f.start + '.' : 'Status follows the dates: Active until ' + f.end + ', then Ended.',
+      cats: ['Music', 'Festivals', 'Art & culture', 'Film & TV', 'Fashion', 'Beauty', 'Food & drink', 'Travel', 'Sports', 'Fitness', 'Wellness', 'Gaming', 'Technology', 'Outdoors'].map((v) => ({ v, on: cats.indexOf(v) > -1 ? 'true' : 'false' })), catN: String(cats.length),
+      moods: ['Energetic', 'Creative', 'Premium', 'Playful', 'Laid-back', 'Bold', 'Family-friendly', 'Underground'].map((v) => ({ v, on: moods.indexOf(v) > -1 ? 'true' : 'false' })),
+      ints: ['Music', 'Art & culture', 'Fashion', 'Beauty', 'Food & drink', 'Travel', 'Sports', 'Fitness', 'Wellness', 'Gaming', 'Technology', 'Outdoors'].map((v) => ({ v, on: ints.indexOf(v) > -1 ? 'true' : 'false' })),
+      chans: CH.map(([v, i]) => ({ v, i, on: chans.indexOf(v) > -1 ? 'true' : 'false', sel: chans.indexOf(v) > -1 })), chN: String(chans.length),
+      fmts: ['Posts', 'Stories', 'Short video', 'Long video', 'Livestream', 'On-site activation'].map((v) => ({ v, on: fmts.indexOf(v) > -1 ? 'true' : 'false' })),
+      hasSpend: !NEW, budgetTxt: money(budN), leftTxt: money(Math.max(left, 0)), overBud: !NEW && left < 0, b1: budN ? Math.min(100, Math.round(15000 / budN * 100)) : 0, b2: budN ? Math.max(0, Math.min(100 - Math.round(15000 / budN * 100), Math.round(20000 / budN * 100))) : 0,
+      overHelp: f.showOver ? 'They’re labelled “Above budget” and listed last.' : 'Hidden from Find projects. You can still open them from search.',
+      ages: AK.map((v, i) => ({ v, id: 'g-age-' + i, n: String(ageMap[v]), pct: ageMap[v] + '%', w: ageMap[v] })),
+      ageTotTxt: 'Total ' + ageTot + '%', ageTotCls: ageTot === 100 ? 'cge-ok' : 'cge-bad', ageOff: ageTot !== 100,
+      ageFixTxt: ageTot > 100 ? 'Age groups add up to ' + ageTot + '%. Lower one to reach 100%.' : 'Age groups add up to ' + ageTot + '%. Raise one to reach 100%.',
+      fem: String(fem), male: String(100 - fem),
+      metrics: metrics.map((m) => ({ n: m.n, t: m.t, h: m.h, lbl: 'Edit ' + m.n })), hasMetrics: metrics.length > 0, noMetrics: metrics.length === 0,
+      noStrat: !stratOk, hasStrat: stratOk,
+      docs: docs.map((d, i) => ({ i: String(i), n: d.n, m: d.m, on: d.on, shareTxt: d.on ? 'Shared with creators' : 'Your team only', lbl: 'Share ' + d.n + ' with creators', rm: 'Remove ' + d.n })), hasDocs: docs.length > 0, noDocs: docs.length === 0,
+      hasToast: !!s.toast, toast: s.toast || '', toastUndo: !!s.tUndo,
+      go,
+      importDoc: () => this.flash('Import reads a brief or deck and fills in sections for you to review'),
+      field: (e) => { const k = e.currentTarget.getAttribute('data-k'); const v = e.target.type === 'checkbox' ? e.target.checked : e.target.value; this.setState({ f: Object.assign({}, s.f || {}, { [k]: v }) }); this.changed(); },
+      chip: (e) => { const g = e.currentTarget.getAttribute('data-g'), v = e.currentTarget.getAttribute('data-v'); const cur2 = { cats, moods, chans, fmts, ints }[g]; this.setState({ [g]: tog(cur2, v) }); this.changed(); },
+      ageSet: (e) => { const v = e.currentTarget.getAttribute('data-v'); this.setState({ ages: Object.assign({}, ageMap, { [v]: Number(e.target.value) }) }); this.changed(); },
+      ageFix: () => { const m = Object.assign({}, ageMap); const diff = 100 - ageTot; const nz = AK.filter((k) => m[k] > 0); const pick = diff < 0 ? nz.slice().sort((x, y) => m[x] - m[y]).find((k) => m[k] >= -diff) || nz.sort((x, y) => m[y] - m[x])[0] : AK.slice().sort((x, y) => m[y] - m[x])[0]; m[pick] = Math.max(0, m[pick] + diff); this.setState({ ages: m }); this.changed(); },
+      genSet: (e) => { this.setState({ fem: Number(e.target.value) }); this.changed(); },
+      kpiP: KPIS.map((v) => ({ v, on: kp.p === v ? 'true' : 'false' })),
+      kpiS: KPIS.filter((v) => v !== kp.p).map((v) => ({ v, on: kp.sec.indexOf(v) > -1 ? 'true' : 'false' })),
+      kpiC: kp.cus.map((v) => ({ v, rm: 'Remove ' + v })),
+      hasDraft: s.draft !== undefined && s.draft !== null, noDraft: s.draft === undefined || s.draft === null, draft: s.draft || '', noDraftTxt: !(s.draft || '').trim(),
+      hasKpis: kpAll.length > 0, noKpis: kpAll.length === 0,
+      kpiRows: kpAll.map((v) => { const t = kp.t[v] || {}; return { v, prim: v === kp.p, t: t.t || '', h: t.h !== undefined ? t.h : (HOW[v] || ''), tl: 'Target for ' + v, hl: 'How ' + v + ' is measured' }; }),
+      pickPrimary: (e) => { const v = e.currentTarget.getAttribute('data-v'); this.setState({ kp: Object.assign({}, kp, { p: kp.p === v ? '' : v, sec: kp.sec.filter((x) => x !== v) }) }); this.changed(); },
+      toggleSec: (e) => { const v = e.currentTarget.getAttribute('data-v'); this.setState({ kp: Object.assign({}, kp, { sec: tog(kp.sec, v) }) }); this.changed(); },
+      rmCustom: (e) => { const v = e.currentTarget.getAttribute('data-v'); this.setState({ kp: Object.assign({}, kp, { cus: kp.cus.filter((x) => x !== v) }) }); this.changed(); },
+      openCustom: () => { this.setState({ draft: '' }); setTimeout(() => { const el = document.getElementById('g-ck'); if (el) el.focus(); }, 30); },
+      closeCustom: () => this.setState({ draft: null }), onDraft: (e) => this.setState({ draft: e.target.value }),
+      addCustom: () => { const v = (s.draft || '').trim(); if (!v) return; this.setState({ kp: Object.assign({}, kp, { cus: kp.cus.indexOf(v) > -1 ? kp.cus : kp.cus.concat([v]) }), draft: null }); this.changed(); },
+      draftKey: (e) => { if (e.key === 'Enter') { e.preventDefault(); const v = (s.draft || '').trim(); if (!v) return; this.setState({ kp: Object.assign({}, kp, { cus: kp.cus.concat([v]) }), draft: null }); this.changed(); } else if (e.key === 'Escape') { e.preventDefault(); this.setState({ draft: null }); } },
+      setTarget: (e) => { const v = e.currentTarget.getAttribute('data-v'), k = e.currentTarget.getAttribute('data-k'); const t = Object.assign({}, kp.t); t[v] = Object.assign({}, t[v] || {}, { [k]: e.target.value }); this.setState({ kp: Object.assign({}, kp, { t }) }); this.changed(); },
+      addMetric: () => { this.setState({ metrics: metrics.concat([{ n: 'New metric', t: 'Set a target', h: 'How will you measure it?' }]) }); this.changed(); },
+      stratTpl: () => { this.setState({ strat: true, f: Object.assign({}, s.f || {}, TPL) }); this.changed(); this.flash('Template added. Edit it to sound like you.'); },
+      stratBlank: () => { this.setState({ strat: true }); this.changed(); },
+      addDoc: () => { this.setState({ docs: docs.concat([{ n: 'Activation brief.pdf', m: 'PDF · 1.1 MB', on: true }]) }); this.changed(); },
+      docShare: (e) => { const i = Number(e.currentTarget.getAttribute('data-i')); this.setState({ docs: docs.map((d, j) => (j === i ? Object.assign({}, d, { on: !d.on }) : d)) }); this.changed(); },
+      docRm: (e) => { const i = Number(e.currentTarget.getAttribute('data-i')); this.setState({ docs: docs.filter((d, j) => j !== i), prevDocs: docs }); this.changed(); this.flash('File removed', true); },
+      undo: () => { if (s.prevDocs) this.setState({ docs: s.prevDocs, prevDocs: null, toast: '' }); }
+    };
+  }
+}
+</script>
+<script src="assets/components.js"></script><script>(function(m){var o={};for(var k in m)o["./"+k]=new Blob([m[k]],{type:"text/html"});window.__resourceBlobs=o;window.__resources={};})(window.__VZ_SRC||{});</script><script src="assets/vendor/react.production.min.js"></script><script src="assets/vendor/react-dom.production.min.js"></script><script src="assets/vendor/dc-runtime.js"></script><script src="assets/prototype-map.js"></script><script src="assets/proto-bar.js"></script>
+</body>
+</html>

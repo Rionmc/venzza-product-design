@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Campaign page</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="ds/venzza/components/bundle.css">
+<link rel="stylesheet" href="shared/venzza-dark.css">
+<link rel="stylesheet" href="shared/venzza-app.css">
+<script src="ds/venzza/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--bg-canvas)}
+</style>
+</helmet>
+<dc-import name="TopNav" active="{{navActive}}" bell="rest" search-open="{{hs.open}}" search-query="{{hs.q}}" search-highlight="{{hs.hi}}" search-status="{{hs.st}}" search-history="{{hs.hist}}" hint-size="100%,60px"></dc-import>
+<div class="pp-obar"><div class="pp-obar-in">
+<nav class="pp-crumb" aria-label="Breadcrumb"><sc-for list="{{crumbs}}" as="r" hint-placeholder-count="1"><a href="{{r.href}}">{{r.l}}</a><svg class="vz-icon" aria-hidden="true"><use href="#i-chevron-right"></use></svg></sc-for><b>{{c.name}}</b></nav>
+<span class="{{c.stCls}}"><i class="pp-dot"></i>{{c.status}}</span><span class="cg-when">{{c.when}}</span>
+<span class="pp-obar-end">
+<sc-if value="{{isOwner}}" hint-placeholder-val="{{true}}"><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{openFind}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-search"></use></svg>Find projects</button><a class="vz-btn vz-btn--secondary sm" href="{{editHref}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-pencil"></use></svg>Edit campaign</a>
+<span class="cg-mw"><button type="button" class="pe-ibtn" aria-label="More actions" aria-haspopup="menu" aria-expanded="{{menuExp}}" onClick="{{toggleMenu}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-ellipsis"></use></svg></button>
+<sc-if value="{{menuOpen}}" hint-placeholder-val="{{false}}"><div class="cg-menu" role="menu" aria-label="Campaign actions"><button type="button" role="menuitem" onClick="{{dup}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-copy"></use></svg>Duplicate campaign</button><button type="button" role="menuitem" onClick="{{copyLink}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-link"></use></svg>Copy link</button><hr><button type="button" role="menuitem" data-d="archive" onClick="{{openDlg}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-folder"></use></svg>Archive campaign</button><button type="button" role="menuitem" class="dz" data-d="delete" onClick="{{openDlg}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-trash-2"></use></svg>Delete campaign</button></div></sc-if></span></sc-if>
+<sc-if value="{{isPart}}" hint-placeholder-val="{{false}}"><button type="button" class="vz-btn pe-solid sm" onClick="{{msg}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-mail"></use></svg>Message Smartcrew</button></sc-if>
+</span>
+</div></div>
+
+<sc-if value="{{isPart}}" hint-placeholder-val="{{false}}"><div class="cg-limit"><div class="pp-wrap"><svg class="vz-icon" aria-hidden="true"><use href="#i-lock"></use></svg><span><b>Limited view.</b> You see your contract and deliverables with Smartcrew. Their budget and other projects stay private.</span></div></div></sc-if>
+
+<div class="pp-band"><section class="pp-wrap pp-dash" aria-label="Campaign summary">
+<sc-for list="{{tiles}}" as="t" hint-placeholder-count="4"><a class="pp-tile cg-tile" href="{{t.href}}"><span>{{t.k}}</span><b>{{t.v}}<em>{{t.em}}</em></b><sc-if value="{{t.bar}}" hint-placeholder-val="{{false}}"><span class="cg-bud" role="img" aria-label="{{t.barLbl}}"><i class="a" style="width: {{t.b1}}%"></i><i class="b" style="width: {{t.b2}}%"></i></span></sc-if><small><sc-if value="{{t.dot}}" hint-placeholder-val="{{false}}"><i class="cg-wdot"></i></sc-if>{{t.s}}</small></a></sc-for>
+</section></div>
+
+<main class="pp-wrap cg-main">
+<section class="cg-brief" aria-labelledby="cg-h-brief">
+<div class="cg-brief-h"><h2 id="cg-h-brief">{{briefTitle}}</h2><sc-if value="{{isOwner}}" hint-placeholder-val="{{true}}"><a class="pp-edit" href="{{basicsHref}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-pencil"></use></svg>Edit</a></sc-if><span class="cg-by">{{c.by}}</span></div>
+<div class="cg-brief-g">
+<p class="cg-desc">{{c.desc}}</p>
+<dl class="cg-dl"><sc-for list="{{facts}}" as="f" hint-placeholder-count="4"><div><dt>{{f.k}}</dt><dd>{{f.v}}<sc-if value="{{f.add}}" hint-placeholder-val="{{false}}"><a class="cg-add" href="{{f.href}}">{{f.add}}</a></sc-if></dd></div></sc-for></dl>
+</div>
+<div class="cg-tags"><sc-for list="{{c.tags}}" as="g" hint-placeholder-count="3"><span class="cg-tag">{{g}}</span></sc-for><sc-for list="{{docs}}" as="d" hint-placeholder-count="0"><a class="cg-doc" href="#cg-h-brief"><svg class="vz-icon" aria-hidden="true"><use href="#i-file-text"></use></svg>{{d}}</a></sc-for></div>
+</section>
+
+<sc-if value="{{isOwner}}" hint-placeholder-val="{{true}}">
+<section class="cg-sec" aria-labelledby="cg-h-pipe">
+<div class="cg-sh"><h2 id="cg-h-pipe">Projects</h2><div class="pe-seg" role="group" aria-label="View"><button type="button" aria-pressed="{{vPipe}}" data-v="pipeline" onClick="{{setView}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-layout-grid"></use></svg>Pipeline</button><button type="button" aria-pressed="{{vCmp}}" data-v="compare" onClick="{{setView}}" disabled="{{noWish}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-layers"></use></svg>Compare wishlist</button></div></div>
+
+<sc-if value="{{showPipe}}" hint-placeholder-val="{{true}}"><div class="cg-pipe">
+<section class="cg-col" aria-label="Wishlist"><div class="cg-colh"><span class="cg-cd" style="background: var(--info-500)"></span><b>Wishlist</b><span class="cg-n">{{wishN}}</span><span class="cg-colhint">Choose a package to send a request</span></div>
+<sc-for list="{{wish}}" as="w" hint-placeholder-count="3"><article class="cg-card"><div class="cg-ch"><span class="cg-th" style="background: {{w.bg}}"></span><span class="cg-cht"><a href="{{w.href}}">{{w.name}}</a><span>{{w.by}}</span></span><button type="button" class="pe-ibtn bare cg-x" aria-label="{{w.rmLbl}}" title="Remove from wishlist" data-id="{{w.id}}" onClick="{{rmWish}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-x"></use></svg></button></div>
+<div class="cg-meta"><span class="vzfit"><span class="dot"></span>Fit {{w.fit}}</span><span class="cg-price">{{w.fromTxt}}</span><span class="cg-pks" aria-label="{{w.pkLbl}}"><sc-for list="{{w.tones}}" as="t" hint-placeholder-count="3"><i style="--pk: {{t}}"></i></sc-for>{{w.pkTxt}}</span></div>
+<sc-if value="{{w.flags}}" hint-placeholder-val="{{false}}"><div class="cg-flags"><sc-if value="{{w.isNew}}" hint-placeholder-val="{{false}}"><span class="cg-new">Added today</span></sc-if><sc-if value="{{w.over}}" hint-placeholder-val="{{false}}"><span class="cg-over">Above budget</span></sc-if><sc-if value="{{w.declined}}" hint-placeholder-val="{{false}}"><span class="cg-new">Offer declined</span></sc-if></div></sc-if>
+<div class="cg-acts"><button type="button" class="vz-btn vz-btn--secondary sm" data-id="{{w.id}}" data-step="choose" onClick="{{openDeal}}">Choose a package</button><button type="button" class="vz-btn vz-btn--ghost sm" data-id="{{w.id}}" data-step="thread" onClick="{{openDeal}}">Ask a question</button></div></article></sc-for>
+<sc-if value="{{noWish}}" hint-placeholder-val="{{false}}"><div class="cg-empty"><svg class="vz-icon" aria-hidden="true"><use href="#i-plus"></use></svg><b>Save projects you like</b><span>Use “Add to wishlist” on any marketplace card. Projects are ranked by how well they fit this brief.</span><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{openFind}}">Find projects</button></div></sc-if>
+</section>
+
+<section class="cg-col" aria-label="Negotiating"><div class="cg-colh"><span class="cg-cd" style="background: var(--warning-500)"></span><b>Negotiating</b><span class="cg-n">{{negN}}</span><span class="cg-colhint">Requests and offers in progress</span></div>
+<sc-for list="{{neg}}" as="n" hint-placeholder-count="1"><article class="cg-card"><div class="cg-ch"><span class="cg-th" style="background: {{n.bg}}"></span><span class="cg-cht"><b>{{n.name}}</b><span>{{n.by}}</span></span></div>
+<div class="cg-pkl"><i class="pk-dot" style="--pk: {{n.tone}}"></i><b>{{n.pk}}</b><span>{{n.list}}</span></div>
+<div class="{{n.stCls}}"><span class="l">{{n.lbl}} <b>{{n.offer}}</b></span><span class="s"><i></i>{{n.state}}</span></div>
+<div class="cg-acts"><button type="button" class="{{n.btnCls}}" data-id="{{n.id}}" data-step="thread" onClick="{{openDeal}}"><svg class="vz-icon" aria-hidden="true"><use href="#{{n.ic}}"></use></svg>{{n.btn}}</button></div></article></sc-for>
+<sc-if value="{{noNeg}}" hint-placeholder-val="{{false}}"><div class="cg-empty sm"><b>No requests yet</b><span>Choose a package on a wishlist project to send a request. It moves here while you agree on terms.</span></div></sc-if>
+</section>
+
+<section class="cg-col" aria-label="Sponsored"><div class="cg-colh"><span class="cg-cd" style="background: var(--success-500)"></span><b>Sponsored</b><span class="cg-n">{{sponN}}</span><span class="cg-colhint">Contracts and their deliverables</span></div>
+<sc-for list="{{spon}}" as="d" hint-placeholder-count="1"><article class="cg-card"><div class="cg-ch"><span class="cg-th" style="background: {{d.bg}}"></span><span class="cg-cht"><b>{{d.name}}</b><span>{{d.by}}</span></span><span class="pe-chip ok">Contract active</span></div>
+<div class="cg-pkl"><i class="pk-dot" style="--pk: {{d.tone}}"></i><b>{{d.pk}}</b><span>{{d.terms}}</span></div>
+<div class="cg-prog"><div class="cg-prog-t"><span>Deliverables</span><b>{{d.done}}</b></div><span class="cg-pbar"><i style="width: {{d.pct}}%"></i></span><span class="{{d.waitCls}}"><i class="cg-wdot"></i>{{d.wait}}</span></div>
+<div class="cg-acts"><a class="vz-btn vz-btn--secondary sm" href="#cg-dlv" onClick="{{jump}}">Track deliverables<svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-down"></use></svg></a></div></article></sc-for>
+<sc-if value="{{noSpon}}" hint-placeholder-val="{{false}}"><div class="cg-empty sm"><b>Nothing sponsored yet</b><span>When a creator accepts, the project lands here and its deliverables are created for you to track.</span></div></sc-if>
+</section>
+</div></sc-if>
+
+<sc-if value="{{showCmp}}" hint-placeholder-val="{{false}}"><div class="cg-cmp" role="table" aria-label="Compare wishlist">
+<div class="cg-cr hd" role="row" style="grid-template-columns: {{cmpCols}}"><span role="columnheader"></span><sc-for list="{{wish}}" as="w" hint-placeholder-count="3"><span role="columnheader" class="cg-cmph"><span class="cg-th" style="background: {{w.bg}}"></span><span><b>{{w.name}}</b><small>{{w.by}}</small></span></span></sc-for></div>
+<sc-for list="{{cmpRows}}" as="r" hint-placeholder-count="7"><div class="cg-cr" role="row" style="grid-template-columns: {{cmpCols}}"><span role="rowheader">{{r.k}}</span><sc-for list="{{r.cells}}" as="x" hint-placeholder-count="3"><span role="cell" class="{{x.cls}}">{{x.v}}</span></sc-for></div></sc-for>
+<div class="cg-cr ft" role="row" style="grid-template-columns: {{cmpCols}}"><span role="rowheader"></span><sc-for list="{{wish}}" as="w" hint-placeholder-count="3"><span role="cell"><button type="button" class="vz-btn vz-btn--secondary sm" data-id="{{w.id}}" data-step="choose" onClick="{{openDeal}}">Choose a package</button></span></sc-for></div>
+<p class="cg-cmpnote">Best value in each row is highlighted. Prices are each project’s lowest package; your budget is {{budgetTxt}}.</p>
+</div></sc-if>
+</section>
+</sc-if>
+
+<sc-if value="{{hasDlv}}" hint-placeholder-val="{{true}}">
+<section class="cg-sec" id="cg-dlv" aria-labelledby="cg-h-dlv">
+<div class="cg-sh"><div><h2 id="cg-h-dlv">{{dlvTitle}}</h2><p>{{dlvSub}}</p></div><span class="cg-sh-end">{{dlvCount}}</span></div>
+<sc-if value="{{hasAttn}}" hint-placeholder-val="{{true}}"><div class="{{attnCls}}"><div class="cg-attn-h"><svg class="vz-icon" aria-hidden="true"><use href="#{{attnIc}}"></use></svg><b>{{attnTitle}}</b><span class="cg-n">{{attnN}}</span></div>
+<sc-for list="{{attn}}" as="a" hint-placeholder-count="2"><div class="cg-ar"><span class="t"><b>{{a.t}}</b><span>{{a.s}}</span></span><button type="button" class="vz-btn vz-btn--secondary sm" data-id="{{a.id}}" onClick="{{openRv}}">{{a.act}}</button></div></sc-for></div></sc-if><sc-if value="{{noAttn}}" hint-placeholder-val="{{false}}"><div class="cg-caught"><svg class="vz-icon" aria-hidden="true"><use href="#i-check-circle"></use></svg>{{caughtTxt}}</div></sc-if>
+<div class="cg-dt" role="table" aria-label="Deliverables">
+<div class="cg-dr hd" role="row"><span role="columnheader">Deliverable</span><span role="columnheader">Progress</span><span role="columnheader">Status</span><span role="columnheader">Due</span></div>
+<sc-for list="{{dlv}}" as="d" hint-placeholder-count="6"><div class="cg-dr" role="row"><span role="cell" class="nm"><span class="cg-dth"><sc-if value="{{d.hasThumb}}" hint-placeholder-val="{{true}}"><img src="{{d.thumb}}" alt="" loading="lazy"></sc-if><sc-if value="{{d.noThumb}}" hint-placeholder-val="{{false}}"><svg class="vz-icon" aria-hidden="true"><use href="#{{d.icon}}"></use></svg></sc-if><sc-if value="{{d.hasCnt}}" hint-placeholder-val="{{false}}"><em title="Images in this post">{{d.cnt}}</em></sc-if><sc-if value="{{d.isVid}}" hint-placeholder-val="{{false}}"><span class="cg-dvid" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"></path></svg></span></sc-if></span><span class="nt"><button type="button" class="cg-dopen" data-id="{{d.tid}}" aria-label="{{d.aria}}" onClick="{{openRv}}">{{d.n}}</button><small>{{d.q}}</small></span></span><span role="cell" class="pg"><span class="cg-pbar"><i style="width: {{d.pct}}%"></i></span><span>{{d.pg}}</span></span><span role="cell"><span class="{{d.stCls}}">{{d.st}}</span></span><span role="cell" class="{{d.dueCls}}">{{d.due}}</span><svg class="vz-icon cg-dgo" aria-hidden="true"><use href="#i-chevron-right"></use></svg></div></sc-for>
+</div>
+</section>
+</sc-if>
+</main>
+
+<sc-if value="{{dlgOpen}}" hint-placeholder-val="{{false}}"><div class="cg-scrim" onClick="{{closeDlg}}"></div><div class="cg-dlg" role="dialog" aria-modal="true" aria-labelledby="cg-dlg-h"><h2 id="cg-dlg-h">{{dlg.t}}</h2><p>{{dlg.p}}</p><sc-if value="{{dlg.hasList}}" hint-placeholder-val="{{false}}"><ul><sc-for list="{{dlg.list}}" as="l" hint-placeholder-count="2"><li>{{l}}</li></sc-for></ul></sc-if><sc-if value="{{dlg.hasAfter}}" hint-placeholder-val="{{false}}"><p>{{dlg.after}}</p></sc-if><div class="cg-dlg-a"><button type="button" class="vz-btn vz-btn--ghost" onClick="{{closeDlg}}">Cancel</button><button type="button" class="{{dlg.btnCls}}" onClick="{{dlgGo}}">{{dlg.btn}}</button></div></div></sc-if>
+<sc-if value="{{dealOpen}}" hint-placeholder-val="{{false}}"><dc-import name="CG-Deal" deal="{{dealId}}" step="{{dealStep}}" view="{{dealView}}" sel="{{dealSel}}" offer="{{dealOffer}}" mode="{{dealMode}}" dname="{{dName}}" dparty="{{dParty}}" dbg="{{dBg}}" dfrom="{{dFrom}}" left="{{dLeft}}" hint-size="100%,100%"></dc-import></sc-if>
+<sc-if value="{{reviewOpen}}" hint-placeholder-val="{{false}}"><dc-import name="CG-Review" mode="{{rvMode}}" item="{{rvItem}}" over="{{rvOver}}" changes="{{rvChanges}}" broken="{{rvBroken}}" hint-size="100%,100%"></dc-import></sc-if>
+<sc-if value="{{findOpen}}" hint-placeholder-val="{{false}}"><dc-import name="CG-FindPanel" campaign="{{findCamp}}" in-wish="{{inWishCsv}}" added="{{addedCsv}}" state="{{findState}}" query="{{findQuery}}" hint-size="100%,100%"></dc-import></sc-if>
+<sc-if value="{{hasToast}}" hint-placeholder-val="{{false}}"><div class="pe-toast" role="status"><svg class="vz-icon" aria-hidden="true"><use href="#i-check-circle"></use></svg>{{toast}}<sc-if value="{{toastFind}}" hint-placeholder-val="{{false}}"><button type="button" class="pe-toast-act" onClick="{{openFind}}">Find projects</button></sc-if><sc-if value="{{toastUndo}}" hint-placeholder-val="{{false}}"><button type="button" class="pe-toast-act" onClick="{{undo}}">Undo</button></sc-if></div></sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"mode":{"editor":"enum","options":["owner","participant"],"default":"owner","section":"State"},"variant":{"editor":"enum","options":["live","new"],"default":"live","section":"State"},"view":{"editor":"enum","options":["pipeline","compare"],"default":"pipeline","section":"State"},"menu":{"editor":"boolean","default":false,"section":"State"},"dialog":{"editor":"enum","options":["none","archive","delete"],"default":"none","section":"State"},"find":{"editor":"boolean","default":false,"section":"Find projects"},"findAdded":{"editor":"string","default":"","section":"Find projects"},"findState":{"editor":"enum","options":["results","loading"],"default":"results","section":"Find projects"},"findQuery":{"editor":"string","default":"","section":"Find projects"},"justAdded":{"editor":"string","default":"","section":"Find projects"},"review":{"editor":"string","default":"","section":"Deliverables"},"deal":{"editor":"string","default":"","section":"Deal"},"dealStep":{"editor":"enum","options":["","choose","thread"],"default":"","section":"Deal"},"dealView":{"editor":"enum","options":["cards","compare"],"default":"cards","section":"Deal"},"dealSel":{"editor":"string","default":"","section":"Deal"},"dealOffer":{"editor":"boolean","default":false,"section":"Deal"},"dealMode":{"editor":"enum","options":["none","confirm","counter","decline"],"default":"none","section":"Deal"},"dealsOver":{"editor":"string","default":"","section":"Deal"},"reviewChanges":{"editor":"boolean","default":false,"section":"Deliverables"},"reviewBroken":{"editor":"boolean","default":false,"section":"Deliverables"},"dlvOver":{"editor":"string","default":"","section":"Deliverables"},"searchOpen":{"editor":"boolean","default":false,"section":"Header"},"searchQuery":{"editor":"string","default":"","section":"Header"},"searchHighlight":{"editor":"int","default":-1,"section":"Header"},"searchStatus":{"editor":"enum","options":["ready","loading","error"],"default":"ready","section":"Header"},"searchHistory":{"editor":"boolean","default":true,"section":"Header"},"$preview":{"width":1440,"height":1900}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.documentElement.classList.add('vz-color');
+    if (window.Venzza) window.Venzza.mountIcons();
+    const csv = (v) => String(v || '').split(',').map((x) => x.trim()).filter(Boolean);
+    const pre = csv(this.props.findAdded).concat(csv(this.props.justAdded));
+    if (pre.length) this.setState({ added: pre });
+    if (csv(this.props.justAdded).length) { const n = csv(this.props.justAdded).length; this.setState({ toast: n + (n === 1 ? ' project' : ' projects') + ' added to the wishlist' }); this.tt = setTimeout(() => this.setState({ toast: '' }), 6000); }
+    this.onWish = (e) => { const d = (e && e.detail) || {}; const st = this.state || {}; const added = st.added || [], removed = st.removed || [];
+      if (d.on) { if (removed.indexOf(d.id) > -1) this.setState({ removed: removed.filter((x) => x !== d.id) }); else if (added.indexOf(d.id) < 0) this.setState({ added: added.concat([d.id]) }); }
+      else { if (added.indexOf(d.id) > -1) this.setState({ added: added.filter((x) => x !== d.id) }); else this.setState({ removed: removed.concat([d.id]) }); } };
+    this.onClose = () => { const st = this.state || {}; const n = (st.added || []).length - (st.addedAtOpen || 0); this.setState({ find: false }); if (n > 0) this.flash(n + (n === 1 ? ' project' : ' projects') + ' added to the wishlist'); setTimeout(() => { const b = document.querySelector('.pp-obar-end .vz-btn--secondary'); if (b) b.focus(); }, 30); };
+    if (this.props.dlvOver) { const o = {}; String(this.props.dlvOver).split(',').filter(Boolean).forEach((x) => { const [k2, v] = x.split(':'); o[k2] = v; }); this.setState({ dover: o }); }
+    this.onDlv = (e) => { const d = (e && e.detail) || {}; const st = this.state || {}; this.setState({ dover: Object.assign({}, st.dover || {}, { [d.id]: d.st }) }); };
+    this.onRvClose = () => { this.setState({ rv: '' }); };
+    if (this.props.dealsOver) { const o = {}; String(this.props.dealsOver).split(',').filter(Boolean).forEach((x) => { const a = x.split(':'); o[a[0]] = a[1] === 'sponsored' ? { st: 'sponsored', pk: 'Night Partner', tone: '#D9A66B', price: Number(a[2]) || 23000, inst: 2, n: 4 } : { st: a[1], pk: 'Desert Oasis', tone: '#D9A66B', list: 50000, offer: Number(a[2]) || 45000, when: 'sent just now' }; }); this.setState({ deals: o }); }
+    this.onDeal = (e) => { const d = (e && e.detail) || {}; const st = this.state || {}; const prev = Object.assign({}, (st.deals || {})[d.id] || {}); this.setState({ deals: Object.assign({}, st.deals || {}, { [d.id]: Object.assign(prev, d, { when: 'sent just now' }) }) }); };
+    this.onDealClose = () => { const st = this.state || {}; const d = (st.deals || {})[st.deal]; this.setState({ deal: '' }); if (d && d.st === 'sponsored') this.flash('Contract created. ' + (d.pk || '') + ' is in Sponsored.'); else if (d && d.st === 'wait') this.flash('Request sent. You’ll be notified when they reply.'); };
+    window.addEventListener('cg-deal', this.onDeal); window.addEventListener('cg-deal-close', this.onDealClose);
+    window.addEventListener('cg-dlv', this.onDlv); window.addEventListener('cg-review-close', this.onRvClose);
+    window.addEventListener('cg-wish', this.onWish); window.addEventListener('cg-find-close', this.onClose);
+    if (this.props.variant === 'new' && this.props.mode !== 'participant' && this.props.dialog !== 'delete' && !this.props.menu && !this.props.find) { this.setState({ toast: 'Campaign created. Find projects to start your wishlist.', tFind: true }); this.tt = setTimeout(() => this.setState({ toast: '' }), 7000); }
+    this.onDoc = (e) => { const s = this.state || {}; const open = s.menu !== undefined ? s.menu : !!this.props.menu; if (open && !e.target.closest('.cg-mw')) this.setState({ menu: false }); };
+    this.onKey = (e) => { if (e.key === 'Escape' && !(this.state || {}).rv && !(this.state || {}).find && !(this.state || {}).deal) this.setState({ menu: false, dlg: 'none' }); };
+    document.addEventListener('click', this.onDoc); document.addEventListener('keydown', this.onKey);
+  }
+  componentWillUnmount() { window.removeEventListener('cg-deal', this.onDeal); window.removeEventListener('cg-deal-close', this.onDealClose); window.removeEventListener('cg-dlv', this.onDlv); window.removeEventListener('cg-review-close', this.onRvClose); window.removeEventListener('cg-wish', this.onWish); window.removeEventListener('cg-find-close', this.onClose); document.removeEventListener('click', this.onDoc); document.removeEventListener('keydown', this.onKey); clearTimeout(this.tt); }
+  flash(t, undo) { this.setState({ toast: t, tFind: false, tUndo: !!undo }); clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({ toast: '' }), 4000); }
+  renderVals() {
+    const P0 = this.props;
+    const P = this.props, s = this.state || {};
+    const part = P.mode === 'participant', NEW = !part && P.variant === 'new', own = !part;
+    const view = s.view || P.view || 'pipeline';
+    const menuOpen = s.menu !== undefined ? s.menu : !!P.menu;
+    const dlgK = s.dlg || P.dialog || 'none';
+    const money = (n) => '$' + n.toLocaleString('en-US');
+    const k = (n) => '$' + Math.round(n / 1000) + 'K';
+    const c = part ? { name: 'Smartcrew Festival Season', status: 'Sponsoring you', stCls: 'pe-chip ok', when: 'Feb 1 – May 31, 2027', by: 'Brief from Smartcrew', desc: 'Put Smartcrew in front of festival crowds this spring with on-site activations and creator-led social coverage.', tags: ['Music', 'Festivals', 'Lifestyle'] }
+      : NEW ? { name: 'Summer Road Trip', status: 'Not started', stCls: 'pe-chip', when: 'Starts Jun 1, 2027', by: 'Coachella Festival (you)', desc: 'Reach 18–34 travellers and music fans on the road this summer with creators who film long-form trips.', tags: ['Travel', 'Music', 'Outdoors'], budget: 45000 }
+      : { name: 'Desert Vibes Festival 2026', status: 'Active', stCls: 'pe-chip ok', when: 'Jan 1 – Apr 30, 2027', by: 'Coachella Festival (you)', desc: 'Promoting our annual music and arts festival experience to young, creative audiences in Southern California.', tags: ['Music', 'Festivals', 'Art & culture'], budget: 40000 };
+    const removed = s.removed || [];
+    const WISH0 = NEW ? [] : [
+      { id: 'sahara', name: 'Sahara Sound Festival 2027', by: 'Sahara Sound Collective · Indio, CA', fit: 96, from: 50000, tones: ['#D9A66B', '#6EA8DE', '#A18FE6'], isNew: true, bg: 'url(assets/img/sahara-main-stage.jpg) center 42% / cover', href: 'PN-Project-Live.dc.html', pkHref: 'PN-Project-Live.dc.html', aud: '18–34 · 120K attendees', reach: '642K followers', when: 'Apr 9 – 18, 2027', where: 'Indio, CA' },
+      { id: 'neon', name: 'Neon Lotus Biennale', by: 'Neon Lotus · São Paulo', fit: 88, from: 35000, tones: ['#D9A66B', '#6EA8DE', '#A18FE6', '#E58E9F'], isNew: true, bg: 'linear-gradient(140deg,#0f4c81,#2a9d8f)', href: 'PN-Market-Match.dc.html', pkHref: 'PN-Market-Match.dc.html', aud: '21–40 · 85K visitors', reach: '310K followers', when: 'Jun 2027', where: 'São Paulo' },
+      { id: 'nordlys', name: 'Studio Nordlys', by: 'Studio Nordlys · Oslo', fit: 84, from: 45000, tones: ['#D9A66B', '#6EA8DE'], isNew: false, bg: 'linear-gradient(140deg,#4a3f8c,#1e6b5c)', href: 'PN-Market-Match.dc.html', pkHref: 'PN-Market-Match.dc.html', aud: '25–44 · public plazas', reach: '190K followers', when: '2027', where: 'Oslo' }
+    ];
+    const BASEIDS = WISH0.map((w) => w.id);
+    const EXTRA = {
+      lowend: { name: 'Low End Society', by: 'Low End Society · Los Angeles', fit: [91, 60], from: 12000, tones: ['#D9A66B', '#6EA8DE'], bg: 'linear-gradient(140deg,#1e1e2e,#4a3f8c)', aud: '21–34 · club nights', reach: '480K followers', when: 'Monthly', where: 'Los Angeles' },
+      palm: { name: 'Palm Springs Modernism Week', by: 'Modernism Week · Palm Springs', fit: [89, 50], from: 22000, tones: ['#D9A66B', '#6EA8DE', '#A18FE6'], bg: 'linear-gradient(140deg,#c0455e,#e8a87c)', aud: '25–44 · design fans', reach: '260K followers', when: 'Feb 2027', where: 'Palm Springs' },
+      golden: { name: 'Golden Hour Sessions', by: 'Golden Hour · Los Angeles', fit: [87, 72], from: 8000, tones: ['#D9A66B', '#6EA8DE'], bg: 'linear-gradient(140deg,#e8a87c,#c0455e)', aud: '18–30 · rooftop gigs', reach: '150K followers', when: 'Weekly', where: 'Los Angeles' },
+      overland: { name: 'Overland: The Long Road', by: 'The Overland Two · 12 countries', fit: [62, 94], from: 80000, tones: ['#D9A66B', '#6EA8DE', '#A18FE6'], bg: 'linear-gradient(140deg,#6a2c70,#c0455e)', aud: '18–34 · travellers', reach: '9.4M viewers', when: '2027', where: '12 countries' },
+      basecamp: { name: 'Basecamp Kitchen Tour', by: 'Basecamp Kitchen · 6 US cities', fit: [61, 78], from: 20000, tones: ['#D9A66B', '#6EA8DE', '#A18FE6'], bg: 'linear-gradient(140deg,#b4705a,#7a4a3a)', aud: '25–44 · food lovers', reach: '220K followers', when: '2027', where: '6 US cities' },
+      coast: { name: 'Coastline Cup', by: 'Coastline Sports · Ericeira, Portugal', fit: [58, 80], from: 60000, tones: ['#D9A66B', '#6EA8DE', '#A18FE6'], bg: 'linear-gradient(140deg,#136a8a,#267871)', aud: '18–34 · surf fans', reach: '1.1M viewers', when: 'Sep 2027', where: 'Ericeira' },
+      summit: { name: 'Summit Trail Series', by: 'Summit Collective · Chamonix', fit: [52, 82], from: 18000, tones: ['#D9A66B', '#6EA8DE', '#A18FE6'], bg: 'linear-gradient(140deg,#1e6b5c,#2a9d8f)', aud: '25–44 · runners', reach: '540K followers', when: 'Jul 2027', where: 'Chamonix' },
+      sahara: { name: 'Sahara Sound Festival 2027', by: 'Sahara Sound Collective · Indio, CA', fit: [96, 70], from: 50000, tones: ['#D9A66B', '#6EA8DE', '#A18FE6'], bg: 'url(assets/img/sahara-main-stage.jpg) center 42% / cover', aud: '18–34 · 120K attendees', reach: '642K followers', when: 'Apr 2027', where: 'Indio, CA', href: 'PN-Project-Live.dc.html' },
+      neon: { name: 'Neon Lotus Biennale', by: 'Neon Lotus · São Paulo', fit: [88, 40], from: 35000, tones: ['#D9A66B', '#6EA8DE', '#A18FE6', '#E58E9F'], bg: 'linear-gradient(140deg,#0f4c81,#2a9d8f)', aud: '21–40 · 85K visitors', reach: '310K followers', when: 'Jun 2027', where: 'São Paulo' },
+      nordlys: { name: 'Studio Nordlys', by: 'Studio Nordlys · Oslo', fit: [84, 35], from: 45000, tones: ['#D9A66B', '#6EA8DE'], bg: 'linear-gradient(140deg,#4a3f8c,#1e6b5c)', aud: '25–44 · public plazas', reach: '190K followers', when: '2027', where: 'Oslo' }
+    };
+    const fi = NEW ? 1 : 0;
+    const added = (s.added || []).filter((id) => EXTRA[id] && BASEIDS.indexOf(id) < 0);
+    const ADDED = added.slice().reverse().map((id) => { const x = EXTRA[id]; return Object.assign({ id, isNew: true, href: x.href || 'PN-Market-Match.dc.html', pkHref: x.href || 'PN-Market-Match.dc.html' }, x, { fit: x.fit[fi] }); });
+    const DEALS = Object.assign(NEW ? {} : { pulse: { st: 'countered', pk: 'Night Partner', tone: '#D9A66B', list: 25000, offer: 20000, counter: 23000, when: '1 day ago' } }, s.deals || {});
+    const META = { pulse: { name: 'Pulse Weekender', by: 'Pulse Collective · Berlin', bg: 'linear-gradient(140deg,#41295a,#2f0743)', party: 'Pulse Collective' } };
+    WISH0.concat(ADDED).forEach((w) => { META[w.id] = { name: w.name, by: w.by, bg: w.bg, party: w.by.split(' · ')[0], from: w.from }; });
+    Object.keys(EXTRA).forEach((k) => { if (!META[k]) META[k] = { name: EXTRA[k].name, by: EXTRA[k].by, bg: EXTRA[k].bg, party: EXTRA[k].by.split(' · ')[0], from: EXTRA[k].from }; });
+    const inDeal = (id) => DEALS[id] && DEALS[id].st !== 'declined';
+    const WISH = ADDED.concat(WISH0).filter((w) => removed.indexOf(w.id) < 0 && !inDeal(w.id)).map((w) => Object.assign({}, w, { declined: !!(DEALS[w.id] && DEALS[w.id].st === 'declined') }));
+    if (DEALS.pulse && DEALS.pulse.st === 'declined' && !WISH.find((w) => w.id === 'pulse')) WISH.push({ id: 'pulse', name: 'Pulse Weekender', by: 'Pulse Collective · Berlin', fit: NEW ? 55 : 90, from: 25000, tones: ['#D9A66B', '#6EA8DE'], bg: META.pulse.bg, href: 'PN-Market-Match.dc.html', pkHref: '', declined: true });
+    const NEG0 = NEW ? [] : [{ name: 'Pulse Weekender', by: 'Pulse Collective · Berlin', bg: 'linear-gradient(140deg,#41295a,#2f0743)', pk: 'Night Partner', tone: '#6EA8DE', list: 'listed at $25,000', offer: '$20,000', state: 'Waiting for the creator · sent 2 days ago' }];
+    const SPON0 = NEW ? [] : [{ name: 'Aurora Field Sessions', by: 'Meridian Hall · Reykjavík', bg: 'linear-gradient(140deg,#0f4c81,#2a9d8f)', pk: 'Session Partner', tone: '#D9A66B', terms: '$15,000 · 3 payments of $5,000', done: '3 of 12 approved', pct: 25, wait: '2 waiting for your approval' }];
+    const NEG = Object.keys(DEALS).filter((k) => DEALS[k].st === 'wait' || DEALS[k].st === 'countered').map((k) => { const x = DEALS[k], m = META[k] || {}, ctr = x.st === 'countered';
+      return { id: k, name: m.name, by: m.by, bg: m.bg, pk: x.pk, tone: x.tone, list: 'listed at ' + money(x.list), lbl: ctr ? (m.party || 'They') + ' countered at' : 'Your offer', offer: money(ctr ? x.counter : x.offer), state: ctr ? 'Your turn · ' + x.when : 'Waiting for ' + (m.party || 'the creator') + ' · ' + (x.when || 'sent just now'), stCls: 'cg-state' + (ctr ? ' turn' : ' warn'), btnCls: ctr ? 'vz-btn pe-solid sm' : 'vz-btn vz-btn--secondary sm', btn: ctr ? 'Review counter-offer' : 'View conversation', ic: ctr ? 'i-arrow-left-right' : 'i-mail' }; });
+    const SPON = SPON0.map((x) => Object.assign({ waitCls: 'cg-wait' }, x)).concat(Object.keys(DEALS).filter((k) => DEALS[k].st === 'sponsored').map((k) => { const x = DEALS[k], m = META[k] || {}; return { name: m.name, by: m.by, bg: m.bg, pk: x.pk, tone: x.tone, terms: money(x.price) + (x.inst > 1 ? ' · ' + x.inst + ' payments of ' + money(x.price / x.inst) : ' · one payment'), done: '0 of ' + (x.n || 4) + ' approved', pct: 0, wait: 'Contract signed today · first due in 3 weeks', waitCls: 'cg-wait mute' }; }));
+    const budget = c.budget || 0, committed = (NEW ? 0 : 15000) + Object.keys(DEALS).filter((k) => DEALS[k].st === 'sponsored').reduce((a, k) => a + DEALS[k].price, 0), offers = Object.keys(DEALS).filter((k) => DEALS[k].st === 'wait' || DEALS[k].st === 'countered').reduce((a, k) => a + DEALS[k].offer, 0), left = budget - committed - offers;
+    const tiles = part ? [
+      { k: 'Contract', v: '$125,000', em: '', s: 'Sahara Tent · 5 payments of $25,000', href: '#cg-dlv' },
+      { k: 'Payments', v: '2', em: ' of 5', s: 'Next $25,000 on Mar 1, 2027', href: '#cg-dlv' },
+      { k: 'Deliverables', v: '4', em: ' of 12 approved', s: '1 needs changes', dot: true, href: '#cg-dlv', dl: true },
+      { k: 'Next due', v: 'Mar 15', em: '', s: 'Stage branding · in 3 weeks', href: '#cg-dlv' }
+    ] : [
+      { k: 'Budget', v: NEW ? money(budget) : money(Math.abs(left)), em: NEW ? ' available' : left < 0 ? ' over your ' + k(budget) : ' left of ' + k(budget), s: NEW ? 'Nothing committed yet' : k(committed) + ' committed · ' + (offers ? k(offers) + ' in open offers' : 'no open offers'), bar: !NEW, b1: Math.min(100, Math.round(committed / budget * 100)), b2: Math.max(0, Math.min(100 - Math.round(committed / budget * 100), Math.round(offers / budget * 100))), barLbl: money(committed) + ' committed, ' + money(offers) + ' in open offers, ' + money(left) + ' left', href: NEW ? 'CG-Edit-New.dc.html' : 'CG-Edit-Budget.dc.html' },
+      { k: 'Projects', v: String(SPON.length), em: ' sponsored', s: NEW ? 'Save projects from the marketplace to start' : WISH.length + ' in wishlist · ' + NEG.length + ' negotiating', href: '#cg-h-pipe' },
+      { k: 'Match quality', v: NEW ? '60%' : '85%', em: '', s: NEW ? 'Add media channels for +10%' : 'Add a strategy for +15%', href: NEW ? 'CG-Edit-New.dc.html' : 'CG-Edit-Strategy.dc.html' },
+      { k: 'Deliverables', v: NEW ? '—' : '3', em: NEW ? '' : ' of 12 approved', s: NEW ? 'Created when a request is accepted' : '2 waiting for your approval', dot: !NEW, href: NEW ? '#cg-h-pipe' : '#cg-dlv', dl: !NEW }
+    ];
+    const facts = part ? [{ k: 'Dates', v: 'Feb 1 – May 31, 2027' }, { k: 'Audience', v: '18–34 · festival-goers' }, { k: 'Media', v: 'Instagram, TikTok' }, { k: 'Your contact', v: 'Ana Ruiz, Smartcrew' }]
+      : NEW ? [{ k: 'Dates', v: 'Jun 1 – Aug 31, 2027' }, { k: 'Audience', v: 'Ages 18–34' }, { k: 'Media', v: 'Not set · ', add: 'Add', href: 'CG-Edit-New.dc.html' }, { k: 'Budget', v: '$45,000' }]
+      : [{ k: 'Dates', v: 'Jan 1 – Apr 30, 2027' }, { k: 'Audience', v: '18–34 · 55% female · Los Angeles, Palm Springs' }, { k: 'Media', v: 'Instagram, TikTok, YouTube' }, { k: 'Budget', v: '$40,000' }];
+    const DO = Object.assign({}, s.dover || {});
+    const BL = { a: 'assets/img/figure-above-lake.jpg', b: 'assets/img/robot-glowing-eye.jpg', c: 'assets/img/robed-figure-desert.jpg', d: 'assets/img/sahara-main-stage.jpg' };
+    const IT = part ? [['s1', 0, 'approved', BL.d], ['s2', 0, 'changes', BL.c, 2], ['s3', 0, 'approved', BL.a], ['s4', 0, 'approved', BL.b], ['s5', 0, 'todo'], ['s6', 0, 'todo'], ['s7', 0, 'todo'], ['s8', 0, 'todo'], ['stage', 1, 'prod'], ['vip', 2, 'todo'], ['act', 3, 'todo'], ['poster', 4, 'approved', BL.b]]
+      : [['p1', 0, 'published', BL.a], ['p2', 0, 'review', BL.b, 3], ['p3', 0, 'overdue'], ['p4', 0, 'todo'], ['p5', 0, 'todo'], ['p6', 0, 'todo'], ['r1', 1, 'review', BL.c, 1, 'vid'], ['r2', 1, 'todo'], ['film', 2, 'prod'], ['logo', 3, 'todo'], ['news', 4, 'published', BL.a], ['rights', 5, 'approved']];
+    const GR = part ? [['Social media coverage', '8 stories and posts', 'i-camera', 'Next: Feb 17'], ['Stage branding', 'Sahara Tent, both weekends', 'i-image', 'Mar 15, 2027', 'Proofs due Mar 1'], ['VIP passes', '20 passes', 'i-badge-plus', 'Apr 1, 2027'], ['Festival grounds activation', '10 × 10 m space', 'i-map-pin', 'Apr 9, 2027'], ['Logo on line-up poster', 'Print and digital', 'i-image', 'Jan 20, 2027']]
+      : [['Instagram posts', '6 posts', 'i-camera', 'Post 3 overdue · Feb 7'], ['Behind-the-scenes reels', '2 reels', 'i-video', 'Feb 28, 2027'], ['Branded session film', '1 film, 6–8 min', 'i-film', 'Mar 20, 2027', 'Filming'], ['Logo in film credits', 'End card', 'i-image', 'Mar 20, 2027'], ['Newsletter feature', '42K subscribers', 'i-mail', 'Jan 18, 2027', 'Sent Jan 18'], ['Usage rights', '12 months, paid social', 'i-file-text', 'Jan 5, 2027', 'Signed', 'doc']];
+    const items = IT.map((x) => ({ id: x[0], g: x[1], st: DO[x[0]] || x[2], th: x[3] || '', n: x[4] || 1, vid: x[5] === 'vid' }));
+    const OK = (x) => x.st === 'approved' || x.st === 'published';
+    const SL = { review: ['For approval', 'cg-s warn'], changes: ['Changes requested', 'cg-s chg'], approved: ['Approved', 'cg-s ok'], published: ['Published', 'cg-s ok'], prod: ['In production', 'cg-s prod'], todo: ['To do', 'cg-s'], overdue: ['Overdue', 'cg-s bad'] };
+    const dlv = GR.map((g, gi) => {
+      const its = items.filter((x) => x.g === gi), ok = its.filter(OK).length, withMedia = its.filter((x) => x.th && x.st !== 'todo' && x.st !== 'overdue');
+      const pick = (k) => its.find((x) => x.st === k);
+      const gst = pick(part ? 'changes' : 'review') ? (part ? 'changes' : 'review') : pick(part ? 'review' : 'changes') ? (part ? 'review' : 'changes') : pick('overdue') ? 'overdue' : ok === its.length ? (its.some((x) => x.st === 'published') ? 'published' : 'approved') : pick('prod') || ok ? 'prod' : 'todo';
+      const target = pick(part ? 'changes' : 'review') || pick(part ? 'review' : 'changes') || withMedia[withMedia.length - 1] || pick('overdue') || its[0];
+      const single = its.length === 1 ? its[0] : null;
+      const pg = !single ? ok + ' of ' + its.length + ' approved' : g[4] && (OK(single) || single.st === 'prod') ? g[4] : { review: 'Waiting for you', changes: 'With the creator', approved: 'Approved', published: 'Live', prod: 'In production', todo: 'Not started' }[single.st];
+      const thumb = target.th && target.st !== 'todo' && target.st !== 'overdue' ? target.th : '';
+      return { n: g[0], q: g[1], pct: Math.round(ok / its.length * 100), pg, st: SL[gst][0], stCls: SL[gst][1], due: g[3], dueCls: /overdue/.test(g[3]) && items.find((x) => x.id === 'p3' && x.st === 'overdue') ? 'du bad' : 'du', hasThumb: !!thumb, noThumb: !thumb, thumb, icon: g[2], cnt: thumb && target.n > 1 ? String(target.n) : '', hasCnt: !!thumb && target.n > 1, isVid: !!thumb && target.vid, thumbAlt: thumb ? 'Preview of what opens' : '', tid: target.id, aria: 'Open ' + g[0] };
+    });
+    const TT = { p2: ['Instagram post 2', 'Three-image carousel · sent yesterday'], r1: ['Behind-the-scenes reel 1', 'Video, 0:42 · sent today'], s2: ['Instagram story set #2', 'Smartcrew: “Use the white logo on dark backgrounds.”'] };
+    const attn = items.filter((x) => x.st === (part ? 'changes' : 'review')).map((x) => ({ id: x.id, t: (TT[x.id] || [x.id])[0], s: (TT[x.id] || ['', 'Sent for approval'])[1], act: part ? 'Upload new version' : 'Review' }));
+    const okN = items.filter(OK).length, waitN = items.filter((x) => x.st === 'review').length, chgN = items.filter((x) => x.st === 'changes').length;
+    tiles.forEach((t) => { if (t.dl) { t.v = String(okN); t.s = part ? (chgN ? chgN + (chgN === 1 ? ' needs changes' : ' need changes') : waitN + ' waiting for Smartcrew') : waitN ? waitN + ' waiting for your approval' : 'Nothing waiting for you'; t.dot = part ? chgN > 0 : waitN > 0; } });
+    const cmpCols = '170px repeat(' + Math.max(WISH.length, 1) + ', minmax(0, 1fr))';
+    const best = (key, dir) => { if (!WISH.length) return ''; const v = WISH.map((w) => w[key]); const b = dir > 0 ? Math.max.apply(null, v) : Math.min.apply(null, v); return b; };
+    const bf = best('fit', 1), bp = best('from', -1);
+    const cmpRows = [
+      { k: 'Fit with this brief', cells: WISH.map((w) => ({ v: w.fit + '%', cls: w.fit === bf ? 'best' : '' })) },
+      { k: 'Packages from', cells: WISH.map((w) => ({ v: money(w.from) + (w.from > budget ? ' · above budget' : ''), cls: w.from === bp ? 'best' : w.from > budget ? 'over' : '' })) },
+      { k: 'Packages', cells: WISH.map((w) => ({ v: w.tones.length + ' to choose from', cls: '' })) },
+      { k: 'Audience', cells: WISH.map((w) => ({ v: w.aud, cls: '' })) },
+      { k: 'Reach', cells: WISH.map((w) => ({ v: w.reach, cls: '' })) },
+      { k: 'When', cells: WISH.map((w) => ({ v: w.when, cls: '' })) },
+      { k: 'Where', cells: WISH.map((w) => ({ v: w.where, cls: '' })) }
+    ];
+    const DLG = {
+      archive: { t: 'Archive this campaign?', p: 'It moves to Archived in your campaigns list. Contracts and deliverables carry on, and you can restore it any time.', btn: 'Archive campaign', btnCls: 'vz-btn pe-solid', list: [] },
+      delete: NEW ? { t: 'Delete Summer Road Trip?', p: 'This removes the brief and its settings. There are no projects or contracts yet. You can’t undo this.', btn: 'Delete campaign', btnCls: 'vz-btn cg-danger', list: [] }
+        : { t: 'This campaign can’t be deleted yet', p: 'Desert Vibes Festival 2026 has work in progress with creators:', btn: 'Archive instead', btnCls: 'vz-btn pe-solid', list: ['An active contract with Aurora Field Sessions ($15,000)', 'An open offer to Pulse Weekender ($20,000)'], after: 'Withdraw the offer and finish the contract to delete it, or archive it now.' }
+    };
+    const dlg = DLG[dlgK] || DLG.archive;
+    return {
+      navActive: part ? 'projects' : 'campaigns', hs: { open: P0.searchOpen === true || P0.searchOpen === 'true', q: P0.searchQuery || '', hi: P0.searchHighlight === undefined ? -1 : Number(P0.searchHighlight), st: P0.searchStatus || 'ready', hist: String(P0.searchHistory) !== 'false' }, crumbs: part ? [{ l: 'Projects', href: 'PN-Projects.dc.html' }, { l: 'Sahara Sound Festival 2027', href: 'PN-Project-Owner.dc.html' }] : [{ l: 'Campaigns', href: 'CP-Campaigns.dc.html' }],
+      c, isOwner: own, isPart: part, editHref: NEW ? 'CG-Edit-New.dc.html' : 'CG-Edit-Overview.dc.html', basicsHref: NEW ? 'CG-Edit-New.dc.html' : 'CG-Edit-Basics.dc.html',
+      menuOpen, menuExp: menuOpen ? 'true' : 'false', tiles, facts,
+      briefTitle: part ? 'Shared brief' : 'Brief', docs: part ? ['Smartcrew brand guidelines.pdf', 'Logo pack.zip'] : [],
+      vPipe: view === 'pipeline' ? 'true' : 'false', vCmp: view === 'compare' ? 'true' : 'false', showPipe: view !== 'compare' || !WISH.length, showCmp: view === 'compare' && WISH.length > 0,
+      wish: WISH.map((w) => ({ id: w.id, name: w.name, by: w.by, fit: String(w.fit), bg: w.bg, href: w.href, pkHref: w.pkHref, fromTxt: 'From ' + money(w.from), tones: w.tones, pkTxt: w.tones.length + ' packages', pkLbl: w.tones.length + ' packages', isNew: !!w.isNew, over: w.from > budget, flags: !!w.isNew || w.from > budget || !!w.declined, declined: !!w.declined, rmLbl: 'Remove ' + w.name + ' from wishlist' })),
+      findOpen: own && (s.find !== undefined ? s.find : !!P.find), findCamp: NEW ? 'sr' : 'dv', inWishCsv: BASEIDS.filter((x) => removed.indexOf(x) < 0).join(','), addedCsv: added.join(','), findState: P.findState || 'results', findQuery: P.findQuery || '',
+      openFind: () => { this.setState({ find: true, menu: false, toast: '', addedAtOpen: (s.added || []).length }); },
+      neg: NEG, spon: SPON, wishN: String(WISH.length), negN: String(NEG.length), sponN: String(SPON.length), noWish: WISH.length === 0, noNeg: NEG.length === 0, noSpon: SPON.length === 0,
+      cmpCols, cmpRows, budgetTxt: money(budget),
+      hasDlv: !NEW, dlvTitle: part ? 'Your deliverables' : 'Deliverables', dlvSub: part ? 'Sahara Sound Festival 2027 · Sahara Tent' : 'Aurora Field Sessions · Session Partner', dlvCount: okN + ' of 12 approved',
+      attnCls: 'cg-attn' + (part ? ' chg' : ''), attnIc: part ? 'i-alert-circle' : 'i-clock', attnTitle: part ? 'Changes requested' : 'Waiting for your approval', attnN: String(attn.length), attn,
+      dlv: dlv, hasAttn: attn.length > 0, noAttn: attn.length === 0, caughtTxt: part ? 'Nothing needs changes. Smartcrew reviews new uploads within 2 days.' : 'You’re all caught up. New uploads from Meridian Hall will appear here.',
+      reviewOpen: s.rv !== undefined ? !!s.rv : !!P.review, rvItem: s.rv || P.review || '', rvMode: part ? 'creator' : 'owner', rvOver: Object.keys(DO).map((k2) => k2 + ':' + DO[k2]).join(','), rvChanges: P.reviewChanges === true || P.reviewChanges === 'true', rvBroken: P.reviewBroken === true || P.reviewBroken === 'true',
+      openRv: (e) => this.setState({ rv: e.currentTarget.getAttribute('data-id'), menu: false, toast: '' }),
+      dlgOpen: dlgK !== 'none', dlg: { t: dlg.t, p: dlg.p, after: dlg.after || '', hasAfter: !!dlg.after, btn: dlg.btn, btnCls: dlg.btnCls, list: dlg.list, hasList: dlg.list.length > 0 },
+      hasToast: !!s.toast, toast: s.toast || '', toastFind: !!s.tFind, toastUndo: !!s.tUndo,
+      toggleMenu: (e) => { e.stopPropagation(); this.setState({ menu: !menuOpen }); },
+      openDlg: (e) => this.setState({ menu: false, dlg: e.currentTarget.getAttribute('data-d') }),
+      closeDlg: () => this.setState({ dlg: 'none' }),
+      dlgGo: () => { this.setState({ dlg: 'none' }); this.flash(dlg.btn === 'Delete campaign' ? 'Campaign deleted' : 'Campaign archived. Find it under Archived in your campaigns.', dlg.btn !== 'Delete campaign'); },
+      dup: () => { this.setState({ menu: false }); this.flash('Duplicated as “' + c.name + ' (copy)”. Projects and contracts aren’t copied.'); },
+      copyLink: () => { this.setState({ menu: false }); this.flash('Link copied. Only your team can open it.'); },
+      msg: () => this.flash('Messages with Smartcrew open here in the next pass'),
+      setView: (e) => this.setState({ view: e.currentTarget.getAttribute('data-v') }),
+      rmWish: (e) => { const id = e.currentTarget.getAttribute('data-id'); this.setState({ removed: removed.concat([id]), last: id }); this.flash('Removed from wishlist', true); },
+      undo: () => { this.setState({ removed: removed.filter((x) => x !== s.last), toast: '' }); },
+      dealOpen: own && !!(s.deal !== undefined ? s.deal : P.deal), dealId: s.deal !== undefined ? s.deal : (P.deal || ''), dealStep: s.dealStep || P.dealStep || '', dealView: P.dealView || 'cards', dealSel: s.deal !== undefined && s.deal !== P.deal ? '' : (P.dealSel || ''), dealOffer: P.dealOffer === true || P.dealOffer === 'true', dealMode: s.deal !== undefined && s.deal !== P.deal ? 'none' : (P.dealMode || 'none'),
+      dName: (META[s.deal || P.deal] || {}).name || '', dParty: (META[s.deal || P.deal] || {}).party || '', dBg: (META[s.deal || P.deal] || {}).bg || '', dFrom: String((META[s.deal || P.deal] || {}).from || ''), dLeft: String(left + (((DEALS[s.deal || P.deal] || {}).st === 'wait' || (DEALS[s.deal || P.deal] || {}).st === 'countered') ? DEALS[s.deal || P.deal].offer : 0)),
+      openDeal: (e) => this.setState({ deal: e.currentTarget.getAttribute('data-id'), dealStep: e.currentTarget.getAttribute('data-step'), menu: false, toast: '' }),
+      review: () => this.flash('Deliverable review comes in the next pass'),
+      jump: (e) => { e.preventDefault(); const el = document.getElementById('cg-dlv'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 128, behavior: 'smooth' }); }
+    };
+  }
+}
+</script>
+<script src="assets/components.js"></script><script>(function(m){var o={};for(var k in m)o["./"+k]=new Blob([m[k]],{type:"text/html"});window.__resourceBlobs=o;window.__resources={};})(window.__VZ_SRC||{});</script><script src="assets/vendor/react.production.min.js"></script><script src="assets/vendor/react-dom.production.min.js"></script><script src="assets/vendor/dc-runtime.js"></script><script src="assets/prototype-map.js"></script><script src="assets/proto-bar.js"></script>
+</body>
+</html>

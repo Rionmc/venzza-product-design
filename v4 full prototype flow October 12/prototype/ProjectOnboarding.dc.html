@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Onboarding · New project</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="ds/venzza/components/bundle.css">
+<link rel="stylesheet" href="shared/venzza-dark.css">
+<link rel="stylesheet" href="shared/venzza-app.css">
+<script src="ds/venzza/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:inherit}
+</style>
+</helmet>
+<div class="{{obCls}}" style="{{obStyle}}"><div class="ob-atmo" aria-hidden="true"><i></i><i></i><i></i></div>
+<sc-if value="{{oldHdr}}" hint-placeholder-val="{{false}}"><header class="ob-top">
+<span class="ob-mark" role="img" aria-label="Venzza"><svg class="ob-mark-svg" viewBox="0 0 410 424" aria-hidden="true" focusable="false"><path d="M204.942 224.153H108.345L0 0H75.657C88.4625 0 100.139 7.32421 105.711 18.8512L204.942 224.153Z"/><path d="M301.655 224.153H205.056L304.289 18.8511C309.861 7.32412 321.537 0 334.343 0H410L301.655 224.153Z"/><path d="M253.256 324.074L204.956 424L156.658 324.074L204.956 224.149L253.256 324.074Z"/></svg></span>
+<sc-if value="{{exitDirect}}" hint-placeholder-val="{{true}}"><a class="ob-exit" href="{{wl.home}}"><svg class="vz-icon sm"><use href="#i-x"></use></svg>Exit</a></sc-if>
+<sc-if value="{{exitAsk}}" hint-placeholder-val="{{false}}"><button type="button" class="ob-exit" onClick="{{askExit}}"><svg class="vz-icon sm"><use href="#i-x"></use></svg>Exit</button></sc-if>
+</header></sc-if>
+<sc-if value="{{flowHdr}}" hint-placeholder-val="{{true}}"><dc-import name="TopNav" flow-links="true" active="projects" bell="rest" brand="lockup" brand-tone="white" brand-size="24" nav-layout="centered" search-mode="takeover" header-width="fluid" tone="raised" account="avatar" hint-size="100%,60px"></dc-import><div class="ob-exitfloat"><sc-if value="{{exitDirect}}" hint-placeholder-val="{{true}}"><a class="ob-exit" href="{{wl.home}}"><svg class="vz-icon sm"><use href="#i-x"></use></svg>Exit</a></sc-if>
+<sc-if value="{{exitAsk}}" hint-placeholder-val="{{false}}"><button type="button" class="ob-exit" onClick="{{askExit}}"><svg class="vz-icon sm"><use href="#i-x"></use></svg>Exit</button></sc-if>
+</div></sc-if>
+<div class="ob-progress" aria-hidden="true"><i style="width: {{progress}}%"></i></div>
+<sc-if value="{{canBack}}" hint-placeholder-val="{{false}}"><button type="button" class="ob-topback show" onClick="{{back}}"><svg class="vz-icon"><use href="#i-arrow-left"></use></svg>Back</button></sc-if>
+<sc-if value="{{backHomeDirect}}" hint-placeholder-val="{{true}}"><a class="ob-topback show" href="{{wl.home}}"><svg class="vz-icon"><use href="#i-arrow-left"></use></svg>Back</a></sc-if>
+<sc-if value="{{backHomeAsk}}" hint-placeholder-val="{{false}}"><button type="button" class="ob-topback show" onClick="{{askExit}}"><svg class="vz-icon"><use href="#i-arrow-left"></use></svg>Back</button></sc-if>
+
+<div class="ob-stage">
+<sc-if value="{{inFlow}}" hint-placeholder-val="{{true}}">
+<div class="ob-wrap" style="padding-bottom: 0">
+<div class="vzsteps" aria-label="Progress">
+<sc-for list="{{steps}}" as="s" hint-placeholder-count="4">
+<div class="{{s.cls}}" aria-current="{{s.current}}">
+<span class="dot"><sc-if value="{{s.done}}" hint-placeholder-val="{{false}}"><svg class="vz-icon"><use href="#i-check"></use></svg></sc-if><sc-if value="{{s.notDone}}" hint-placeholder-val="{{true}}">{{s.n}}</sc-if></span>
+<span class="slabel2">{{s.label}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{is.intro}}" hint-placeholder-val="{{false}}">
+<section class="ob-step active" aria-labelledby="hp-intro">
+<div class="ob-wrap ob-intro">
+<div class="ob-eyebrow">New project</div>
+<h1 class="ob-h" id="hp-intro">Here's how a project works.</h1>
+<p class="ob-sub">Set it up once. Sponsors find it in the marketplace and add it to their campaigns.</p>
+<div class="obi-flow" role="list" aria-label="How a project works">
+<span class="obi-track" aria-hidden="true"><i></i></span>
+<div class="obi-node" role="listitem"><span class="obi-ic"><svg class="vz-icon"><use href="#i-briefcase"></use></svg></span><b>Your project</b><span>What you're offering, who you reach and when it happens.</span></div>
+<div class="obi-node" role="listitem"><span class="obi-ic"><svg class="vz-icon"><use href="#i-package"></use></svg></span><b>Packages</b><span>The sponsorships you sell. You'll build these on the project page.</span></div>
+<div class="obi-node" role="listitem"><span class="obi-ic"><svg class="vz-icon"><use href="#i-target"></use></svg></span><b>Campaigns</b><span>Sponsors whose campaigns fit you, ready to add you to theirs.</span></div>
+</div>
+<div class="obi-cta"><button type="button" class="vz-btn vz-btn--primary lg ob-next" onClick="{{startFlow}}">Get started<svg class="vz-icon"><use href="#i-arrow-right"></use></svg></button><span class="obi-meta"><svg class="vz-icon"><use href="#i-clock"></use></svg>4 short steps · about 3 minutes</span></div>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{is.basics}}" hint-placeholder-val="{{true}}">
+<section class="ob-step active" aria-labelledby="hp-basics">
+<div class="ob-wrap" style="padding-top: 0">
+<div class="ob-eyebrow">{{wl.eyebrow}}</div>
+<h1 class="ob-h" id="hp-basics">Name your project.</h1>
+<p class="ob-sub">{{wl.sub}}</p>
+<sc-if value="{{wl.quick}}" hint-placeholder-val="{{false}}"><p class="ob-quick">Know what you need? <a href="{{wl.quickHref}}">Use the one-page form instead</a></p></sc-if>
+<sc-if value="{{inlineIntro}}" hint-placeholder-val="{{false}}">
+<div class="ob-hier compact" aria-label="How a project works">
+<div class="obh-node"><span class="obh-ic"><svg class="vz-icon"><use href="#i-briefcase"></use></svg></span><b>Project</b><span>Offer, reach &amp; dates</span></div>
+<div class="obh-arrow" aria-hidden="true"><svg class="vz-icon"><use href="#i-arrow-right"></use></svg></div>
+<div class="obh-node"><span class="obh-ic"><svg class="vz-icon"><use href="#i-package"></use></svg></span><b>Packages</b><span>Built on the project page</span></div>
+<div class="obh-arrow" aria-hidden="true"><svg class="vz-icon"><use href="#i-arrow-right"></use></svg></div>
+<div class="obh-node"><span class="obh-ic"><svg class="vz-icon"><use href="#i-target"></use></svg></span><b>Campaigns</b><span>Sponsors add you to theirs</span></div>
+</div>
+</sc-if>
+<sc-if value="{{aiIdle}}" hint-placeholder-val="{{true}}">
+<button type="button" class="{{aiCls}}" disabled="{{aiBusy}}" onClick="{{runAi}}">
+<span class="ic"><svg class="vz-icon"><use href="#i-bot"></use></svg></span>
+<span><b>{{aiTitle}}</b><p>Upload a brief, deck or media kit and we'll fill in the basics for you to review.</p></span>
+</button>
+</sc-if>
+<sc-if value="{{aiDone}}" hint-placeholder-val="{{false}}">
+<div class="vz-alert vz-alert--success" role="status"><svg class="vz-icon vz-icon--fill lg" style="color: var(--status-success-solid)"><use href="#i-circle-check-fill"></use></svg><span><b>Filled in from 3d-projection-brief.pdf</b>Review the details below before you continue.</span></div>
+</sc-if>
+<div class="ob-field"><span class="vz-label" id="pj-lbl-cover">Cover image</span>
+<sc-if value="{{noCover}}" hint-placeholder-val="{{true}}"><button type="button" class="vzup pf-up" style="min-height: 150px" aria-labelledby="pj-lbl-cover" onClick="{{addCover}}"><span class="vzup-ic"><svg class="vz-icon"><use href="#i-image"></use></svg></span><span class="vzup-t"><b>Click to upload</b> or drag and drop</span><span class="vzup-h">Recommended 1600 × 800 px or larger · JPG or PNG up to 10 MB</span></button></sc-if>
+<sc-if value="{{hasCover}}" hint-placeholder-val="{{false}}"><div class="pf-cover"><img src="assets/img/sahara-main-stage.jpg" alt="Project cover" style="height: 170px"><div class="pf-cover-act"><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{addCover}}">Replace</button><button type="button" class="vz-btn vz-btn--ghost sm" onClick="{{removeCover}}">Remove</button></div></div></sc-if>
+</div>
+<div class="ob-field">
+<label class="vz-label" for="pj-name">Project name <span class="ob-req" aria-hidden="true">*</span></label>
+<input class="vz-input" id="pj-name" placeholder="e.g. Aurora Field Sessions" required value="{{d.name}}" onChange="{{set.name}}" onInput="{{set.name}}">
+</div>
+<div class="ob-row2">
+<div class="ob-field"><label class="vz-label" for="pj-org">Organization</label><input class="vz-input" id="pj-org" placeholder="e.g. Justaverse" value="{{d.org}}" onChange="{{set.org}}" onInput="{{set.org}}"></div>
+<div class="ob-field"><label class="vz-label" for="pj-loc">Primary location</label><input class="vz-input" id="pj-loc" placeholder="City, country" value="{{d.location}}" onChange="{{set.location}}" onInput="{{set.location}}"></div>
+</div>
+<div class="ob-field">
+<label class="vz-label" for="pj-cat">Category</label>
+<select class="vz-select" id="pj-cat" style="width: 100%" value="{{d.category}}" onChange="{{set.category}}">
+<option value="">Select a category</option>
+<sc-for list="{{categories}}" as="c" hint-placeholder-count="10"><option value="{{c}}">{{c}}</option></sc-for>
+</select>
+</div>
+<div class="ob-field"><label class="vz-label" for="pj-tag">Tagline</label><input class="vz-input" id="pj-tag" placeholder="A punchy one-line pitch" value="{{d.tagline}}" onChange="{{set.tagline}}" onInput="{{set.tagline}}"></div>
+<div class="ob-row2">
+<div class="ob-field"><label class="vz-label" for="pj-start">Start date</label><input type="{{dateType}}" class="vz-input" id="pj-start" value="{{d.start}}" onChange="{{set.start}}" onInput="{{set.start}}"></div>
+<div class="ob-field"><label class="vz-label" for="pj-end">End date</label><input type="{{dateType}}" class="vz-input" id="pj-end" value="{{d.end}}" onChange="{{set.end}}" onInput="{{set.end}}"></div>
+</div>
+<div class="ob-field">
+<label class="vz-label" for="pj-desc">Short description <span class="ob-req" aria-hidden="true">*</span></label>
+<textarea class="vz-textarea" id="pj-desc" rows="4" placeholder="What is this project, and what makes it a great fit for sponsors?" required value="{{d.desc}}" onChange="{{set.desc}}" onInput="{{set.desc}}"></textarea>
+</div>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{is.mood}}" hint-placeholder-val="{{false}}">
+<section class="ob-step active ob-moodstep" aria-labelledby="h-mood">
+<div class="ob-wrap" style="padding-top: 0"><div class="ob-eyebrow">Mood · Step 2 of 4</div><h1 class="ob-h" id="h-mood">What’s the feeling?</h1><p class="ob-sub">{{moodSub}}</p></div>
+<div class="ob-moodstage"><dc-import name="MD-Moods" embed="true" primary="{{d.mood}}" sup="{{moodSupCsv}}" suggest="{{moodSuggest}}" hint-size="100%,600px"></dc-import></div>
+</section>
+</sc-if>
+
+<sc-if value="{{is.audience}}" hint-placeholder-val="{{false}}">
+<section class="ob-step active" aria-labelledby="hp-aud">
+<div class="ob-wrap" style="padding-top: 0">
+<div class="ob-eyebrow">Audience &amp; reach · Step 3 of 4</div>
+<h1 class="ob-h" id="hp-aud">Who does this project reach?</h1>
+<p class="ob-sub">Sponsors use this to see if your audience matches their brand.</p>
+<div class="ob-field">
+<label class="vz-label" for="pj-reach">Estimated total reach</label>
+<input class="vz-input" id="pj-reach" inputmode="numeric" placeholder="e.g. 480,000" value="{{d.reach}}" onChange="{{set.reach}}" onInput="{{set.reach}}">
+<p class="ob-help">Combined followers, subscribers or attendees across your channels.</p>
+</div>
+<div class="ob-field">
+<span class="vz-label" id="pj-lbl-aud">Audience makeup</span>
+<p class="ob-help" style="margin: 0 0 10px">Pick the interests that describe your audience.</p>
+<div class="obchips" role="group" aria-labelledby="pj-lbl-aud"><sc-for list="{{chips.audience}}" as="o" hint-placeholder-count="10"><button type="button" class="{{o.cls}}" aria-pressed="{{o.on}}" onClick="{{o.toggle}}">{{o.label}}</button></sc-for></div>
+</div>
+<div class="ob-field">
+<span class="vz-label" id="pj-lbl-loc">Where they are</span>
+<div class="obchips" role="group" aria-labelledby="pj-lbl-loc" style="margin-top: 8px"><sc-for list="{{chips.locations}}" as="o" hint-placeholder-count="6"><button type="button" class="{{o.cls}}" aria-pressed="{{o.on}}" onClick="{{o.toggle}}">{{o.label}}</button></sc-for></div>
+<form class="ob-addrow" onSubmit="{{addLocation}}"><input class="vz-input" placeholder="Add a location" aria-label="Add a location" value="{{d.inLoc}}" onChange="{{set.inLoc}}" onInput="{{set.inLoc}}"><button type="submit" class="vz-btn vz-btn--secondary">Add</button></form>
+</div>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{is.review}}" hint-placeholder-val="{{false}}">
+<section class="ob-step active" aria-labelledby="hp-ready">
+<div class="ob-wrap" style="padding-top: 0">
+<div class="ob-eyebrow">You're set · Step 4 of 4</div>
+<h1 class="ob-h" id="hp-ready">{{readyTitle}}</h1>
+<p class="ob-sub">Your project is saved as a Draft. Next, build your sponsorship packages on the project page.</p>
+<div class="ob-nextcard">
+<div class="ob-nextcard-h"><span class="pst draft"><i></i>Draft</span><span>Private to your team until you publish</span></div>
+<sc-for list="{{nextSteps}}" as="n" hint-placeholder-count="4"><div class="{{n.cls}}"><span class="ic"><svg class="vz-icon"><use href="#i-check"></use></svg></span><span class="t"><b>{{n.label}}</b><span>{{n.sub}}</span></span><span class="{{n.tagCls}}">{{n.tag}}</span></div></sc-for>
+</div>
+<div class="ob-finalcta"><a class="vz-btn vz-btn--primary" href="{{wl.pkgs}}">Build your packages<svg class="vz-icon"><use href="#i-arrow-right"></use></svg></a><a class="vz-btn vz-btn--ghost" href="{{wl.done}}">Go to project</a></div>
+<div class="ob-summary">
+<h5>Project summary</h5>
+<sc-for list="{{summary}}" as="r" hint-placeholder-count="7">
+<div class="ob-sumrow"><span class="k">{{r.k}}</span><span class="v">{{r.v}}</span></div>
+</sc-for>
+</div>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{showNav}}" hint-placeholder-val="{{true}}">
+<div class="ob-nav">
+<div class="inner">
+<span class="ob-navnote" aria-live="polite">{{navNote}}</span>
+<span class="sp"></span>
+<sc-if value="{{canSkip}}" hint-placeholder-val="{{false}}"><button type="button" class="ob-skip" onClick="{{next}}">Skip for now</button></sc-if>
+<button type="button" class="vz-btn vz-btn--primary ob-next" disabled="{{blocked}}" onClick="{{next}}">Continue<svg class="vz-icon"><use href="#i-arrow-right"></use></svg></button>
+</div>
+</div>
+</sc-if>
+</div>
+</div>
+<sc-if value="{{exitOpen}}" hint-placeholder-val="{{false}}">
+<div class="vzdlg-backdrop open ob-exitdlg" onClick="{{onExitBackdrop}}" onKeyDown="{{onExitKey}}">
+<div class="vzdlg sm" role="dialog" aria-modal="true" aria-labelledby="ob-exit-t">
+<div class="vzdlg-head"><div class="vzdlg-ic info"><svg class="vz-icon"><use href="#i-file-text"></use></svg></div><div><h3 class="vzdlg-title" id="ob-exit-t">Save this project as a draft?</h3></div></div>
+<div class="vzdlg-body">You've started setting it up. Save a draft to pick up right where you left off, or discard what you've entered.</div>
+<div class="vzdlg-foot ob-exitfoot"><a class="vz-btn vz-btn--ghost ob-discard" href="{{wl.home}}">Discard</a><span class="sp"></span><button type="button" class="vz-btn vz-btn--secondary" onClick="{{closeExit}}">Keep editing</button><a class="vz-btn vz-btn--primary" href="{{wl.draft}}">Save draft</a></div>
+</div>
+</div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"flow":{"editor":"boolean","default":true,"section":"State"},"firstTime":{"editor":"boolean","default":false,"section":"State"},"scenario":{"editor":"enum","options":["intro","basics-empty","basics-filled","mood","mood-picked","audience","review","review-skipped"],"default":"basics-empty","section":"State"},"introStyle":{"editor":"enum","options":["screen","inline"],"default":"screen","section":"Variation"},"$preview":{"width":1440,"height":960}}'>
+class Component extends DCLogic {
+  componentWillUnmount() { clearTimeout(this.aiT); }
+  componentDidMount() { document.documentElement.setAttribute('data-theme', 'dark'); if (window.Venzza) window.Venzza.mountIcons(); this.onMood = (e) => { const x = (e && e.detail) || {}; this.upd({ mood: x.p || '', moodSup: x.sup || [] }); }; window.addEventListener('md-change', this.onMood); }
+  componentWillUnmount() { window.removeEventListener('md-change', this.onMood); }
+  componentDidUpdate(prev) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    if (prev.scenario !== this.props.scenario || prev.introStyle !== this.props.introStyle) this.setState({ exitOpen: undefined, step: undefined, d: undefined, ai: undefined });
+  }
+  blank() { return { mood: '', moodSup: [], cover: false, org: '', location: '', tagline: '', start: '', end: '', name: '', category: '', desc: '', reach: '', audience: [], locations: [], extraLoc: [], inLoc: '', pkg: '', price: '', includes: '' }; }
+  basics() {
+    return Object.assign(this.blank(), { cover: true, org: 'Meridian Hall', location: 'São Paulo, Brazil', tagline: 'Live audiovisual sessions in remote landscapes', start: '2026-11-06', end: '2026-12-12', name: 'Aurora Field Sessions', category: 'Music', desc: 'A touring live audiovisual series staged in remote landscapes, filmed and released as short films. Sponsors get a premium, story-driven moment in front of an engaged culture audience.' });
+  }
+  full() {
+    return Object.assign(this.basics(), { reach: '480,000', audience: ['Music', 'Travel', 'Art & culture'], locations: ['São Paulo', 'Brazil (national)'], pkg: 'Title Partner', price: '25,000', includes: 'On-stage banner and stage naming, 3 dedicated social posts, a co-branded backstage reel.' });
+  }
+  // Living prototype: start fresh or resume the saved draft; save as you go.
+  protoStart() {
+    if (!this._pi) {
+      const P = window.VzProto, it = P.takeIntent() || {};
+      const p = it.resume === 'project' ? P.project() : null;
+      if (p && p.setup && p.setup !== 'done') this._pi = { id: p.id, step: p.setup, d: Object.assign(this.blank(), p.ob || {}) };
+      else this._pi = { id: P.newId('p'), step: this.props.introStyle === 'inline' ? 'basics' : 'intro', d: this.blank() };
+    }
+    return { step: this._pi.step, d: this._pi.d };
+  }
+  protoSave() {
+    const P = window.VzProto, st = this.st(), d = st.d;
+    if (!P || !this._pi || st.step === 'intro' || !d || !(d.name || '').trim()) return;
+    const prev = P.data().projects.find((x) => x.id === this._pi.id) || {};
+    const done = st.step === 'review' || prev.setup === 'done';
+    P.putProject({ id: this._pi.id, ob: d, name: d.name, org: d.org, location: d.location, category: d.category, desc: d.desc, tagline: d.tagline, start: d.start, end: d.end, cover: !!d.cover, reach: d.reach, audience: d.audience, locations: d.locations, setup: done ? 'done' : st.step, status: prev.status || 'draft', _editing: !done });
+  }
+  scenarioState() {
+    if (window.VzProto) return this.protoStart();
+    const sc = this.props.scenario || 'basics-empty';
+    if (sc === 'intro') return { step: this.props.introStyle === 'inline' ? 'basics' : 'intro', d: this.blank() };
+    if (sc === 'basics-filled') return { step: 'basics', d: this.basics(), ai: 'done' };
+    if (sc === 'mood') return { step: 'mood', d: this.basics() };
+    if (sc === 'mood-picked') return { step: 'mood', d: Object.assign(this.basics(), { mood: 'dreamy', moodSup: ['adventurous', 'chill'] }) };
+    if (sc === 'audience') return { step: 'audience', d: Object.assign(this.basics(), { mood: 'dreamy', moodSup: ['adventurous', 'chill'], reach: '480,000', audience: ['Music', 'Travel'], locations: ['São Paulo'] }) };
+    if (sc === 'review') return { step: 'review', d: this.full() };
+    if (sc === 'review-skipped') return { step: 'review', d: this.basics() };
+    return { step: 'basics', d: this.blank() };
+  }
+  st() {
+    const out = Object.assign({ ai: 'idle' }, this.scenarioState());
+    const s = this.state || {};
+    Object.keys(s).forEach((k) => { if (s[k] !== undefined) out[k] = s[k]; });
+    return out;
+  }
+  upd(patch) { this.setState({ d: Object.assign({}, this.st().d, patch) }); }
+  exitVals(st, idx, blocked, hint) {
+    const dirty = JSON.stringify(st.d) !== JSON.stringify(this.blank()) || st.ai === 'done';
+    const first = idx <= 0;
+    return {
+      exitDirect: !dirty, exitAsk: dirty,
+      backHomeDirect: first && !dirty, backHomeAsk: first && dirty,
+      exitOpen: !!st.exitOpen,
+      askExit: () => this.setState({ exitOpen: true }),
+      closeExit: () => this.setState({ exitOpen: false }),
+      onExitBackdrop: (e) => { if (e.target === e.currentTarget) this.setState({ exitOpen: false }); },
+      onExitKey: (e) => { if (e.key === 'Escape') this.setState({ exitOpen: false }); },
+      navNote: blocked ? hint : ''
+    };
+  }
+  // dateType: bound as the date inputs' type, so the unrendered template never holds a date input with a template-hole value (avoids a console warning)
+  renderVals() { const v = this.renderVals0(); v.dateType = 'date'; const FL = this.props.flow !== false && this.props.flow !== 'false'; const FT = this.props.firstTime === true || this.props.firstTime === 'true'; v.flowHdr = FL; v.oldHdr = !FL; v.wl = { quick: FL && !FT, quickHref: 'CR-NewProject.dc.html', home: FL ? 'PN-Home.dc.html' : 'ProjectOnboarding-Home.dc.html', done: FL ? 'PN-New-Overview.dc.html' : 'ProjectDetail-DraftChecklist.dc.html', pkgs: FL ? 'PN-New-Packages.dc.html' : 'ProjectDetail-DraftPackage.dc.html', draft: FL ? 'PN-Projects.dc.html' : 'Home-DraftSavedProject.dc.html', eyebrow: FL && !FT ? 'Guided setup · Step 1 of 4' : 'Project basics · Step 1 of 4', sub: FL && !FT ? 'Four short steps. Skip anything you’re unsure about and add it later.' : 'This is what sponsors see first: a clear title and a short pitch.' }; return v; }
+  renderVals0() {
+    if (window.VzProto && this._pi) { clearTimeout(this._ps); this._ps = setTimeout(() => this.protoSave(), 0); }
+    const st = this.st();
+    const d = st.d;
+    const fd = (iso) => { const p = iso.split('-').map(Number); return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][p[1] - 1] + ' ' + p[2] + ', ' + p[0]; };
+    const introScreen = this.props.introStyle !== 'inline';
+    const ORDER = (introScreen ? ['intro'] : []).concat(['basics', 'mood', 'audience', 'review']);
+    const LABELS = ['Basics', 'Mood', 'Audience', 'Review'];
+    const FLOW = ['basics', 'mood', 'audience', 'review'];
+    const MOODC = { energetic: ['#FF6A3D', '#C2185B'], euphoric: ['#FF4FB0', '#6A3BD8'], chill: ['#46C7F0', '#2C5FB8'], dreamy: ['#C8A8F0', '#E58EB8'], bold: ['#FF3B5C', '#FF9F1C'], underground: ['#5B5B66', '#2A1F3D'], premium: ['#D9B77A', '#7A5A2E'], playful: ['#FFC94A', '#FF6F7D'], wholesome: ['#7FD48A', '#2E9C8A'], artsy: ['#8E8CF0', '#4CB3C9'], adventurous: ['#2FB7A0', '#1F5E8C'], nocturnal: ['#3D5AFE', '#B026FF'] };
+    const MNAME = { energetic: 'Energetic', euphoric: 'Euphoric', chill: 'Chill', dreamy: 'Dreamy', bold: 'Bold', underground: 'Underground', premium: 'Premium', playful: 'Playful', wholesome: 'Wholesome', artsy: 'Artsy', adventurous: 'Adventurous', nocturnal: 'Nocturnal' };
+    const idx = ORDER.indexOf(st.step);
+    const flowIdx = FLOW.indexOf(st.step);
+    const go = (k) => this.setState({ step: k });
+    const OPTS = {
+      audience: ['Music', 'Art & culture', 'Fashion', 'Beauty', 'Food & drink', 'Travel', 'Sports', 'Fitness', 'Wellness', 'Gaming', 'Technology', 'Outdoors'],
+      locations: ['São Paulo', 'Rio de Janeiro', 'Brazil (national)', 'United States', 'Europe', 'Global']
+    };
+    const chipset = (key, list) => list.map((label) => {
+      const on = d[key].indexOf(label) > -1;
+      return { label, on, cls: on ? 'obchip on' : 'obchip', toggle: () => {
+        const cur = this.st().d[key];
+        this.upd({ [key]: on ? cur.filter((x) => x !== label) : cur.concat([label]) });
+      } };
+    });
+    const set = {};
+    ['name', 'category', 'desc', 'reach', 'inLoc', 'pkg', 'price', 'includes', 'org', 'location', 'tagline', 'start', 'end'].forEach((k) => { set[k] = (e) => this.upd({ [k]: e.target.value }); });
+    const basicsOk = d.name.trim().length > 0 && d.desc.trim().length > 0;
+    const blocked = (st.step === 'basics' && !basicsOk) || (st.step === 'mood' && !d.mood);
+    const priceNum = parseFloat(('' + d.price).replace(/[^0-9.]/g, ''));
+    const reachNum = parseFloat(('' + d.reach).replace(/[^0-9.]/g, ''));
+    return {
+      progress: st.step === 'intro' ? 0 : Math.round(((flowIdx + 1) / 4) * 100),
+      canBack: idx > 0,
+      ...this.exitVals(st, idx, blocked, st.step === 'mood' ? 'Pick a main mood to continue. Supporting moods are optional.' : 'Add a project name and description to continue.'),
+      back: () => go(ORDER[Math.max(idx - 1, 0)]),
+      obCls: 'ob ob-glow p-' + (st.step || 'basics'),
+      moodSupCsv: (d.moodSup || []).join(','), moodSuggest: 'dreamy,adventurous,chill',
+      obStyle: d.mood && MOODC[d.mood] && ORDER.indexOf(st.step) >= ORDER.indexOf('mood') ? '--oa: ' + MOODC[d.mood][1] + '; --ob2: ' + MOODC[d.mood][0] + '; --oc: ' + ((d.moodSup || [])[0] && MOODC[d.moodSup[0]] ? MOODC[d.moodSup[0]][0] : MOODC[d.mood][1]) : '',
+      moodSub: 'Pick the main mood of ' + (d.name || 'your project') + ', then up to three that support it. Sponsors use moods to find projects that feel right for their campaigns.',
+      is: { mood: st.step === 'mood', intro: st.step === 'intro', basics: st.step === 'basics', audience: st.step === 'audience', review: st.step === 'review' },
+      inFlow: flowIdx > -1,
+      inlineIntro: !introScreen,
+      startFlow: () => go('basics'),
+      steps: LABELS.map((label, i) => {
+        const done = i < flowIdx || st.step === 'review';
+        const cur = i === flowIdx && st.step !== 'review';
+        return { label, n: i + 1, done, notDone: !done, current: cur ? 'step' : undefined, cls: 'vzstep ' + (done ? 'done' : cur ? 'current' : 'upcoming') };
+      }),
+      d, set,
+      aiIdle: st.ai !== 'done', aiDone: st.ai === 'done', aiBusy: st.ai === 'busy',
+      aiCls: st.ai === 'busy' ? 'ob-ai busy' : 'ob-ai',
+      aiTitle: st.ai === 'busy' ? 'Reading your brief…' : 'In a hurry? Let AI start it for you.',
+      runAi: () => { this.setState({ ai: 'busy' }); clearTimeout(this.aiT); this.aiT = setTimeout(() => { const b = this.basics(); this.setState({ ai: 'done', d: Object.assign({}, this.st().d, { cover: true, name: b.name, org: b.org, location: b.location, category: b.category, tagline: b.tagline, start: b.start, end: b.end, desc: b.desc }) }); }, 1100); },
+      noCover: !d.cover, hasCover: !!d.cover,
+      addCover: () => this.upd({ cover: true }),
+      removeCover: () => this.upd({ cover: false }),
+      categories: ['Music', 'Live events', 'Art & culture', 'Film & series', 'Sports', 'Food & drink', 'Technology', 'Gaming', 'Fashion & beauty', 'Travel & outdoors'],
+      chips: { audience: chipset('audience', OPTS.audience), locations: chipset('locations', OPTS.locations.concat(d.extraLoc)) },
+      addLocation: (e) => {
+        if (e && e.preventDefault) e.preventDefault();
+        const cur = this.st().d; const t = (cur.inLoc || '').trim();
+        if (!t) return;
+        const extra = OPTS.locations.indexOf(t) > -1 || cur.extraLoc.indexOf(t) > -1 ? cur.extraLoc : cur.extraLoc.concat([t]);
+        this.upd({ extraLoc: extra, locations: cur.locations.indexOf(t) > -1 ? cur.locations : cur.locations.concat([t]), inLoc: '' });
+      },
+      readyTitle: (d.name || 'Your project') + ' is set up.',
+      summary: [
+        { k: 'Name', v: d.name || '—' },
+        { k: 'Organization', v: d.org || '—' },
+        { k: 'Category', v: d.category || '—' },
+        { k: 'Mood', v: d.mood ? MNAME[d.mood] + (d.moodSup.length ? ', with ' + d.moodSup.map((x) => MNAME[x]).join(', ') : '') : '—' },
+        { k: 'Location', v: d.location || '—' },
+        { k: 'Dates', v: d.start ? fd(d.start) + (d.end ? ' – ' + fd(d.end) : '') : '—' },
+        { k: 'Cover image', v: d.cover ? 'Added' : '—' },
+        { k: 'Reach', v: reachNum ? reachNum.toLocaleString('en-US') : '—' },
+        { k: 'Audience', v: d.audience.length ? d.audience.join(', ') : '—' },
+        { k: 'Locations', v: d.locations.length ? d.locations.join(', ') : '—' },
+      ],
+      nextSteps: [
+        { label: 'Basics', sub: 'Name, category, description', done: true },
+        { label: 'Cover image', sub: 'The hero sponsors see first', done: !!d.cover },
+        { label: 'Mood', sub: d.mood ? MNAME[d.mood] + ' sets the feel of your page' : 'How your project feels', done: !!d.mood },
+        { label: 'Audience & reach', sub: 'Who a sponsor gets in front of', done: !!reachNum },
+        { label: 'Packages', sub: 'Build them on the project page', done: false, next: true }
+      ].map((n) => ({ label: n.label, sub: n.sub, cls: n.done ? 'pd-chk-i done' : 'pd-chk-i', tag: n.done ? 'Done' : n.next ? 'Next' : 'To do', tagCls: n.done ? 'pd-chk-tag' : 'pd-chk-tag req' })),
+      showNav: st.step !== 'review' && st.step !== 'intro',
+      canSkip: st.step === 'audience',
+      blocked,
+      next: () => { if (!blocked) go(ORDER[Math.min(idx + 1, ORDER.length - 1)]); }
+    };
+  }
+}
+</script>
+<script src="assets/components.js"></script><script>(function(m){var o={};for(var k in m)o["./"+k]=new Blob([m[k]],{type:"text/html"});window.__resourceBlobs=o;window.__resources={};})(window.__VZ_SRC||{});</script><script src="assets/vendor/react.production.min.js"></script><script src="assets/vendor/react-dom.production.min.js"></script><script src="assets/vendor/dc-runtime.js"></script><script src="assets/prototype-map.js"></script><script src="assets/proto-bar.js"></script>
+</body>
+</html>

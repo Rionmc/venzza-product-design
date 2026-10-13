@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Decisions and rules</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="ds/venzza/components/bundle.css">
+<link rel="stylesheet" href="shared/venzza-dark.css">
+<link rel="stylesheet" href="shared/venzza-app.css">
+<script src="ds/venzza/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--bg-canvas)}
+.dr{width:100%;max-width:1440px;box-sizing:border-box;padding:64px 72px 80px;color:var(--text-primary);font-family:var(--font-product)}
+.dr-k{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--lime-400);margin:0 0 10px}
+.dr h1{margin:0 0 10px;font-family:var(--font-marketing);font-size:36px;font-weight:700;letter-spacing:-.02em}
+.dr-lead{margin:0 0 40px;font-size:16px;line-height:1.6;color:var(--text-secondary);max-width:900px}
+.dr-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.dr-wide{grid-column:span 3}
+.dr-two{grid-column:span 2}
+.dr-c{background:var(--bg-surface-deep);border:var(--bw-hairline) solid var(--border-on-deep);border-radius:var(--radius-xl);padding:24px 26px}
+.dr-c h2{margin:0 0 4px;font-size:17px;font-weight:700}
+.dr-c>p{margin:0 0 14px;font-size:13.5px;line-height:1.55;color:var(--text-secondary)}
+.dr-c ul{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.dr-c li{font-size:13.5px;line-height:1.5;color:var(--text-secondary);padding-left:16px;position:relative}
+.dr-c li::before{content:"";position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:var(--radius-pill);background:var(--neutral-600)}
+.dr-c li b{color:var(--text-primary);font-weight:600}
+.dr-c code{font-family:var(--font-mono);font-size:12px;color:var(--text-primary);background:var(--bg-inset);padding:1px 6px;border-radius:var(--radius-sm)}
+.dr-pages{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:4px}
+.dr-pg{background:var(--bg-surface);border:var(--bw-hairline) solid var(--border-subtle);border-radius:var(--radius-lg);padding:14px 16px}
+.dr-pg b{display:block;font-size:14px;margin-bottom:4px}
+.dr-pg span{font-size:12.5px;line-height:1.45;color:var(--text-tertiary)}
+.dr-sw{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.dr-sw span{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--text-secondary)}
+.dr-sw i{width:14px;height:14px;border-radius:var(--radius-pill);flex:none}
+.dr-t{width:100%;border-collapse:collapse;font-size:13px}
+.dr-t th{text-align:left;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;color:var(--text-tertiary);padding:0 12px 10px 0;border-bottom:var(--bw-hairline) solid var(--border-subtle)}
+.dr-t td{padding:10px 12px 10px 0;border-bottom:var(--bw-hairline) solid var(--border-subtle);color:var(--text-secondary);vertical-align:top;line-height:1.45}
+.dr-t td:first-child{color:var(--text-primary);font-weight:600;white-space:nowrap}
+.dr-t tr:last-child td{border-bottom:0}
+</style>
+</helmet>
+<div class="dr">
+<p class="dr-k">Start here</p>
+<h1>Decisions and rules</h1>
+<p class="dr-lead">What this file holds, where things live, and the rules every new screen follows. The design system is the source of truth for tokens, components and content lists. This file is where screens and flows are designed.</p>
+
+<div class="dr-grid">
+<section class="dr-c dr-wide" aria-labelledby="dr-pages">
+<h2 id="dr-pages">How the file is organized</h2>
+<p>Each page holds one product area. Current designs only; anything superseded moves to Archive with a note saying what replaced it.</p>
+<div class="dr-pages">
+<div class="dr-pg"><b>Start here</b><span>This board, the prototype map, the developer spec and design notes.</span></div>
+<div class="dr-pg"><b>Onboarding</b><span>Guided setup for campaigns and projects, every step and state.</span></div>
+<div class="dr-pg"><b>Projects</b><span>Home, the project editor, packages, preview and publish, creating a project.</span></div>
+<div class="dr-pg"><b>Campaigns</b><span>Campaigns list, creating, the campaign page, deliverables, negotiation, editing.</span></div>
+<div class="dr-pg"><b>Marketplace</b><span>Browsing and search, campaign matching, saving to wishlists, the public project page and gallery.</span></div>
+<div class="dr-pg"><b>Components</b><span>Source components the screens are built from, header and search, notifications.</span></div>
+<div class="dr-pg"><b>Light mode</b><span>Key screens in the light theme, to review it side by side with dark.</span></div>
+<div class="dr-pg"><b>Explorations</b><span>Open or parked ideas: moods, logo, header variations, reviews.</span></div>
+<div class="dr-pg"><b>Archive</b><span>Earlier versions kept for reference. Don’t build from these.</span></div>
+</div>
+</section>
+
+<section class="dr-c" aria-labelledby="dr-color">
+<h2 id="dr-color">Colour roles</h2>
+<p>Colour carries meaning, so each colour has one job.</p>
+<ul>
+<li><b>Lime</b> is for actions only: the one primary button, focus, the current tab.</li>
+<li><b>Green</b> means complete or approved.</li>
+<li><b>Mood colours</b> set atmosphere: mood dots and the onboarding glow. Never on buttons.</li>
+<li><b>Package colours</b> identify a package everywhere it appears.</li>
+<li><b>No lime in the glow.</b> The glow uses mood or neutral colours.</li>
+</ul>
+<div class="dr-sw"><span><i style="background: var(--lime-400)"></i>Action</span><span><i style="background: var(--success-500)"></i>Complete</span><span><i style="background: #A18FE6"></i>Mood</span><span><i style="background: #6EA8DE"></i>Package</span></div>
+</section>
+
+<section class="dr-c" aria-labelledby="dr-build">
+<h2 id="dr-build">Building a new screen</h2>
+<p>Start from the closest template in the design system.</p>
+<ul>
+<li><b>Templates first</b>: Project detail, Campaign board, Deal flow, Edit project, Packages, Edit campaign, and both onboardings.</li>
+<li><b>Components, not copies.</b> If something is missing, propose it for the design system before styling it locally.</li>
+<li><b>Radius scale only</b>: <code>xs 2</code> <code>sm 4</code> <code>md 8</code> <code>lg 12</code> <code>xl 16</code> <code>pill</code>.</li>
+<li><b>Edit actions</b> use the secondary button. One primary action per view.</li>
+<li><b>Check light mode</b> on the Light mode page before calling a screen done. Use theme tokens, never fixed dark colours.</li>
+</ul>
+</section>
+
+<section class="dr-c" aria-labelledby="dr-behave">
+<h2 id="dr-behave">Behaviour</h2>
+<p>Keep these consistent across every flow.</p>
+<ul>
+<li><b>Editors autosave.</b> “Saving…”, then “All changes saved”.</li>
+<li><b>Esc closes</b> panels and viewers. Focus returns to where it came from.</li>
+<li><b>The action dock</b> appears only after a selection.</li>
+<li><b>The media viewer</b> has no actions: view, swipe, close.</li>
+<li><b>Copies are never published</b> automatically.</li>
+</ul>
+</section>
+
+<section class="dr-c dr-two" aria-labelledby="dr-dec">
+<h2 id="dr-dec">Decisions log</h2>
+<p>Settled choices. Change them in the design system first, then here.</p>
+<table class="dr-t">
+<thead><tr><th>Decision</th><th>What we chose</th></tr></thead>
+<tbody>
+<tr><td>Project categories</td><td>Music, Live events, Art &amp; culture, Film &amp; series, Sports, Food &amp; drink, Technology, Gaming, Fashion &amp; beauty, Travel &amp; outdoors. One per project. Separate from audience interests.</td></tr>
+<tr><td>Content lists</td><td>Interests, age bands, campaign tags, KPIs, moods and categories come from the design system’s Content lists, same values and order everywhere.</td></tr>
+<tr><td>Moods</td><td>One main mood and up to three supporting. Required for projects, optional for campaigns.</td></tr>
+<tr><td>Header</td><td>Concept B: centred nav, search takes over the centre, raised full-width header, avatar-only account.</td></tr>
+<tr><td>Package editor</td><td>Full screen with a live sponsor preview. Cards and Compare edit the same packages.</td></tr>
+<tr><td>Light theme text</td><td>Tertiary text uses neutral-650 so it passes 4.5:1 on every light surface. Dark theme unchanged.</td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="dr-c" aria-labelledby="dr-names">
+<h2 id="dr-names">File names</h2>
+<p>The prefix tells you the area.</p>
+<ul>
+<li><code>PN-</code> projects and marketplace screens</li>
+<li><code>CP-</code> <code>CG-</code> campaigns list and campaign page</li>
+<li><code>CR-</code> one-page create forms</li>
+<li><code>OB-</code> guided setup entry points</li>
+<li><code>PE-</code> shared screen components</li>
+<li>No prefix: older components, still in use</li>
+</ul>
+</section>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1640}}'>
+class Component extends DCLogic {
+  componentDidMount() { document.documentElement.setAttribute('data-theme', 'dark'); if (window.Venzza) window.Venzza.mountIcons(); }
+  renderVals() { return {}; }
+}
+</script>
+<script src="assets/components.js"></script><script>(function(m){var o={};for(var k in m)o["./"+k]=new Blob([m[k]],{type:"text/html"});window.__resourceBlobs=o;window.__resources={};})(window.__VZ_SRC||{});</script><script src="assets/vendor/react.production.min.js"></script><script src="assets/vendor/react-dom.production.min.js"></script><script src="assets/vendor/dc-runtime.js"></script><script src="assets/prototype-map.js"></script><script src="assets/proto-bar.js"></script>
+</body>
+</html>

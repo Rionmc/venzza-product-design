@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Notifications · panel (component)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="ds/venzza/components/bundle.css">
+<link rel="stylesheet" href="shared/venzza-dark.css">
+<link rel="stylesheet" href="shared/venzza-app.css">
+<script src="ds/venzza/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<sc-if value="{{isDropdown}}" hint-placeholder-val="{{true}}">
+<section class="nt-panel" role="dialog" aria-label="Notifications">
+<div class="nt-hd"><h2>Notifications</h2><sc-if value="{{hasUnread}}" hint-placeholder-val="{{true}}"><span class="nt-new">{{unreadLabel}}</span></sc-if><button type="button" class="nt-markall" onClick="{{markAll}}" disabled="{{noUnread}}">Mark all as read</button></div>
+<sc-if value="{{hasAny}}" hint-placeholder-val="{{true}}">
+<div class="nt-tabs" role="tablist" aria-label="Filter notifications">
+<sc-for list="{{tabs}}" as="t" hint-placeholder-count="2"><button type="button" class="nt-tab" role="tab" aria-selected="{{t.sel}}" onClick="{{t.pick}}">{{t.label}}<sc-if value="{{t.hasCount}}" hint-placeholder-val="{{false}}"><span class="c">{{t.count}}</span></sc-if></button></sc-for>
+</div>
+<div class="nt-list">
+<sc-for list="{{groups}}" as="g" hint-placeholder-count="2">
+<div class="nt-day">{{g.label}}</div>
+<sc-for list="{{g.items}}" as="n" hint-placeholder-count="3">
+<article class="{{n.cls}}">
+<div class="nt-av"><sc-if value="{{n.isSys}}" hint-placeholder-val="{{false}}"><span class="nt-sys" aria-hidden="true"><svg viewBox="0 0 410 424"><path d="M204.942 224.153H108.345L0 0H75.657C88.4625 0 100.139 7.32421 105.711 18.8512L204.942 224.153Z"/><path d="M301.655 224.153H205.056L304.289 18.8511C309.861 7.32412 321.537 0 334.343 0H410L301.655 224.153Z"/><path d="M253.256 324.074L204.956 424L156.658 324.074L204.956 224.149L253.256 324.074Z"/></svg></span></sc-if><sc-if value="{{n.isPerson}}" hint-placeholder-val="{{true}}"><span class="{{n.avCls}}" aria-hidden="true">{{n.av}}</span></sc-if><span class="{{n.badgeCls}}" aria-hidden="true"><svg class="vz-icon"><use href="#{{n.icon}}"></use></svg></span></div>
+<div class="nt-body">
+<p class="nt-msg"><a class="nt-link" href="{{n.href}}" onClick="{{n.open}}"><b>{{n.actor}}</b> {{n.verb}} <b>{{n.obj}}</b>{{n.tail}}</a></p>
+<div class="nt-meta"><span class="nt-ctx"><svg class="vz-icon" aria-hidden="true"><use href="#{{n.ctxIcon}}"></use></svg><span>{{n.ctx}}</span></span><sc-if value="{{showRole}}" hint-placeholder-val="{{false}}"><span class="nt-role">{{n.roleLabel}}</span></sc-if><span class="nt-sep" aria-hidden="true"></span><time>{{n.time}}</time></div>
+<sc-if value="{{n.hasAct}}" hint-placeholder-val="{{false}}"><div class="nt-act"><a class="{{n.actCls}}" href="{{n.href}}" onClick="{{n.open}}">{{n.act}}</a></div></sc-if>
+</div>
+<span class="nt-unread" aria-label="{{n.unreadLabel}}"></span>
+</article>
+</sc-for>
+</sc-for>
+<sc-if value="{{tabEmpty}}" hint-placeholder-val="{{false}}"><div class="nt-empty"><div class="nt-empty-ic"><svg class="vz-icon"><use href="#i-check"></use></svg></div><h3>Nothing needs you right now</h3><p>Offers waiting on your reply show up here.</p></div></sc-if>
+</div>
+</sc-if>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}"><div class="nt-empty"><div class="nt-empty-ic"><svg class="vz-icon"><use href="#i-bell"></use></svg></div><h3>You're all caught up</h3><p>We'll let you know when sponsors respond, offers change or your projects need attention.</p></div></sc-if>
+<div class="nt-ft"><a href="NotificationsPage.dc.html">View all notifications<svg class="vz-icon"><use href="#i-arrow-right"></use></svg></a></div>
+</section>
+</sc-if>
+
+<sc-if value="{{isPage}}" hint-placeholder-val="{{false}}">
+<div class="nt-page">
+<div class="nt-page-hd"><div><h1>Notifications</h1><p>{{pageSub}}</p></div><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{markAll}}" disabled="{{noUnread}}"><svg class="vz-icon sm"><use href="#i-check"></use></svg>Mark all as read</button></div>
+<div class="nt-page-tool">
+<div class="nt-tabs" role="tablist" aria-label="Filter notifications">
+<sc-for list="{{tabs}}" as="t" hint-placeholder-count="3"><button type="button" class="nt-tab" role="tab" aria-selected="{{t.sel}}" onClick="{{t.pick}}">{{t.label}}<sc-if value="{{t.hasCount}}" hint-placeholder-val="{{false}}"><span class="c">{{t.count}}</span></sc-if></button></sc-for>
+</div>
+<sc-if value="{{showRole}}" hint-placeholder-val="{{true}}"><div class="nt-seg" role="group" aria-label="Show notifications for">
+<sc-for list="{{roles}}" as="r" hint-placeholder-count="3"><button type="button" aria-pressed="{{r.sel}}" onClick="{{r.pick}}"><sc-if value="{{r.hasIcon}}" hint-placeholder-val="{{false}}"><svg class="vz-icon" aria-hidden="true"><use href="#{{r.icon}}"></use></svg></sc-if>{{r.label}}</button></sc-for>
+</div></sc-if>
+</div>
+<div class="nt-card">
+<sc-for list="{{groups}}" as="g" hint-placeholder-count="2">
+<div class="nt-day">{{g.label}}</div>
+<sc-for list="{{g.items}}" as="n" hint-placeholder-count="3">
+<article class="{{n.cls}}">
+<div class="nt-av"><sc-if value="{{n.isSys}}" hint-placeholder-val="{{false}}"><span class="nt-sys" aria-hidden="true"><svg viewBox="0 0 410 424"><path d="M204.942 224.153H108.345L0 0H75.657C88.4625 0 100.139 7.32421 105.711 18.8512L204.942 224.153Z"/><path d="M301.655 224.153H205.056L304.289 18.8511C309.861 7.32412 321.537 0 334.343 0H410L301.655 224.153Z"/><path d="M253.256 324.074L204.956 424L156.658 324.074L204.956 224.149L253.256 324.074Z"/></svg></span></sc-if><sc-if value="{{n.isPerson}}" hint-placeholder-val="{{true}}"><span class="{{n.avCls}}" aria-hidden="true">{{n.av}}</span></sc-if><span class="{{n.badgeCls}}" aria-hidden="true"><svg class="vz-icon"><use href="#{{n.icon}}"></use></svg></span></div>
+<div class="nt-body">
+<p class="nt-msg"><a class="nt-link" href="{{n.href}}" onClick="{{n.open}}"><b>{{n.actor}}</b> {{n.verb}} <b>{{n.obj}}</b>{{n.tail}}</a></p>
+<div class="nt-meta"><span class="nt-ctx"><svg class="vz-icon" aria-hidden="true"><use href="#{{n.ctxIcon}}"></use></svg><span>{{n.ctx}}</span></span><sc-if value="{{showRole}}" hint-placeholder-val="{{false}}"><span class="nt-role">{{n.roleLabel}}</span></sc-if><span class="nt-sep" aria-hidden="true"></span><time>{{n.time}}</time></div>
+<sc-if value="{{n.hasAct}}" hint-placeholder-val="{{false}}"><div class="nt-act"><a class="{{n.actCls}}" href="{{n.href}}" onClick="{{n.open}}">{{n.act}}</a></div></sc-if>
+</div>
+<span class="nt-unread" aria-label="{{n.unreadLabel}}"></span>
+</article>
+</sc-for>
+</sc-for>
+<sc-if value="{{listEmpty}}" hint-placeholder-val="{{false}}"><div class="nt-empty"><div class="nt-empty-ic"><svg class="vz-icon"><use href="#i-bell"></use></svg></div><h3>{{emptyTitle}}</h3><p>{{emptyText}}</p></div></sc-if>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{isStrip}}" hint-placeholder-val="{{false}}">
+<sc-if value="{{stripShow}}" hint-placeholder-val="{{true}}">
+<section class="nt-strip" aria-labelledby="nt-strip-t">
+<div class="nt-strip-h"><h2 id="nt-strip-t">Needs your attention</h2><span class="c">{{stripCount}}</span><a href="NotificationsPage.dc.html">All notifications<svg class="vz-icon"><use href="#i-arrow-right"></use></svg></a></div>
+<div class="nt-strip-grid">
+<sc-for list="{{strip}}" as="n" hint-placeholder-count="3">
+<article class="{{n.cls}}">
+<div class="nt-top"><div class="nt-av"><span class="{{n.avCls}}" aria-hidden="true">{{n.av}}</span><span class="{{n.badgeCls}}" aria-hidden="true"><svg class="vz-icon"><use href="#{{n.icon}}"></use></svg></span></div>
+<div class="nt-meta"><span class="nt-ctx"><svg class="vz-icon" aria-hidden="true"><use href="#{{n.ctxIcon}}"></use></svg><span>{{n.ctx}}</span></span><span class="nt-sep" aria-hidden="true"></span><time>{{n.time}}</time></div></div>
+<p class="nt-msg"><a class="nt-link" href="{{n.href}}" onClick="{{n.open}}"><b>{{n.actor}}</b> {{n.verb}} <b>{{n.obj}}</b>{{n.tail}}</a></p>
+<div class="nt-act"><a class="vz-btn vz-btn--secondary sm" href="{{n.href}}" onClick="{{n.open}}">{{n.act}}</a></div>
+</article>
+</sc-for>
+</div>
+</section>
+</sc-if>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"layout":{"editor":"enum","options":["dropdown","page","strip"],"default":"dropdown","section":"State"},"role":{"editor":"enum","options":["both","creator","sponsor"],"default":"both","section":"State"},"empty":{"editor":"boolean","default":false,"section":"State"},"tab":{"editor":"enum","options":["all","action","unread"],"default":"all","section":"State"},"$preview":{"width":400,"height":620}}'>
+class Component extends DCLogic {
+  componentDidMount() { document.documentElement.setAttribute('data-theme', 'dark'); if (window.Venzza) window.Venzza.mountIcons(); }
+  componentDidUpdate(prev) { if (prev.role !== this.props.role || prev.tab !== this.props.tab || prev.empty !== this.props.empty) this.setState({ tab: undefined, roleF: undefined, read: undefined }); }
+  // One list feeds every surface: the bell dropdown, the Notifications page and the Home strip.
+  // kind: action = needs a decision (counter-offer, offer expiring); update = information.
+  items() {
+    return [
+      { id: 'n1', role: 'creator', kind: 'action', day: 'today', time: '12m ago', unread: true, av: 'PA', avc: 'b', icon: 'i-arrow-left-right', tone: 'warn', actor: 'Pulse Agency', verb: 'countered your', obj: 'Supporter', tail: ' package at $18,000.', ctx: 'Aurora Field Sessions', act: 'Review offer', href: 'PN-Project-Owner.dc.html' },
+      { id: 'n2', role: 'sponsor', kind: 'action', day: 'today', time: '40m ago', unread: true, av: 'MO', avc: 'c', icon: 'i-arrow-left-right', tone: 'warn', actor: 'Maya Okonkwo', verb: 'replied to your offer with', obj: '$12,000 for 3 posts', tail: '.', ctx: 'Desert Vibes Festival 2026', act: 'Review', href: 'CG-Deal-Counter.dc.html' },
+      { id: 'n3', role: 'creator', kind: 'update', day: 'today', time: '1h ago', unread: true, av: 'NA', avc: 'd', icon: 'i-check', tone: 'ok', actor: 'Northlight Audio', verb: 'approved the', obj: 'Headline partner', tail: ' package. Next: sign the agreement.', ctx: 'Aurora Field Sessions', href: 'PN-Project-Owner.dc.html' },
+      { id: 'n4', role: 'creator', kind: 'action', day: 'today', time: '2h ago', unread: true, av: 'BK', avc: 'c', icon: 'i-clock', tone: 'warn', actor: 'Basecamp Kitchen’s', verb: 'offer expires in', obj: '2 days', tail: '.', ctx: 'Aurora Field Sessions', act: 'Respond', href: 'PN-Project-Owner.dc.html' },
+      { id: 'n5', role: 'sponsor', kind: 'update', day: 'today', time: '3h ago', unread: false, sys: true, icon: 'i-sparkle', tone: 'sys', actor: '3 new projects', verb: 'match', obj: 'Trail Shoe Launch', tail: '.', ctx: 'Trail Shoe Launch', href: 'CG-Find-Open.dc.html' },
+      { id: 'n6', role: 'creator', kind: 'update', day: 'yesterday', time: 'Yesterday', unread: false, av: 'DV', avc: 'c', icon: 'i-bookmark', tone: 'info', actor: 'Desert Vibes Festival 2026', verb: 'and 2 other sponsors saved', obj: 'Aurora Field Sessions', tail: ' to their wishlists.', ctx: 'Aurora Field Sessions', href: 'PN-Project-Owner.dc.html' },
+      { id: 'n7', role: 'creator', kind: 'update', day: 'yesterday', time: 'Yesterday', unread: false, sys: true, icon: 'i-rocket', tone: 'sys', actor: 'Summer Bass Series', verb: 'is', obj: 'ready to publish', tail: '. It stays private until you do.', ctx: 'Summer Bass Series', act: 'Publish', soft: true, href: 'PN-Project-Review.dc.html' },
+      { id: 'n8', role: 'sponsor', kind: 'update', day: 'yesterday', time: 'Yesterday', unread: false, av: 'AF', avc: 'd', icon: 'i-package', tone: 'info', actor: 'Aurora Field Sessions', verb: 'added a new package:', obj: 'Backstage pass', tail: '.', ctx: 'Desert Vibes Festival 2026', href: 'CG-Campaign.dc.html' },
+      { id: 'n9', role: 'sponsor', kind: 'update', day: 'week', time: 'Mon', unread: false, av: 'NL', avc: 'b', icon: 'i-x', tone: 'muted', actor: 'Neon Lotus', verb: 'declined your offer.', obj: '', tail: '4 similar creators are available.', ctx: 'Desert Vibes Festival 2026', act: 'See matches', soft: true, href: 'CG-Find-Open.dc.html' }
+    ];
+  }
+  st() {
+    const s = this.state || {};
+    const role = this.props.role || 'both';
+    return { tab: s.tab || this.props.tab || 'all', roleF: s.roleF || 'all', read: s.read || {}, role };
+  }
+  renderVals() {
+    const st = this.st();
+    const layout = this.props.layout || 'dropdown';
+    const DAYS = { today: 'Today', yesterday: 'Yesterday', week: 'Earlier this week' };
+    let base = this.props.empty ? [] : this.items().filter((n) => st.role === 'both' || n.role === st.role);
+    if (layout === 'page' && st.role === 'both' && st.roleF !== 'all') base = base.filter((n) => n.role === st.roleF);
+    const isUnread = (n) => n.unread && !st.read[n.id];
+    const unread = base.filter(isUnread).length;
+    const actions = base.filter((n) => n.kind === 'action').length;
+    const markRead = (id) => this.setState({ read: Object.assign({}, st.read, { [id]: true }) });
+    const decorate = (n) => Object.assign({}, n, {
+      cls: isUnread(n) ? 'nt-row' : 'nt-row read',
+      isSys: !!n.sys, isPerson: !n.sys,
+      avCls: 'vzav ' + (n.avc || ''),
+      badgeCls: 'nt-badge ' + n.tone,
+      ctxIcon: n.role === 'sponsor' ? 'i-target' : 'i-briefcase',
+      roleLabel: n.role === 'sponsor' ? 'Sponsor' : 'Creator',
+      hasAct: !!n.act,
+      actCls: 'vz-btn vz-btn--secondary sm',
+      unreadLabel: isUnread(n) ? 'Unread' : '',
+      open: () => markRead(n.id)
+    });
+    let list = base;
+    if (st.tab === 'action') list = base.filter((n) => n.kind === 'action');
+    if (st.tab === 'unread') list = base.filter(isUnread);
+    const groups = ['today', 'yesterday', 'week'].map((d) => ({ label: DAYS[d], items: list.filter((n) => n.day === d).map(decorate) })).filter((g) => g.items.length);
+    const TABS = layout === 'page' ? [['all', 'All'], ['action', 'Needs action'], ['unread', 'Unread']] : [['all', 'All'], ['action', 'Needs action']];
+    const strip = base.filter((n) => n.kind === 'action').slice(0, 3).map(decorate);
+    const both = st.role === 'both';
+    return {
+      isDropdown: layout === 'dropdown', isPage: layout === 'page', isStrip: layout === 'strip',
+      hasAny: base.length > 0, isEmpty: base.length === 0,
+      hasUnread: unread > 0, noUnread: unread === 0, unreadLabel: unread + ' new',
+      markAll: () => { const r = Object.assign({}, st.read); base.forEach((n) => { r[n.id] = true; }); this.setState({ read: r }); },
+      tabs: TABS.map(([k, label]) => ({ label, sel: st.tab === k, pick: () => this.setState({ tab: k }), hasCount: k === 'action' && actions > 0, count: String(actions) })),
+      groups, tabEmpty: base.length > 0 && list.length === 0, listEmpty: list.length === 0,
+      emptyTitle: base.length === 0 ? 'You’re all caught up' : st.tab === 'action' ? 'Nothing needs you right now' : 'No unread notifications',
+      emptyText: base.length === 0 ? 'We’ll let you know when sponsors respond, offers change or your projects need attention.' : 'Offers waiting on your reply show up here.',
+      showRole: both,
+      roles: [['all', 'All', ''], ['creator', 'As creator', 'i-briefcase'], ['sponsor', 'As sponsor', 'i-target']].map(([k, label, icon]) => ({ label, icon, hasIcon: !!icon, sel: st.roleF === k, pick: () => this.setState({ roleF: k }) })),
+      pageSub: both ? 'Updates on your projects and campaigns, newest first.' : st.role === 'sponsor' ? 'Updates on your campaigns and offers, newest first.' : 'Updates on your projects and offers, newest first.',
+      strip, stripShow: strip.length > 0, stripCount: String(strip.length)
+    };
+  }
+}
+</script>
+<script src="assets/components.js"></script><script>(function(m){var o={};for(var k in m)o["./"+k]=new Blob([m[k]],{type:"text/html"});window.__resourceBlobs=o;window.__resources={};})(window.__VZ_SRC||{});</script><script src="assets/vendor/react.production.min.js"></script><script src="assets/vendor/react-dom.production.min.js"></script><script src="assets/vendor/dc-runtime.js"></script><script src="assets/prototype-map.js"></script><script src="assets/proto-bar.js"></script>
+</body>
+</html>

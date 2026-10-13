@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Deliverable viewer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="ds/venzza/components/bundle.css">
+<link rel="stylesheet" href="shared/venzza-dark.css">
+<link rel="stylesheet" href="shared/venzza-app.css">
+<script src="ds/venzza/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="cf-scrim" onClick="{{close}}"></div>
+<section class="cf rv" role="dialog" aria-modal="true" aria-labelledby="rv-h" tabIndex="-1">
+<header class="rv-hd">
+<div class="rv-ht"><span class="rv-crumb">{{crumb}}</span><h2 id="rv-h">{{it.title}}</h2></div>
+<nav class="rv-pills" aria-label="{{pillsLbl}}"><sc-for list="{{pills}}" as="p" hint-placeholder-count="6"><button type="button" class="{{p.cls}}" aria-current="{{p.cur}}" aria-label="{{p.aria}}" data-id="{{p.id}}" onClick="{{goId}}">{{p.n}}</button></sc-for></nav>
+<span class="rv-nav"><button type="button" class="pe-ibtn" aria-label="Previous deliverable" disabled="{{isFirst}}" onClick="{{prev}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-chevron-left"></use></svg></button><span>{{pos}}</span><button type="button" class="pe-ibtn" aria-label="Next deliverable" disabled="{{isLast}}" onClick="{{next}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-chevron-right"></use></svg></button></span>
+<button type="button" class="pe-ibtn" aria-label="Close" onClick="{{close}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-x"></use></svg></button>
+</header>
+
+<div class="rv-body">
+<div class="rv-stage">
+<sc-if value="{{showSeg}}" hint-placeholder-val="{{false}}"><div class="pe-seg rv-seg" role="group" aria-label="Show"><button type="button" aria-pressed="{{segLive}}" data-v="live" disabled="{{broken}}" onClick="{{setSeg}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-globe"></use></svg>Live post</button><button type="button" aria-pressed="{{segShot}}" data-v="shot" onClick="{{setSeg}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-image"></use></svg>Saved screenshot</button><button type="button" aria-pressed="{{segDraft}}" data-v="draft" onClick="{{setSeg}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-check-circle"></use></svg>Approved draft</button></div></sc-if>
+
+<sc-if value="{{m.image}}" hint-placeholder-val="{{true}}"><figure class="rv-media"><img src="{{m.src}}" alt="{{m.alt}}" draggable="false"><sc-if value="{{m.multi}}" hint-placeholder-val="{{false}}"><button type="button" class="rv-arr l" aria-label="Previous image" onClick="{{imgPrev}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-chevron-left"></use></svg></button><button type="button" class="rv-arr r" aria-label="Next image" onClick="{{imgNext}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-chevron-right"></use></svg></button><span class="rv-count">{{m.idx}}</span><span class="rv-dots"><sc-for list="{{m.dots}}" as="d" hint-placeholder-count="3"><i class="{{d}}"></i></sc-for></span></sc-if></figure></sc-if>
+
+<sc-if value="{{m.video}}" hint-placeholder-val="{{false}}"><figure class="rv-media vid"><img src="{{m.src}}" alt="{{m.alt}}" draggable="false"><button type="button" class="rv-play" aria-label="{{playLbl}}" onClick="{{togglePlay}}"><sc-if value="{{isPlaying}}" hint-placeholder-val="{{false}}"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg></sc-if><sc-if value="{{notPlaying}}" hint-placeholder-val="{{true}}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"></path></svg></sc-if></button><div class="rv-vbar"><span>{{vTime}}</span><i><em style="width: {{vPct}}%"></em></i><span>{{m.dur}}</span></div></figure></sc-if>
+
+<sc-if value="{{m.embed}}" hint-placeholder-val="{{false}}"><div class="rv-embed"><div class="rv-eh"><span class="av">MH</span><span><b>meridianhall</b><small>Reykjavík · Sponsored with Coachella Festival</small></span></div><img src="{{m.src}}" alt="{{m.alt}}" draggable="false"><div class="rv-ef"><span class="rv-ei"><svg class="vz-icon" aria-hidden="true"><use href="#i-heart"></use></svg>9,412</span><span class="rv-ei"><svg class="vz-icon" aria-hidden="true"><use href="#i-mail"></use></svg>312</span><p><b>meridianhall</b> {{it.caption}}</p><a href="#rv-h">View on Instagram<svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-up-right"></use></svg></a></div></div></sc-if>
+
+<sc-if value="{{m.shot}}" hint-placeholder-val="{{false}}"><figure class="rv-media shot"><img src="{{m.src}}" alt="{{m.alt}}" draggable="false"><figcaption>Captured {{it.pubDate}} when the link was added</figcaption></figure></sc-if>
+
+<sc-if value="{{m.email}}" hint-placeholder-val="{{false}}"><div class="rv-doc mail"><span class="k">From Meridian Hall · Jan 18, 2027</span><b>This season: field sessions in the highlands, with Coachella Festival</b><img src="assets/img/figure-above-lake.jpg" alt="" draggable="false"><p>Our partners at Coachella Festival made this season possible. As a thank-you, readers get early access to Desert Vibes passes.</p><span class="btn">Get early access</span></div></sc-if>
+
+<sc-if value="{{m.doc}}" hint-placeholder-val="{{false}}"><div class="rv-doc"><span class="k">PDF · 2 pages</span><b>Usage rights agreement</b><p>Coachella Festival may use the session film, posts and reels in paid social for 12 months from first publication, in the United States.</p><span class="sig">Signed by Meridian Hall and Coachella Festival · Jan 5, 2027</span></div></sc-if>
+
+<sc-if value="{{m.none}}" hint-placeholder-val="{{false}}"><div class="rv-none"><span class="ic"><svg class="vz-icon" aria-hidden="true"><use href="#{{it.icon}}"></use></svg></span><b>{{noneTitle}}</b><p>{{noneTxt}}</p><sc-if value="{{canUpload}}" hint-placeholder-val="{{false}}"><button type="button" class="vz-btn pe-solid sm" onClick="{{upload}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-upload"></use></svg>Upload for approval</button><span class="rv-hint">Images, video or PDF · up to 2 GB · or drop files here</span></sc-if><sc-if value="{{canNudge}}" hint-placeholder-val="{{false}}"><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{nudge}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-bell"></use></svg>{{nudgeLbl}}</button></sc-if></div></sc-if>
+<sc-if value="{{broken}}" hint-placeholder-val="{{false}}"><div class="cv-warn rv-broken" role="status"><svg class="vz-icon" aria-hidden="true"><use href="#i-alert-triangle"></use></svg><span><b>The live post can’t be found.</b> It may have been deleted or made private. You’re seeing the screenshot saved on Feb 1.</span></div></sc-if>
+</div>
+
+<aside class="rv-side">
+<div class="rv-sc">
+<div class="rv-st"><span class="{{stCls}}">{{stTxt}}</span><span class="rv-due">{{dueTxt}}</span></div>
+<p class="rv-from">{{fromTxt}}</p>
+
+<sc-if value="{{hasResults}}" hint-placeholder-val="{{false}}"><div class="rv-blk"><h3>Results <small>{{resWhen}}</small></h3><div class="rv-kpi"><sc-for list="{{results}}" as="r" hint-placeholder-count="4"><div><b>{{r.v}}</b><span>{{r.k}}</span></div></sc-for></div><a class="rv-link" href="#rv-h">{{linkTxt}}<svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-up-right"></use></svg></a></div></sc-if>
+
+<sc-if value="{{hasCaption}}" hint-placeholder-val="{{false}}"><div class="rv-blk"><h3>Caption</h3><p class="rv-cap">{{it.caption}}</p></div></sc-if>
+
+<sc-if value="{{hasCheck}}" hint-placeholder-val="{{false}}"><div class="rv-blk"><h3>Brief checklist <small>{{checkN}}</small></h3><ul class="rv-ck"><sc-for list="{{checks}}" as="c" hint-placeholder-count="4"><li><label><input type="checkbox" checked="{{c.on}}" data-i="{{c.i}}" onChange="{{tick}}" disabled="{{c.ro}}"><span><b>{{c.k}}</b>{{c.v}}</span></label></li></sc-for></ul></div></sc-if>
+
+<sc-if value="{{hasLinkForm}}" hint-placeholder-val="{{false}}"><div class="rv-blk"><h3>Posted it?</h3><p class="rv-cap">Add the live link. We save a screenshot and start tracking results.</p><div class="rv-lf"><input class="pe-in" placeholder="https://instagram.com/p/…" aria-label="Live link" value="{{linkVal}}" onInput="{{onLink}}"><button type="button" class="vz-btn vz-btn--secondary sm" disabled="{{noLink}}" onClick="{{saveLink}}">Add link</button></div></div></sc-if>
+
+<sc-if value="{{hasVersions}}" hint-placeholder-val="{{false}}"><div class="rv-blk"><h3>Versions</h3><ol class="rv-ver"><sc-for list="{{versions}}" as="v" hint-placeholder-count="2"><li class="{{v.cls}}"><b>{{v.n}}</b><span>{{v.t}}</span></li></sc-for></ol></div></sc-if>
+
+<div class="rv-blk"><h3>Conversation</h3>
+<sc-if value="{{hasMsgs}}" hint-placeholder-val="{{true}}"><ul class="rv-msgs"><sc-for list="{{msgs}}" as="g" hint-placeholder-count="2"><li class="{{g.cls}}"><span class="av">{{g.ini}}</span><span><b>{{g.who}}</b><small>{{g.when}}</small><p>{{g.t}}</p></span></li></sc-for></ul></sc-if>
+<sc-if value="{{noMsgs}}" hint-placeholder-val="{{false}}"><p class="rv-cap">No messages yet.</p></sc-if>
+<div class="rv-say"><input class="pe-in" placeholder="{{sayPh}}" aria-label="Write a message" value="{{say}}" onInput="{{onSay}}" onKeyDown="{{sayKey}}"><button type="button" class="pe-ibtn" aria-label="Send message" disabled="{{noSay}}" onClick="{{send}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-up"></use></svg></button></div>
+</div>
+</div>
+
+<sc-if value="{{showActs}}" hint-placeholder-val="{{true}}"><div class="rv-acts">
+<sc-if value="{{askChanges}}" hint-placeholder-val="{{false}}"><div class="rv-chg"><label for="rv-note">What needs to change?</label><textarea id="rv-note" class="pe-in" rows="3" placeholder="Be specific, for example “Move our logo out of the bottom corner”" value="{{note}}" onInput="{{onNote}}"></textarea><div class="rv-chg-a"><button type="button" class="vz-btn vz-btn--ghost sm" onClick="{{cancelChanges}}">Cancel</button><button type="button" class="vz-btn pe-solid sm" disabled="{{noNote}}" onClick="{{sendChanges}}">Send to creator</button></div></div></sc-if>
+<sc-if value="{{ownerBtns}}" hint-placeholder-val="{{true}}"><button type="button" class="vz-btn vz-btn--secondary" onClick="{{startChanges}}">Request changes</button><button type="button" class="vz-btn pe-solid" onClick="{{approve}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-check"></use></svg>{{approveLbl}}</button></sc-if>
+<sc-if value="{{creatorBtns}}" hint-placeholder-val="{{false}}"><button type="button" class="vz-btn pe-solid rv-wide" onClick="{{upload}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-upload"></use></svg>Upload new version</button></sc-if>
+</div></sc-if>
+</aside>
+</div>
+<sc-if value="{{hasToast}}" hint-placeholder-val="{{false}}"><div class="pe-toast rv-toast" role="status"><svg class="vz-icon" aria-hidden="true"><use href="#i-check-circle"></use></svg>{{toast}}</div></sc-if>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"mode":{"editor":"enum","options":["owner","creator"],"default":"owner","section":"State"},"item":{"editor":"string","default":"p2","section":"State"},"over":{"editor":"string","default":"","section":"State"},"changes":{"editor":"boolean","default":false,"section":"State"},"broken":{"editor":"boolean","default":false,"section":"State"},"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    if (window.Venzza) window.Venzza.mountIcons();
+    document.documentElement.style.overflow = 'hidden';
+    this.ft = setTimeout(() => { const el = document.querySelector('.rv'); if (el) el.focus(); }, 40);
+    this.onDocKey = (e) => { if (this._key) this._key(e); }; document.addEventListener('keydown', this.onDocKey);
+  }
+  componentWillUnmount() { document.removeEventListener('keydown', this.onDocKey); document.documentElement.style.overflow = ''; clearTimeout(this.ft); clearTimeout(this.tt); clearInterval(this.pl); }
+  flash(t) { this.setState({ toast: t }); clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({ toast: '' }), 3200); }
+  data(creator) {
+    const B = { a: 'assets/img/figure-above-lake.jpg', b: 'assets/img/robot-glowing-eye.jpg', c: 'assets/img/robed-figure-desert.jpg', d: 'assets/img/sahara-main-stage.jpg' };
+    if (creator) {
+      const S = (i, st, extra) => Object.assign({ id: 's' + i, g: 'Social media coverage', n: String(i), title: 'Instagram story set #' + i, kind: 'image', icon: 'i-camera', st, due: ['Feb 10', 'Feb 17', 'Feb 24', 'Mar 3', 'Mar 10', 'Mar 17', 'Mar 24', 'Mar 31'][i - 1] + ', 2027' }, extra || {});
+      return [
+        S(1, 'approved', { media: [B.d], caption: 'Sahara Tent, night one. Thanks @smartcrew for keeping us going #SmartcrewFestival', versions: [['v1', 'Approved by Smartcrew · Feb 8', 'ok']], msgs: [['AR', 'Ana Ruiz · Smartcrew', 'Feb 8', 'Perfect, approved. Post whenever you’re ready.']], linkForm: true }),
+        S(2, 'changes', { media: [B.c, B.d], caption: 'Golden hour at the Sahara Tent with @smartcrew', versions: [['v1', 'Changes requested · Feb 9', 'chg']], msgs: [['AR', 'Ana Ruiz · Smartcrew', 'Feb 9', 'Use the white logo on dark backgrounds, please. The black one disappears on frame 2.']] }),
+        S(3, 'approved', { media: [B.a], caption: 'Sound check', versions: [['v1', 'Approved · Feb 9', 'ok']], msgs: [] }), S(4, 'approved', { media: [B.b], caption: 'Art walk', versions: [['v1', 'Approved · Feb 9', 'ok']], msgs: [] }),
+        S(5, 'todo'), S(6, 'todo'), S(7, 'todo'), S(8, 'todo'),
+        { id: 'stage', g: 'Stage branding', n: '1', title: 'Stage branding', kind: 'none', icon: 'i-image', st: 'prod', due: 'Mar 15, 2027' },
+        { id: 'vip', g: 'VIP passes', n: '1', title: 'VIP passes (20)', kind: 'none', icon: 'i-badge-plus', st: 'todo', due: 'Apr 1, 2027' },
+        { id: 'act', g: 'Festival grounds activation', n: '1', title: 'Festival grounds activation', kind: 'none', icon: 'i-map-pin', st: 'todo', due: 'Apr 9, 2027' },
+        { id: 'poster', g: 'Logo on line-up poster', n: '1', title: 'Logo on line-up poster', kind: 'image', icon: 'i-image', st: 'approved', due: 'Jan 20, 2027', media: [B.b], versions: [['v1', 'Approved · Jan 18', 'ok']], msgs: [] }
+      ];
+    }
+    const P = (i, st, extra) => Object.assign({ id: 'p' + i, g: 'Instagram posts', n: String(i), title: 'Instagram post ' + i + ' of 6', kind: 'image', icon: 'i-camera', st, due: ['Feb 1', 'Feb 10', 'Feb 7', 'Feb 21', 'Feb 28', 'Mar 7'][i - 1] + ', 2027' }, extra || {});
+    return [
+      P(1, 'published', { media: [B.a], caption: 'Recorded at dawn above Þingvallavatn. Season two of Field Sessions is made with @coachellafestival. Early Desert Vibes passes in bio #DesertVibes2027', pubDate: 'Feb 1, 2027', results: [['182K', 'Reach'], ['9.4K', 'Likes'], ['312', 'Comments'], ['1.1K', 'Saves']], link: 'instagram.com/p/C9fx2…', versions: [['v1', 'Changes requested · Jan 24', 'chg'], ['v2', 'Approved · Jan 27', 'ok'], ['Live', 'Posted Feb 1 · link added', 'live']], msgs: [['CF', 'You', 'Jan 24', 'Love it. Can the logo sit top right instead of over the water?'], ['MH', 'Meridian Hall', 'Jan 26', 'Moved it. v2 attached.']] }),
+      P(2, 'review', { media: [B.b, B.c, B.a], caption: 'The sculpture garden at our Reykjavík session, built with @coachellafestival. Three nights, no setlist #DesertVibes2027', versions: [['v1', 'Sent for approval · yesterday', 'rev']], msgs: [['MH', 'Meridian Hall', 'Yesterday', 'Three-image carousel for Feb 10. Happy to swap the order.']] }),
+      P(3, 'overdue', { kind: 'none' }), P(4, 'todo', { kind: 'none' }), P(5, 'todo', { kind: 'none' }), P(6, 'todo', { kind: 'none' }),
+      { id: 'r1', g: 'Behind-the-scenes reels', n: '1', title: 'Behind-the-scenes reel 1 of 2', kind: 'video', icon: 'i-video', st: 'review', due: 'Feb 14, 2027', media: [B.c], dur: '0:42', caption: 'How we hauled a piano up a glacier for @coachellafestival #DesertVibes2027', versions: [['v1', 'Sent for approval · today', 'rev']], msgs: [] },
+      { id: 'r2', g: 'Behind-the-scenes reels', n: '2', title: 'Behind-the-scenes reel 2 of 2', kind: 'none', icon: 'i-video', st: 'todo', due: 'Feb 28, 2027' },
+      { id: 'film', g: 'Branded session film', n: '1', title: 'Branded session film', kind: 'none', icon: 'i-film', st: 'prod', due: 'Mar 20, 2027', prodNote: 'Filming now. Meridian Hall expects to send the first cut on Mar 6.' },
+      { id: 'logo', g: 'Logo in film credits', n: '1', title: 'Logo in film credits', kind: 'none', icon: 'i-image', st: 'todo', due: 'Mar 20, 2027' },
+      { id: 'news', g: 'Newsletter feature', n: '1', title: 'Newsletter feature', kind: 'email', icon: 'i-mail', st: 'published', due: 'Jan 18, 2027', pubDate: 'Jan 18, 2027', results: [['42K', 'Sent'], ['46%', 'Opened'], ['3.1K', 'Clicks'], ['214', 'Passes sold']], link: 'View the email', versions: [['v1', 'Approved · Jan 15', 'ok'], ['Sent', 'Jan 18', 'live']], msgs: [] },
+      { id: 'rights', g: 'Usage rights', n: '1', title: 'Usage rights · 12 months, paid social', kind: 'doc', icon: 'i-file-text', st: 'approved', due: 'Jan 5, 2027', link: 'Download PDF', versions: [['Signed', 'Jan 5, 2027', 'ok']], msgs: [] }
+    ];
+  }
+  renderVals() {
+    const P = this.props, s = this.state || {};
+    const CR = P.mode === 'creator';
+    const over = {}; String(P.over || '').split(',').filter(Boolean).forEach((x) => { const [k, v] = x.split(':'); over[k] = v; });
+    Object.assign(over, s.over || {});
+    const L = this.data(CR).map((x) => Object.assign({}, x, { st: over[x.id] || x.st }));
+    const id = s.id || P.item || L[0].id;
+    const i = Math.max(0, L.findIndex((x) => x.id === id));
+    const it = L[i];
+    const grp = L.filter((x) => x.g === it.g);
+    const ST = { review: ['For approval', 'cg-s warn'], changes: ['Changes requested', 'cg-s chg'], approved: ['Approved', 'cg-s ok'], published: ['Published', 'cg-s ok'], prod: ['In production', 'cg-s prod'], todo: ['To do', 'cg-s'], overdue: ['Overdue', 'cg-s bad'] };
+    const st = ST[it.st] || ST.todo;
+    const imgs = it.media || [];
+    const ii = Math.min(s.img || 0, Math.max(imgs.length - 1, 0));
+    const pub = it.st === 'published';
+    const brokenOn = pub && it.kind === 'image' && (P.broken === true || P.broken === 'true');
+    const seg = brokenOn ? 'shot' : s.seg || 'live';
+    const kind = pub && it.kind === 'image' ? (seg === 'live' ? 'embed' : seg === 'shot' ? 'shot' : 'image') : it.kind;
+    const has = it.kind !== 'none';
+    const askChanges = s.ask !== undefined ? s.ask : (P.changes === true || P.changes === 'true') && it.st === 'review';
+    const CHK = [['Key message', 'Desert Vibes is where Southern California’s creative crowd spends its spring'], ['Mentions', 'Early-bird VIP passes'], ['Hashtag', '#DesertVibes2027'], ['Tag', '@coachellafestival']];
+    const ticks = (s.ticks || {})[it.id] || (it.st === 'review' ? [false, true, true, true] : [true, true, true, true]);
+    const noteV = s.note || '';
+    const go = (j) => { const n = L[Math.max(0, Math.min(L.length - 1, j))]; clearInterval(this.pl); this.setState({ id: n.id, img: 0, seg: 'live', ask: false, note: '', playing: false, vt: 0 }); setTimeout(() => { const a = document.activeElement; if (!a || a === document.body || !document.querySelector('.rv').contains(a)) { const el = document.querySelector('.rv'); if (el) el.focus(); } }, 0); };
+    const setSt = (v, msg) => { const o = Object.assign({}, s.over || {}, { [it.id]: v }); this.setState({ over: o, ask: false, note: '' }); window.dispatchEvent(new CustomEvent('cg-dlv', { detail: { id: it.id, st: v } })); return o; };
+    const nextReview = (o) => L.find((x, j) => j !== i && (o[x.id] || x.st) === 'review');
+    const msgs = ((s.msgs || {})[it.id] || []).concat([]);
+    const baseMsgs = (it.msgs || []).map((m) => ({ ini: m[0], who: m[1], when: m[2], t: m[3], cls: m[1] === 'You' || (CR && m[1].indexOf('Sahara') === 0) ? 'me' : '' }));
+    const allMsgs = baseMsgs.concat(msgs);
+    const vers = (it.versions || []).map((v) => ({ n: v[0], t: v[1], cls: 'rv-v ' + v[2] }));
+    const vt = s.vt || 0;
+    const noneTitle = it.st === 'prod' ? 'In production' : it.st === 'overdue' ? 'Not submitted yet · ' + Math.max(2, 2) + ' days overdue' : CR ? 'Nothing uploaded yet' : 'Nothing to review yet';
+    const noneTxt = it.prodNote || (it.st === 'overdue' ? 'This post was due on ' + it.due.replace(', 2027', '') + '. A nudge sends Meridian Hall a reminder with the due date and brief.' : CR ? 'Upload your draft and Smartcrew will review it here. Due ' + it.due + '.' : 'Meridian Hall will upload it here for your approval. Due ' + it.due + '.');
+    return {
+      crumb: (CR ? 'Smartcrew Festival Season' : 'Aurora Field Sessions · Session Partner') + ' › ' + it.g, it: Object.assign({}, it, { pubDate: it.pubDate || '', caption: it.caption || '' }),
+      pills: grp.length > 1 ? grp.map((x) => ({ id: x.id, n: x.n, cur: x.id === it.id ? 'true' : undefined, cls: 'rv-pill ' + x.st + (x.id === it.id ? ' on' : ''), aria: x.title + ', ' + (ST[x.st] || ST.todo)[0] })) : [], pillsLbl: it.g,
+      pos: (i + 1) + ' of ' + L.length, isFirst: i === 0, isLast: i === L.length - 1,
+      showSeg: pub && it.kind === 'image', segLive: seg === 'live' ? 'true' : 'false', segShot: seg === 'shot' ? 'true' : 'false', segDraft: seg === 'draft' ? 'true' : 'false',
+      m: { image: kind === 'image', video: kind === 'video', embed: kind === 'embed', shot: kind === 'shot', email: kind === 'email', doc: kind === 'doc', none: !has, src: imgs[ii] || '', alt: it.title, multi: imgs.length > 1 && kind === 'image', idx: (ii + 1) + ' / ' + imgs.length, dots: imgs.map((x, j) => (j === ii ? 'on' : '')), dur: it.dur || '' },
+      broken: brokenOn,
+      playLbl: s.playing ? 'Pause' : 'Play', isPlaying: !!s.playing, notPlaying: !s.playing, vTime: '0:' + String(Math.round(vt * 42 / 100)).padStart(2, '0'), vPct: String(vt),
+      noneTitle, noneTxt, canUpload: CR && !has && it.st !== 'prod', canNudge: !CR && it.st === 'overdue', nudgeLbl: s.nudged && s.nudged[it.id] ? 'Reminder sent' : 'Nudge Meridian Hall',
+      stTxt: st[0], stCls: st[1], dueTxt: (pub ? 'Posted ' : 'Due ') + (it.pubDate || it.due),
+      fromTxt: it.st === 'review' ? (CR ? 'Waiting for Smartcrew to review' : 'Sent by Meridian Hall · ' + (it.versions ? it.versions[it.versions.length - 1][1].split('· ')[1] : '')) : it.st === 'changes' ? (CR ? 'Smartcrew asked for changes. Upload a new version when it’s ready.' : 'Waiting for Meridian Hall to send a new version') : it.st === 'approved' && !pub ? (CR ? 'Approved. Post it, then add the live link.' : 'Approved. Meridian Hall will post it and add the live link.') : pub ? 'Live since ' + it.pubDate : '',
+      hasResults: pub, results: (it.results || []).map((r) => ({ v: r[0], k: r[1] })), resWhen: 'updated today', linkTxt: it.link || 'Open',
+      hasCaption: !!it.caption && !pub && has, hasCheck: has && (it.kind === 'image' || it.kind === 'video') && !CR, checks: CHK.map((c, j) => ({ i: String(j), k: c[0], v: c[1], on: !!ticks[j], ro: it.st !== 'review' })), checkN: ticks.filter(Boolean).length + ' of ' + CHK.length,
+      hasLinkForm: CR && it.st === 'approved' && !!it.linkForm, linkVal: s.link || '', noLink: !(s.link || '').trim(),
+      hasVersions: vers.length > 0, versions: vers,
+      msgs: allMsgs, hasMsgs: allMsgs.length > 0, noMsgs: allMsgs.length === 0, say: s.say || '', noSay: !(s.say || '').trim(), sayPh: CR ? 'Message Smartcrew' : 'Message Meridian Hall',
+      showActs: (!CR && it.st === 'review') || (CR && it.st === 'changes'), ownerBtns: !CR && it.st === 'review' && !askChanges, creatorBtns: CR && it.st === 'changes', askChanges, note: noteV, noNote: !noteV.trim(),
+      approveLbl: grp.filter((x) => x.st === 'review').length > 1 || nextReview(over) ? 'Approve and next' : 'Approve',
+      hasToast: !!s.toast, toast: s.toast || '',
+      goId: (e) => go(L.findIndex((x) => x.id === e.currentTarget.getAttribute('data-id'))), prev: () => go(i - 1), next: () => go(i + 1),
+      imgPrev: () => this.setState({ img: (ii - 1 + imgs.length) % imgs.length }), imgNext: () => this.setState({ img: (ii + 1) % imgs.length }),
+      setSeg: (e) => this.setState({ seg: e.currentTarget.getAttribute('data-v') }),
+      togglePlay: () => { const on = !s.playing; this.setState({ playing: on }); clearInterval(this.pl); if (on) this.pl = setInterval(() => { const v = ((this.state || {}).vt || 0) + 2; if (v >= 100) { clearInterval(this.pl); this.setState({ vt: 100, playing: false }); } else this.setState({ vt: v }); }, 170); },
+      tick: (e) => { const j = Number(e.currentTarget.getAttribute('data-i')); const t = ticks.slice(); t[j] = !t[j]; this.setState({ ticks: Object.assign({}, s.ticks || {}, { [it.id]: t }) }); },
+      startChanges: () => { this.setState({ ask: true }); setTimeout(() => { const el = document.getElementById('rv-note'); if (el) el.focus(); }, 30); },
+      cancelChanges: () => this.setState({ ask: false, note: '' }), onNote: (e) => this.setState({ note: e.target.value }),
+      sendChanges: () => { const m = Object.assign({}, s.msgs || {}, { [it.id]: msgs.concat([{ ini: 'CF', who: 'You', when: 'Just now', t: noteV, cls: 'me' }]) }); setSt('changes'); this.setState({ msgs: m }); this.flash('Changes requested. Meridian Hall has been notified.'); },
+      approve: () => { const o = setSt('approved'); const n = nextReview(o); if (n) { this.flash('Approved. Next: ' + n.title); setTimeout(() => go(L.findIndex((x) => x.id === n.id)), 250); } else this.flash('Approved. Nothing else is waiting for you.'); },
+      upload: () => { setSt('review'); this.flash(CR ? 'Sent to Smartcrew for approval' : 'Uploaded'); },
+      nudge: () => { this.setState({ nudged: Object.assign({}, s.nudged || {}, { [it.id]: true }) }); this.flash('Reminder sent to Meridian Hall'); },
+      onLink: (e) => this.setState({ link: e.target.value }), saveLink: () => { setSt('published'); this.setState({ link: '' }); this.flash('Live link added. Results will appear here within a day.'); },
+      onSay: (e) => this.setState({ say: e.target.value }),
+      send: () => { const t = (s.say || '').trim(); if (!t) return; const m = Object.assign({}, s.msgs || {}, { [it.id]: msgs.concat([{ ini: CR ? 'SS' : 'CF', who: 'You', when: 'Just now', t, cls: 'me' }]) }); this.setState({ msgs: m, say: '' }); },
+      sayKey: (e) => { if (e.key === 'Enter') { e.preventDefault(); const t = (s.say || '').trim(); if (!t) return; const m = Object.assign({}, s.msgs || {}, { [it.id]: msgs.concat([{ ini: CR ? 'SS' : 'CF', who: 'You', when: 'Just now', t, cls: 'me' }]) }); this.setState({ msgs: m, say: '' }); } },
+      close: () => window.dispatchEvent(new CustomEvent('cg-review-close', { detail: { over: s.over || {} } })),
+      _k: (this._key = (e) => { const tg = e.target.tagName; if (e.key === 'Escape') { e.preventDefault(); if (askChanges) this.setState({ ask: false }); else window.dispatchEvent(new CustomEvent('cg-review-close', { detail: { over: s.over || {} } })); } else if ((tg !== 'INPUT' && tg !== 'TEXTAREA') && e.key === 'ArrowRight') go(i + 1); else if ((tg !== 'INPUT' && tg !== 'TEXTAREA') && e.key === 'ArrowLeft') go(i - 1); }) && null
+    };
+  }
+}
+</script>
+<script src="assets/components.js"></script><script>(function(m){var o={};for(var k in m)o["./"+k]=new Blob([m[k]],{type:"text/html"});window.__resourceBlobs=o;window.__resources={};})(window.__VZ_SRC||{});</script><script src="assets/vendor/react.production.min.js"></script><script src="assets/vendor/react-dom.production.min.js"></script><script src="assets/vendor/dc-runtime.js"></script><script src="assets/prototype-map.js"></script><script src="assets/proto-bar.js"></script>
+</body>
+</html>

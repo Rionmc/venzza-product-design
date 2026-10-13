@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Project edit · Sponsorship packages</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="ds/venzza/components/bundle.css">
+<link rel="stylesheet" href="shared/venzza-dark.css">
+<link rel="stylesheet" href="shared/venzza-app.css">
+<script src="ds/venzza/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--bg-canvas)}
+</style>
+</helmet>
+<div class="pe-pk">
+<div class="pe-head">
+<div><h1>Sponsorship packages</h1><p>What sponsors can buy from this project. Open a package to edit everything about it in one place, or compare them all side by side.</p></div>
+<sc-if value="{{hasPk}}" hint-placeholder-val="{{true}}"><div class="pe-head-end">
+<div class="pe-seg" role="group" aria-label="View"><button type="button" aria-pressed="{{cardsP}}" data-v="cards" onClick="{{setView}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-layout-grid"></use></svg>Cards</button><button type="button" aria-pressed="{{compareP}}" data-v="compare" onClick="{{setView}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-list"></use></svg>Compare</button></div>
+<button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{openCreate}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-plus"></use></svg>New package</button>
+</div></sc-if>
+</div>
+
+<sc-if value="{{hasPk}}" hint-placeholder-val="{{true}}">
+<div class="pq-sum"><div class="pe-stats">
+<div><b>{{st.count}}</b><span>{{st.countLbl}}</span></div>
+<div><b>{{st.avail}}</b><span>Available to sell</span></div>
+<div><b>{{st.range}}</b><span>Price range</span></div>
+<div><b>{{st.dl}}</b><span>Deliverables · <button type="button" class="pe-go" style="font-size:12px;padding:0" onClick="{{openLib}}">Manage</button></span></div>
+</div></div>
+
+<div class="{{readyCls}}">
+<div class="pq-ready-h"><svg class="{{readyIconCls}}" aria-hidden="true"><use href="#{{readyIcon}}"></use></svg>{{readyTitle}}<span>{{readySub}}</span></div>
+<sc-for list="{{issues}}" as="r" hint-placeholder-count="2"><div class="pq-ready-r"><svg class="{{r.icCls}}" aria-hidden="true"><use href="#{{r.ic}}"></use></svg><span class="t"><b>{{r.b}}</b>{{r.t}}</span><button type="button" class="pe-go" data-fix="{{r.fix}}" data-id="{{r.id}}" data-step="{{r.step}}" onClick="{{fix}}">{{r.act}}<svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></button></div></sc-for>
+</div>
+
+<sc-if value="{{isCards}}" hint-placeholder-val="{{true}}">
+<div class="pq-grid">
+<sc-for list="{{cards}}" as="c" hint-placeholder-count="3"><article class="{{c.cls}}" aria-label="{{c.name}}" style="--pk: {{c.tone}}">
+<div class="pq-top"><span class="pe-chip">{{c.availLbl}}</span><span class="{{c.visCls}}"><svg class="vz-icon" aria-hidden="true"><use href="#{{c.visIcon}}"></use></svg>{{c.visLbl}}</span><button type="button" class="pe-ibtn bare" aria-label="{{c.menuLbl}}" aria-expanded="{{c.menuOpen}}" data-id="{{c.id}}" onClick="{{toggleMenu}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-ellipsis"></use></svg></button></div>
+<sc-if value="{{c.menuOpen}}" hint-placeholder-val="{{false}}"><div class="pq-menu" role="menu"><button type="button" role="menuitem" data-id="{{c.id}}" data-act="dup" onClick="{{menuAct}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-copy"></use></svg>Duplicate</button><button type="button" role="menuitem" data-id="{{c.id}}" data-act="left" disabled="{{c.firstDis}}" onClick="{{menuAct}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-left"></use></svg>Move earlier</button><button type="button" role="menuitem" data-id="{{c.id}}" data-act="right" disabled="{{c.lastDis}}" onClick="{{menuAct}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg>Move later</button><hr><button type="button" role="menuitem" class="del" data-id="{{c.id}}" data-act="del" onClick="{{menuAct}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-trash-2"></use></svg>Delete package</button></div></sc-if>
+<h3><i class="pk-dot" aria-hidden="true"></i>{{c.name}}</h3>
+<p class="pq-desc">{{c.desc}}</p>
+<div class="pq-price"><b class="{{c.priceCls}}">{{c.priceTxt}}</b><span>{{c.terms}}</span></div>
+<ul class="pq-inc"><sc-for list="{{c.incs}}" as="i" hint-placeholder-count="3"><li><svg class="vz-icon" aria-hidden="true"><use href="#i-check"></use></svg><span class="nm">{{i.name}}</span><b>{{i.q}}</b></li></sc-for><sc-if value="{{c.emptyInc}}" hint-placeholder-val="{{false}}"><li class="empty">Nothing included yet</li></sc-if><sc-if value="{{c.hasNo}}" hint-placeholder-val="{{true}}"><li class="no">Not included: {{c.noTxt}}</li></sc-if></ul>
+<div class="pq-foot"><button type="button" class="vz-btn vz-btn--secondary sm" data-id="{{c.id}}" onClick="{{openEdit}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-pencil"></use></svg>Edit package</button></div>
+</article></sc-for>
+<button type="button" class="pq-new" onClick="{{openCreate}}"><span class="ic"><svg class="vz-icon" aria-hidden="true"><use href="#i-plus"></use></svg></span><b>New package</b><span>Name it, pick what’s included and set a price, all in one panel.</span></button>
+</div>
+</sc-if>
+
+<sc-if value="{{isCompare}}" hint-placeholder-val="{{false}}">
+<div class="cq-wrap"><div class="cq" role="table" aria-label="Compare packages" style="grid-template-columns: {{gridCols}}">
+<div role="row"><div class="cell rh hd" role="columnheader"><span class="pe-eyebrow">Package</span></div><sc-for list="{{cols}}" as="c" hint-placeholder-count="3"><div class="cell hd" role="columnheader" style="--pk: {{c.tone}}"><div class="cq-ph"><div><b><i class="pk-dot" aria-hidden="true"></i>{{c.name}}</b><span>{{c.sub}}</span></div><button type="button" class="pe-ibtn bare" aria-label="{{c.editLbl}}" data-id="{{c.id}}" onClick="{{openEdit}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-pencil"></use></svg></button></div></div></sc-for><div class="cell hd cq-addcol"><button type="button" onClick="{{openCreate}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-plus"></use></svg>Package</button></div></div>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="8">
+<sc-if value="{{r.grp}}" hint-placeholder-val="{{false}}"><div role="row" class="grp"><div class="cell rh" role="rowheader"><span class="cat-lbl"><i class="cat-dot" style="--c: {{r.cc}}" aria-hidden="true"></i>{{r.label}}</span></div><div class="cell fill"></div></div></sc-if>
+<sc-if value="{{r.row}}" hint-placeholder-val="{{true}}"><div role="row">
+<div class="cell rh" role="rowheader"><sc-if value="{{r.isDl}}" hint-placeholder-val="{{true}}"><button type="button" class="cq-rn" data-d="{{r.id}}" onClick="{{openLibAt}}" aria-label="{{r.editLbl}}">{{r.label}}<sc-if value="{{r.right}}" hint-placeholder-val="{{false}}"><span class="cq-right"><svg class="vz-icon" aria-hidden="true"><use href="#i-file-text"></use></svg>Right</span></sc-if><svg class="vz-icon cq-rn-ic" aria-hidden="true"><use href="#i-pencil"></use></svg></button></sc-if><sc-if value="{{r.isOffer}}" hint-placeholder-val="{{false}}"><b style="font-weight:650">{{r.label}}</b></sc-if><span class="cq-rd">{{r.desc}}</span></div>
+<sc-for list="{{r.cells}}" as="x" hint-placeholder-count="3"><div class="cell cq-cell" role="cell">
+<sc-if value="{{x.isQty}}" hint-placeholder-val="{{true}}"><sc-if value="{{x.sel}}" hint-placeholder-val="{{false}}"><div class="cq-edit"><span class="pe-step"><button type="button" aria-label="Fewer" data-d="{{x.d}}" data-p="{{x.p}}" data-k="-1" onClick="{{bump}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-minus"></use></svg></button><b>{{x.q}}</b><button type="button" aria-label="More" data-d="{{x.d}}" data-p="{{x.p}}" data-k="1" onClick="{{bump}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-plus"></use></svg></button></span><small>{{x.u}}</small></div></sc-if><sc-if value="{{x.unsel}}" hint-placeholder-val="{{true}}"><button type="button" class="{{x.cls}}" aria-label="{{x.aria}}" data-d="{{x.d}}" data-p="{{x.p}}" onClick="{{selCell}}"><sc-if value="{{x.on}}" hint-placeholder-val="{{true}}">{{x.q}}<small>{{x.u}}</small></sc-if><sc-if value="{{x.off}}" hint-placeholder-val="{{false}}"><span class="dash">—</span><span class="add">+ Include</span></sc-if></button></sc-if></sc-if>
+<sc-if value="{{x.isPrice}}" hint-placeholder-val="{{false}}"><div class="pe-money cq-in"><span>$</span><input class="pe-in cq-in" inputmode="numeric" aria-label="{{x.aria}}" placeholder="Add price" value="{{x.priceStr}}" data-p="{{x.p}}" onChange="{{setPriceCell}}" onInput="{{setPriceCell}}"></div></sc-if>
+<sc-if value="{{x.isPay}}" hint-placeholder-val="{{false}}"><select class="pe-in cq-sel" aria-label="{{x.aria}}" value="{{x.inst}}" data-p="{{x.p}}" onChange="{{setInstCell}}"><sc-for list="{{instOpts}}" as="o" hint-placeholder-count="3"><option value="{{o.v}}">{{o.l}}</option></sc-for></select></sc-if>
+<sc-if value="{{x.isVis}}" hint-placeholder-val="{{false}}"><label class="cq-vis"><span class="pe-sw"><input type="checkbox" aria-label="{{x.aria}}" checked="{{x.pub}}" data-p="{{x.p}}" onChange="{{setVisCell}}"><i></i></span>{{x.visTxt}}</label></sc-if>
+<sc-if value="{{x.isAvail}}" hint-placeholder-val="{{false}}"><span class="pe-step"><button type="button" aria-label="Fewer available" data-p="{{x.p}}" data-k="-1" disabled="{{x.minDis}}" onClick="{{bumpAvail}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-minus"></use></svg></button><b>{{x.avail}}</b><button type="button" aria-label="More available" data-p="{{x.p}}" data-k="1" onClick="{{bumpAvail}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-plus"></use></svg></button></span></sc-if>
+</div></sc-for><div class="cell"></div>
+</div></sc-if>
+</sc-for>
+<div role="row"><div class="cell rh"><button type="button" class="pe-go" style="color:var(--text-secondary)" onClick="{{openLibNew}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-plus"></use></svg>Add deliverable</button></div><div class="cell fill"></div></div>
+</div></div>
+<div class="cq-foot"><span><span class="k">Click a quantity to change it</span><span class="k">— means not included</span><span class="k">Click a deliverable’s name to edit it everywhere</span></span><span>This is the same table sponsors use to compare.</span></div>
+</sc-if>
+</sc-if>
+
+<sc-if value="{{noPk}}" hint-placeholder-val="{{false}}">
+<div class="pq-empty"><div>
+<h2>Create your first package</h2>
+<p>Packages are what sponsors buy. Each one bundles a few things you deliver at one price. Most projects start with two or three tiers.</p>
+<ol class="pq-steps"><li><span class="n">1</span><span><b>Name it</b>Something sponsors will remember, like “Main Stage”.</span></li><li><span class="n">2</span><span><b>Choose what’s included</b>Pick from things you deliver: posts, stage branding, passes.</span></li><li><span class="n">3</span><span><b>Set a price</b>One payment or installments. Show it, or keep it on request.</span></li></ol>
+<div class="acts"><button type="button" class="vz-btn pe-solid" onClick="{{openCreate}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-plus"></use></svg>Create a package</button><button type="button" class="vz-btn vz-btn--secondary" onClick="{{useTiers}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-layers"></use></svg>Start with three tiers</button></div>
+</div>
+<div class="pq-ghost" aria-hidden="true">
+<div class="pq"><span class="pe-chip" style="align-self:flex-start">Starter tier</span><h3>Supporter</h3><div class="pq-price"><b>$10,000</b></div></div>
+<div class="pq"><span class="pe-chip" style="align-self:flex-start">Most chosen</span><h3>Partner</h3><div class="pq-price"><b>$40,000</b></div></div>
+<div class="pq"><span class="pe-chip" style="align-self:flex-start">Top tier</span><h3>Headline</h3><div class="pq-price"><b>$120,000</b></div></div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{edOpen}}" hint-placeholder-val="{{false}}">
+<div class="{{scrimCls}}" onClick="{{closeEd}}"></div>
+<section class="{{shCls}}" role="dialog" aria-modal="true" aria-labelledby="sh-title" onKeyDown="{{onSheetKey}}">
+<div class="sh-h"><div><h2 id="sh-title">{{ed.title}}</h2><p>{{ed.sub}}</p></div><sc-if value="{{ed.showNav}}" hint-placeholder-val="{{false}}"><div class="sh-nav" role="group" aria-label="Switch package"><button type="button" class="pe-ibtn" aria-label="{{ed.prevLbl}}" title="{{ed.prevLbl}}" data-k="-1" disabled="{{ed.prevDis}}" onClick="{{edNav}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-chevron-left"></use></svg></button><span>{{ed.pos}}</span><button type="button" class="pe-ibtn" aria-label="{{ed.nextLbl}}" title="{{ed.nextLbl}}" data-k="1" disabled="{{ed.nextDis}}" onClick="{{edNav}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-chevron-right"></use></svg></button></div></sc-if><button type="button" class="pe-ibtn" aria-label="Close" onClick="{{closeEd}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-x"></use></svg></button></div>
+<div class="sh-b">
+
+<div class="sh-form">
+<div class="sh-sec" id="sh-s1"><div class="sh-sec-h"><span class="{{ed.n1}}"><sc-if value="{{ed.d1}}" hint-placeholder-val="{{false}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-check"></use></svg></sc-if><sc-if value="{{ed.nd1}}" hint-placeholder-val="{{true}}">1</sc-if></span><h3>Details</h3></div>
+<div class="pe-form">
+<div class="pe-f"><label for="ed-name">Package name <small>{{ed.nameCount}}/60</small></label><input id="ed-name" class="pe-in" maxlength="60" placeholder="e.g. Main Stage" value="{{ed.name}}" data-k="name" onChange="{{edField}}" onInput="{{edField}}"></div>
+<div class="pe-f"><label for="ed-desc">Short description <small>{{ed.descCount}}/180</small></label><textarea id="ed-desc" class="pe-in" maxlength="180" rows="2" placeholder="One line on why a sponsor would pick this" value="{{ed.desc}}" data-k="desc" onChange="{{edField}}" onInput="{{edField}}"></textarea></div>
+<div class="pe-f"><div class="lb">How many can you sell?</div><div style="display:flex;align-items:center;gap:12px"><span class="pe-step"><button type="button" aria-label="Fewer" data-k="-1" disabled="{{ed.availMin}}" onClick="{{edAvail}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-minus"></use></svg></button><b>{{ed.avail}}</b><button type="button" aria-label="More" data-k="1" onClick="{{edAvail}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-plus"></use></svg></button></span><span class="hint" style="margin:0">Sponsors see “{{ed.avail}} available”. Sold packages come off automatically.</span></div></div>
+
+</div></div>
+
+<div class="sh-sec" id="sh-s2"><div class="sh-sec-h"><span class="{{ed.n2}}"><sc-if value="{{ed.d2}}" hint-placeholder-val="{{false}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-check"></use></svg></sc-if><sc-if value="{{ed.nd2}}" hint-placeholder-val="{{true}}">2</sc-if></span><h3>What’s included</h3><span>{{ed.incCount}}</span></div>
+<sc-for list="{{ed.incRows}}" as="r" hint-placeholder-count="4"><sc-if value="{{r.cat}}" hint-placeholder-val="{{false}}"><div class="inc-cat"><i class="cat-dot" style="--c: {{r.cc}}" aria-hidden="true"></i>{{r.label}}</div></sc-if><sc-if value="{{r.row}}" hint-placeholder-val="{{true}}"><div class="{{r.cls}}" data-d="{{r.id}}" onClick="{{edToggle}}"><button type="button" class="inc-box" role="checkbox" aria-checked="{{r.on}}" aria-label="{{r.aria}}" data-d="{{r.id}}" onClick="{{edToggle}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-check"></use></svg></button><span class="t"><b>{{r.name}}<sc-if value="{{r.right}}" hint-placeholder-val="{{false}}"><span class="cq-right"><svg class="vz-icon" aria-hidden="true"><use href="#i-file-text"></use></svg>Right</span></sc-if></b><span>{{r.desc}}</span></span><span class="pe-step" onClick="{{stop}}"><button type="button" aria-label="Fewer" data-d="{{r.id}}" data-k="-1" disabled="{{r.minDis}}" onClick="{{edQty}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-minus"></use></svg></button><b>{{r.q}}</b><button type="button" aria-label="More" data-d="{{r.id}}" data-k="1" onClick="{{edQty}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-plus"></use></svg></button></span><span class="u">{{r.u}}</span><button type="button" class="pe-ibtn bare inc-edit" aria-label="{{r.editLbl}}" title="Edit deliverable" data-d="{{r.id}}" onClick="{{ieOpen}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-pencil"></use></svg></button></div></sc-if><sc-if value="{{r.form}}" hint-placeholder-val="{{false}}"><div class="lib-edit inc-form"><div class="inc-form-h"><b>Edit deliverable</b><span>{{ie.useNote}}</span></div><div class="pe-form"><div class="pe-f"><label>Name</label><input class="pe-in" value="{{ie.name}}" data-k="name" onChange="{{ieField}}" onInput="{{ieField}}" placeholder="e.g. Newsletter feature"></div><div class="pe-f"><label>Description</label><input class="pe-in" value="{{ie.desc}}" data-k="desc" onChange="{{ieField}}" onInput="{{ieField}}" placeholder="What exactly the sponsor gets"></div><div class="pe-2"><div class="pe-f"><label>Category</label><select class="pe-in" value="{{ie.cat}}" data-k="cat" onChange="{{ieField}}"><sc-for list="{{catOpts}}" as="o" hint-placeholder-count="4"><option value="{{o}}">{{o}}</option></sc-for></select></div><div class="pe-f"><label>Counted in</label><input class="pe-in" value="{{ie.unit}}" data-k="unit" onChange="{{ieField}}" onInput="{{ieField}}" placeholder="posts, passes, placements"></div></div><div class="pe-swrow"><div><b>Track as a contract right</b><span>Adds it to the rights checklist on the campaign board by default. You can still change it per deal.</span></div><label class="pe-sw"><input type="checkbox" aria-label="Track as a contract right" checked="{{ie.right}}" data-k="right" onChange="{{ieField}}"><i></i></label></div><div class="acts"><span class="grow"></span><button type="button" class="vz-btn vz-btn--ghost sm" onClick="{{ieCancel}}">Cancel</button><button type="button" class="vz-btn pe-solid sm" disabled="{{ie.dis}}" onClick="{{ieSave}}">Save</button></div></div></div></sc-if></sc-for>
+<sc-if value="{{ed.newOpen}}" hint-placeholder-val="{{false}}"><div class="lib-edit inc-form"><div class="inc-form-h"><b>New deliverable</b><span>Saved to your deliverables and included in this package</span></div><div class="pe-form"><div class="pe-f"><label>Name</label><input class="pe-in" value="{{nd.name}}" data-k="name" onChange="{{ndField}}" onInput="{{ndField}}" placeholder="e.g. Newsletter feature"></div><div class="pe-f"><label>Description</label><input class="pe-in" value="{{nd.desc}}" data-k="desc" onChange="{{ndField}}" onInput="{{ndField}}" placeholder="What exactly the sponsor gets"></div><div class="pe-2"><div class="pe-f"><label>Category</label><select class="pe-in" value="{{nd.cat}}" data-k="cat" onChange="{{ndField}}"><sc-for list="{{catOpts}}" as="o" hint-placeholder-count="4"><option value="{{o}}">{{o}}</option></sc-for></select></div><div class="pe-f"><label>Counted in</label><input class="pe-in" value="{{nd.unit}}" data-k="unit" onChange="{{ndField}}" onInput="{{ndField}}" placeholder="posts, passes, placements"></div></div><div class="pe-swrow"><div><b>Track as a contract right</b><span>Adds it to the rights checklist on the campaign board by default. You can still change it per deal.</span></div><label class="pe-sw"><input type="checkbox" aria-label="Track as a contract right" checked="{{nd.right}}" data-k="right" onChange="{{ndField}}"><i></i></label></div><div class="acts"><span class="grow"></span><button type="button" class="vz-btn vz-btn--ghost sm" onClick="{{ndCancel}}">Cancel</button><button type="button" class="vz-btn pe-solid sm" disabled="{{nd.dis}}" onClick="{{ndAdd}}">Add to package</button></div></div></div></sc-if>
+<sc-if value="{{ed.newClosed}}" hint-placeholder-val="{{true}}"><button type="button" class="pe-go" style="margin-top:12px;color:var(--text-secondary)" onClick="{{ndOpen}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-plus"></use></svg>Add a new deliverable</button></sc-if>
+</div>
+
+<div class="sh-sec" id="sh-s3"><div class="sh-sec-h"><span class="{{ed.n3}}"><sc-if value="{{ed.d3}}" hint-placeholder-val="{{false}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-check"></use></svg></sc-if><sc-if value="{{ed.nd3}}" hint-placeholder-val="{{true}}">3</sc-if></span><h3>Price &amp; payment</h3><span>USD</span></div>
+<div class="pe-form">
+<div class="pe-2"><div class="pe-f"><label for="ed-price">Price</label><div class="pe-money"><span>$</span><input id="ed-price" class="pe-in" inputmode="numeric" placeholder="0" value="{{ed.priceStr}}" onChange="{{edPrice}}" onInput="{{edPrice}}"></div></div>
+<div class="pe-f"><div class="lb">Payment</div><div class="pe-seg" role="group" aria-label="Payment"><button type="button" aria-pressed="{{ed.one}}" data-n="1" onClick="{{edInst}}">One payment</button><button type="button" aria-pressed="{{ed.many}}" data-n="{{ed.lastMany}}" onClick="{{edInst}}">Installments</button></div></div></div>
+<sc-if value="{{ed.many}}" hint-placeholder-val="{{false}}"><div class="pe-f"><div class="lb">Number of payments</div><div class="pe-togs"><sc-for list="{{ed.instChips}}" as="o" hint-placeholder-count="6"><button type="button" class="pe-tog" aria-pressed="{{o.on}}" data-n="{{o.n}}" onClick="{{edInst}}">{{o.n}}</button></sc-for></div></div></sc-if>
+<sc-if value="{{ed.hasPrice}}" hint-placeholder-val="{{true}}"><div class="pay" style="margin-top:0">
+<div class="pay-r big"><span>{{ed.payLbl}}</span><b>{{ed.payEach}}</b></div>
+<sc-if value="{{ed.hasLast}}" hint-placeholder-val="{{false}}"><div class="pay-r"><span>Last payment (rounding)</span><b>{{ed.payLast}}</b></div></sc-if>
+<div class="pay-r"><span>Sponsor pays in total</span><b>{{ed.total}}</b></div>
+<div class="pay-ok"><svg class="vz-icon" aria-hidden="true"><use href="#i-check-circle"></use></svg>Adds up to the price exactly. No finance charge.</div>
+</div></sc-if>
+<div class="pe-swrow"><div><b>Show the price to sponsors</b><span>{{ed.visHelp}}</span></div><label class="pe-sw"><input type="checkbox" aria-label="Show the price to sponsors" checked="{{ed.pub}}" onChange="{{edVis}}"><i></i></label></div>
+</div></div>
+</div>
+
+<aside class="sh-prev" aria-label="Sponsor card preview">
+<div class="pe-eyebrow" style="margin-bottom:12px">What sponsors see</div>
+<div class="prev-card" style="--pk: {{ed.tone}}"><span class="pe-chip">{{ed.avail}} available</span><h4>{{ed.pvName}}</h4><p>{{ed.pvDesc}}</p><div class="pq-price"><b class="{{ed.pvPriceCls}}">{{ed.pvPrice}}</b><span>{{ed.pvTerms}}</span></div><ul class="pq-inc"><sc-for list="{{ed.pvIncs}}" as="i" hint-placeholder-count="3"><li><svg class="vz-icon" aria-hidden="true"><use href="#i-check"></use></svg><span class="nm">{{i.name}}</span><b>{{i.q}}</b></li></sc-for><sc-if value="{{ed.pvEmpty}}" hint-placeholder-val="{{false}}"><li class="no">Pick what’s included to see it here.</li></sc-if></ul></div>
+<p class="prev-note">Updates as you type. Sponsors also see every package side by side in a comparison table.</p>
+<a class="pe-go" href="PN-Project-Preview-Packages.dc.html" style="margin-top:6px"><svg class="vz-icon" aria-hidden="true"><use href="#i-eye"></use></svg>Open sponsor preview</a>
+</aside>
+</div>
+<div class="sh-f">
+<sc-if value="{{ed.isEdit}}" hint-placeholder-val="{{true}}"><button type="button" class="vz-btn vz-btn--ghost sm pe-danger-ghost" data-id="{{ed.id}}" data-act="del" onClick="{{menuAct}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-trash-2"></use></svg>Delete package</button></sc-if>
+<sc-if value="{{ed.isCreate}}" hint-placeholder-val="{{false}}"><button type="button" class="vz-btn vz-btn--ghost sm" onClick="{{closeEd}}">Cancel</button></sc-if>
+<span class="grow"></span><span class="note">{{ed.note}}</span>
+<button type="button" class="vz-btn pe-solid sm" disabled="{{ed.okDis}}" onClick="{{edOk}}">{{ed.okLbl}}</button>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{libOpen}}" hint-placeholder-val="{{false}}">
+<div class="sh-scrim" onClick="{{closeLib}}"></div>
+<section class="sh narrow" role="dialog" aria-modal="true" aria-labelledby="lib-title" onKeyDown="{{onSheetKey}}">
+<div class="sh-h"><div><h2 id="lib-title">Deliverables</h2><p>Everything you can include in a package. Edit one here and it updates in every package that uses it.</p></div><button type="button" class="pe-ibtn" aria-label="Close" onClick="{{closeLib}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-x"></use></svg></button></div>
+<div class="lib">
+<sc-if value="{{lib.newClosed}}" hint-placeholder-val="{{true}}"><button type="button" class="vz-btn vz-btn--secondary sm" style="margin:8px 0 6px" onClick="{{openLibNew}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-plus"></use></svg>New deliverable</button></sc-if>
+<sc-for list="{{lib.rows}}" as="r" hint-placeholder-count="4">
+<sc-if value="{{r.cat}}" hint-placeholder-val="{{false}}"><div class="inc-cat" style="margin-top:20px"><i class="cat-dot" style="--c: {{r.cc}}" aria-hidden="true"></i>{{r.label}}</div></sc-if>
+<sc-if value="{{r.view}}" hint-placeholder-val="{{true}}"><div class="lib-row"><span class="t"><b>{{r.name}}<sc-if value="{{r.right}}" hint-placeholder-val="{{false}}"><span class="cq-right"><svg class="vz-icon" aria-hidden="true"><use href="#i-file-text"></use></svg>Right</span></sc-if></b><span>{{r.desc}} · counted in {{r.unit}}</span></span><span class="use">{{r.use}}</span><button type="button" class="pe-ibtn" aria-label="{{r.editLbl}}" data-d="{{r.id}}" onClick="{{libEdit}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-pencil"></use></svg></button></div></sc-if>
+<sc-if value="{{r.form}}" hint-placeholder-val="{{false}}"><div class="lib-edit"><div class="inc-form-h"><b>{{lf.title}}</b><span>{{lf.useNote}}</span></div><div class="pe-form">
+<div class="pe-f"><label>Name</label><input class="pe-in" value="{{lf.name}}" data-k="name" onChange="{{lfField}}" onInput="{{lfField}}" placeholder="e.g. Newsletter feature"></div>
+<div class="pe-f"><label>Description</label><input class="pe-in" value="{{lf.desc}}" data-k="desc" onChange="{{lfField}}" onInput="{{lfField}}" placeholder="What exactly the sponsor gets"></div>
+<div class="pe-2"><div class="pe-f"><label>Category</label><select class="pe-in" value="{{lf.cat}}" data-k="cat" onChange="{{lfField}}"><sc-for list="{{catOpts}}" as="o" hint-placeholder-count="4"><option value="{{o}}">{{o}}</option></sc-for></select></div><div class="pe-f"><label>Counted in</label><input class="pe-in" value="{{lf.unit}}" data-k="unit" onChange="{{lfField}}" onInput="{{lfField}}" placeholder="posts, passes, placements"></div></div>
+<div class="pe-swrow"><div><b>Track as a contract right</b><span>Adds it to the rights checklist on the campaign board by default. You can still change it per deal.</span></div><label class="pe-sw"><input type="checkbox" aria-label="Track as a contract right" checked="{{lf.right}}" data-k="right" onChange="{{lfField}}"><i></i></label></div>
+<div class="acts"><sc-if value="{{lf.canDel}}" hint-placeholder-val="{{true}}"><button type="button" class="vz-btn vz-btn--ghost sm pe-danger-ghost" onClick="{{libDel}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-trash-2"></use></svg>Delete</button><span class="note">{{lf.delNote}}</span></sc-if><span class="grow"></span><button type="button" class="vz-btn vz-btn--ghost sm" onClick="{{libCancel}}">Cancel</button><button type="button" class="vz-btn pe-solid sm" disabled="{{lf.dis}}" onClick="{{libSave}}">{{lf.okLbl}}</button></div>
+</div></div></sc-if>
+</sc-for>
+</div>
+<div class="sh-f"><span class="note">{{lib.foot}}</span><span class="grow"></span><button type="button" class="vz-btn pe-solid sm" onClick="{{closeLib}}">Done</button></div>
+</section>
+</sc-if>
+
+<sc-if value="{{hasToast}}" hint-placeholder-val="{{false}}"><div class="pe-toast" role="status"><svg class="vz-icon" aria-hidden="true"><use href="#i-check-circle"></use></svg>{{toast}}<sc-if value="{{canUndo}}" hint-placeholder-val="{{false}}"><button type="button" class="vz-btn vz-btn--ghost sm" style="color:var(--neutral-950);height:26px" onClick="{{undo}}">Undo</button></sc-if></div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"view":{"editor":"enum","options":["cards","compare"],"default":"cards","section":"State"},"scenario":{"editor":"enum","options":["ready","issues","empty"],"default":"ready","section":"State"},"editor":{"editor":"enum","options":["none","edit","create"],"default":"none","section":"State"},"editId":{"editor":"enum","options":["p1","p2","p3"],"default":"p2","section":"State"},"library":{"editor":"boolean","default":false,"section":"State"},"editorStyle":{"editor":"enum","options":["panel","fullscreen"],"default":"fullscreen","section":"State"},"cell":{"editor":"string","default":"","section":"State"},"$preview":{"width":1120,"height":1100}}'>
+class Component extends DCLogic {
+  componentDidMount() { document.documentElement.setAttribute('data-theme', 'dark'); if (window.Venzza) window.Venzza.mountIcons(); if (!window.__cqStick) { window.__cqStick = () => { document.querySelectorAll('.cq').forEach((el) => { const r = el.getBoundingClientRect(); const st = parseFloat(getComputedStyle(el).getPropertyValue('--stk')) || 0; el.classList.toggle('stuck', r.top < st - 1 && r.bottom > st + 140); }); }; window.addEventListener('scroll', window.__cqStick, { passive: true }); window.addEventListener('resize', window.__cqStick); } setTimeout(window.__cqStick, 60); this.stats(false); this.onEsc = (e) => { if (e.key !== 'Escape') return; const s = this.state || {}; if (s.menu) { this.setState({ menu: null }); return; } if (document.querySelector('.sh')) this.setState({ ed: null, lib: null, nd: null, lf: null }); }; document.addEventListener('keydown', this.onEsc); this.onDown = (e) => { const s = this.state || {}; const t = e.target; if (s.menu && !(t.closest && (t.closest('.pq-menu') || t.closest('.pq-top')))) this.setState({ menu: null }); if (s.sel !== undefined && s.sel && !(t.closest && t.closest('.cq-cell'))) this.setState({ sel: '' }); }; document.addEventListener('mousedown', this.onDown); }
+  // focus: move into the side panel when it opens, hand it back to the trigger when it closes
+  syncFocus() { const sh = document.querySelector('.sh'); if (sh && !this.shOpen) { this.shOpen = true; this.ret = document.activeElement; setTimeout(() => { const st = (this.state || {}).step || 1; const sec = st > 1 && (this.state || {}).jump ? sh.querySelector('#sh-s' + st) : null; const box = sh.querySelector('.sh-form'); if (sec && box) { box.scrollTop = sec.offsetTop - box.offsetTop - 8; const g = sec.querySelector('input, button'); if (g) { g.focus({ preventScroll: true }); this.setState({ jump: false }); return; } } const f = ['.sh-form input', '.lib input', '.lib .vz-btn', '.sh-h .pe-ibtn'].map((q) => sh.querySelector(q)).find(Boolean); if (f) f.focus({ preventScroll: true }); }, 40); } else if (!sh && this.shOpen) { this.shOpen = false; if (this.ret && this.ret.isConnected) this.ret.focus(); } }
+  componentWillUnmount() { document.removeEventListener('keydown', this.onEsc); document.removeEventListener('mousedown', this.onDown); }
+  componentDidUpdate(prev) { this.syncFocus(); const P = this.props; if (prev.scenario !== P.scenario || prev.view !== P.view || prev.editor !== P.editor || prev.editId !== P.editId || prev.library !== P.library || prev.cell !== P.cell) this.setState({ pk: undefined, dl: undefined, view: undefined, ed: undefined, lib: undefined, sel: undefined, menu: null, toast: '' }); }
+  // ---------- sample data ----------
+  baseDl() { return [
+    { id: 'fga', name: 'Festival ground activation', desc: 'Branded booth or lounge on the festival grounds', cat: 'Experience & activation', one: 'activation', unit: 'activations', right: false },
+    { id: 'smc', name: 'Social media coverage', desc: 'Instagram and TikTok festival content', cat: 'Digital media', one: 'post', unit: 'posts', right: false },
+    { id: 'stb', name: 'Stage branding', desc: 'Logo placement on stage screens', cat: 'Physical placement', one: 'placement', unit: 'placements', right: true },
+    { id: 'vip', name: 'VIP passes', desc: 'All-access passes for brand guests', cat: 'Tickets & hospitality', one: 'pass', unit: 'passes', right: false }
+  ]; }
+  basePk() {
+    const sc = this.props.scenario || 'ready';
+    if (sc === 'empty') return [];
+    const P = [
+      { id: 'p1', tone: '#D9A66B', name: 'Desert Oasis', desc: 'Festival ground activation with a branded lounge', avail: 10, price: 50000, inst: 1, pub: true, inc: { fga: 1, smc: 3 } },
+      { id: 'p2', tone: '#6EA8DE', name: 'Sahara Tent', desc: 'Tent sponsorship with enhanced visibility across the weekend', avail: 5, price: 125000, inst: 5, pub: true, inc: { fga: 1, smc: 8, stb: 1 } },
+      { id: 'p3', tone: '#A18FE6', name: 'Main Stage Experience', desc: 'Premium main stage presence with VIP hospitality', avail: 2, price: 250000, inst: 10, pub: true, inc: { fga: 1, smc: 15, stb: 1, vip: 20 } }
+    ];
+    if (sc === 'issues') { P[2].pub = false; P.push({ id: 'p4', tone: '#E58E9F', name: 'Night Market', desc: '', avail: 4, price: 0, inst: 1, pub: true, inc: {} }); }
+    return P;
+  }
+  get S() {
+    const s = this.state || {};
+    const pk = s.pk || this.basePk();
+    const dl = s.dl || (this.props.scenario === 'empty' && !s.pk ? [] : this.baseDl());
+    let ed = s.ed;
+    if (ed === undefined) { const m = this.props.editor; ed = m === 'edit' ? { mode: 'edit', id: this.props.editId || 'p2' } : m === 'create' ? { mode: 'create', draft: { id: 'new', tone: '#5FB8A3', name: 'Night Market', desc: 'Evening food-and-music market with a branded stall', avail: 4, price: 0, inst: 1, pub: true, inc: { fga: 1, smc: 4 } } } : null; }
+    let lib = s.lib;
+    if (lib === undefined) lib = this.props.library ? { edit: 'smc' } : null;
+    const sel = s.sel !== undefined ? s.sel : (this.props.cell || '');
+    return { pk, dl, ed, lib, sel, ie: s.ie || null, step: s.step || 1, view: s.view || this.props.view || 'cards', menu: s.menu || null, nd: s.nd || null, lf: s.lf || null, toast: s.toast || '', undo: s.undo || null };
+  }
+  // ---------- helpers ----------
+  short(n) { return '$' + (n >= 1e6 ? (Math.round(n / 1e5) / 10) + 'M' : n >= 1e3 ? Math.round(n / 1e3) + 'k' : n); }
+  tones() { return [['#D9A66B', 'Sand'], ['#6EA8DE', 'Sky'], ['#A18FE6', 'Violet'], ['#E58E9F', 'Rose'], ['#5FB8A3', 'Teal'], ['#9AA6B8', 'Slate']]; }
+  nextTone() { const used = this.S.pk.map((p) => p.tone); const t = this.tones().find((x) => used.indexOf(x[0]) < 0); return t ? t[0] : '#9AA6B8'; }
+  catColor(c) { return { 'Experience & activation': '#E7A15C', 'Digital media': '#6EA8DE', 'Physical placement': '#A18FE6', 'Tickets & hospitality': '#5FB8A3', 'Content & media': '#E58E9F' }[c] || '#9AA6B8'; }
+  money(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
+  money2(n) { const r = Math.round(n * 100) / 100; return '$' + r.toLocaleString('en-US', { minimumFractionDigits: r % 1 ? 2 : 0, maximumFractionDigits: 2 }); }
+  split(price, n) { const each = Math.floor((price / n) * 100) / 100; const last = Math.round((price - each * (n - 1)) * 100) / 100; return { each, last, uneven: Math.abs(last - each) > 0.001 }; }
+  terms(p) { if (!p.price) return 'Add a price to sell this package'; if (p.inst > 1) { const sp = this.split(p.price, p.inst); return p.inst + ' payments of ' + this.money2(sp.each) + (sp.uneven ? ' (last ' + this.money2(sp.last) + ')' : ''); } return 'One payment'; }
+  qtyTxt(d, q) { return q + ' ' + (q === 1 ? d.one : d.unit); }
+  emit(pk, dl) { this.stats(true, pk, dl); }
+  stats(changed, pk, dl) { const S = this.S; pk = pk || S.pk; dl = dl || S.dl; const iss = this.issues(pk, dl).filter((x) => x.lvl === 'warn').length; window.__pePk = { count: pk.length, warn: iss }; try { window.dispatchEvent(new CustomEvent(changed ? 'pe-change' : 'pe-stats', { detail: { count: pk.length, warn: iss } })); } catch (e) {} }
+  commit(patch, msg, undoable) { const S = this.S; const next = Object.assign({}, patch); if (undoable) next.undo = { pk: S.pk, dl: S.dl }; if (msg) next.toast = msg; this.setState(next); this.emit(patch.pk || S.pk, patch.dl || S.dl); if (msg) { clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({ toast: '', undo: null }), 5000); } }
+  setPk(id, fn, pk) { pk = pk || this.S.pk; return pk.map((p) => (p.id === id ? fn(Object.assign({}, p, { inc: Object.assign({}, p.inc) })) : p)); }
+  issues(pk, dl) {
+    const out = [];
+    pk.forEach((p) => {
+      const nm = p.name || 'Untitled package';
+      if (!p.price) out.push({ lvl: 'warn', b: nm, t: ' has no price yet', fix: 'edit', id: p.id, step: 3, act: 'Add price' });
+      if (!Object.keys(p.inc).length) out.push({ lvl: 'warn', b: nm, t: ' doesn’t include anything yet', fix: 'edit', id: p.id, step: 2, act: 'Choose' });
+      if (!p.desc) out.push({ lvl: 'warn', b: nm, t: ' needs a short description', fix: 'edit', id: p.id, step: 1, act: 'Write' });
+    });
+    dl.forEach((d) => { const inP = pk.filter((p) => p.inc[d.id]); if (pk.length && !inP.length) out.push({ lvl: 'info', b: d.name, t: ' isn’t in any package', fix: 'lib', id: d.id, act: 'Review' }); });
+    pk.filter((p) => !p.pub && p.price).forEach((p) => out.push({ lvl: 'info', b: p.name, t: ' shows “Price on request”. Sponsors will ask you for it.', fix: 'edit', id: p.id, step: 3, act: 'Change' }));
+    return out;
+  }
+  renderVals() {
+    const S = this.S;
+    const { pk, dl, ed, lib, sel, view, menu } = S;
+    const byId = {}; dl.forEach((d) => { byId[d.id] = d; });
+    const cats = []; dl.forEach((d) => { if (cats.indexOf(d.cat) < 0) cats.push(d.cat); });
+    const prices = pk.map((p) => p.price).filter(Boolean);
+    const iss = this.issues(pk, dl);
+    const warnN = iss.filter((x) => x.lvl === 'warn').length;
+    // cards
+    const cards = pk.map((p, i) => {
+      const incs = dl.filter((d) => p.inc[d.id]).map((d) => ({ q: this.qtyTxt(d, p.inc[d.id]), name: d.name }));
+      const no = dl.filter((d) => !p.inc[d.id]).map((d) => d.name);
+      const bad = !p.price || !Object.keys(p.inc).length || !p.desc;
+      return { id: p.id, tone: p.tone || '#9AA6B8', name: p.name || 'Untitled package', desc: p.desc || 'No description yet', availLbl: p.avail + ' available', visCls: 'pe-chip' + (p.pub ? '' : ''), visIcon: p.pub ? 'i-globe' : 'i-lock', visLbl: p.pub ? 'Price shown' : 'On request',
+        priceTxt: p.price ? this.money(p.price) : 'No price yet', priceCls: p.price ? '' : 'none', terms: this.terms(p) + (p.price && !p.pub ? ' · hidden from sponsors' : ''),
+        incs, emptyInc: !incs.length, hasNo: !!incs.length && !!no.length, noTxt: no.join(', '), cls: 'pq' + (bad ? ' warn' : ''),
+        menuOpen: menu === p.id, menuLbl: 'More actions for ' + (p.name || 'package'), firstDis: i === 0, lastDis: i === pk.length - 1 };
+    });
+    // compare
+    const instOpts = [1, 2, 3, 4, 5, 6, 10, 12].map((n) => ({ v: String(n), l: n === 1 ? 'One payment' : n + ' payments' }));
+    const cols = pk.map((p) => ({ id: p.id, tone: p.tone || '#9AA6B8', name: p.name || 'Untitled', sub: p.price ? this.money(p.price) + ' · ' + p.avail + ' available' : 'No price · ' + p.avail + ' available', editLbl: 'Edit ' + (p.name || 'package') }));
+    const rows = [];
+    rows.push({ grp: true, label: 'Offer' });
+    const offer = (k, label, desc, mk) => rows.push({ row: true, isOffer: true, id: k, label, desc, cells: pk.map((p) => Object.assign({ p: p.id }, mk(p))) });
+    offer('price', 'Price', 'Total the sponsor pays', (p) => ({ isPrice: true, priceStr: p.price ? p.price.toLocaleString('en-US') : '', aria: 'Price for ' + p.name }));
+    offer('pay', 'Payment', 'Split evenly, no finance charge', (p) => ({ isPay: true, inst: String(p.inst), aria: 'Payment for ' + p.name }));
+    offer('vis', 'Price shown', 'Off shows “Price on request”', (p) => ({ isVis: true, pub: !!p.pub, visTxt: p.pub ? 'Shown' : 'On request', aria: 'Show price for ' + p.name }));
+    offer('avail', 'Available', 'How many you can sell', (p) => ({ isAvail: true, avail: p.avail, minDis: p.avail <= 1 }));
+    cats.forEach((c) => {
+      rows.push({ grp: true, label: c, cc: this.catColor(c) });
+      dl.filter((d) => d.cat === c).forEach((d) => rows.push({ row: true, isDl: true, id: d.id, editLbl: 'Edit deliverable: ' + d.name, label: d.name, desc: d.desc, right: !!d.right, cells: pk.map((p) => { const q = p.inc[d.id] || 0; const isSel = sel === d.id + ':' + p.id;
+        return { isQty: true, d: d.id, p: p.id, q, u: q === 1 ? d.one : d.unit, sel: isSel, unsel: !isSel, on: q > 0, off: !q, cls: 'cq-q' + (q ? '' : ' off'), aria: q ? d.name + ' in ' + p.name + ': ' + this.qtyTxt(d, q) + '. Change' : d.name + ' not included in ' + p.name + '. Include' }; }) }));
+    });
+    // editor
+    let edV = {};
+    let edOpen = false;
+    if (ed) {
+      const p = ed.mode === 'create' ? ed.draft : pk.find((x) => x.id === ed.id);
+      if (p) {
+        edOpen = true;
+        const incN = Object.keys(p.inc).length;
+        const sp = p.price ? this.split(p.price, p.inst) : null;
+        const incRows = [];
+        cats.forEach((c) => { incRows.push({ cat: true, label: c, cc: this.catColor(c) }); dl.filter((d) => d.cat === c).forEach((d) => { const q = p.inc[d.id] || 0; if (S.ie && S.ie.id === d.id) { incRows.push({ form: true }); return; } incRows.push({ row: true, editLbl: 'Edit ' + d.name, id: d.id, cls: 'inc' + (q ? ' on' : ''), on: q ? 'true' : 'false', aria: 'Include ' + d.name, name: d.name, right: !!d.right, desc: d.desc, q: q || 1, minDis: q <= 1, u: q === 1 ? d.one : d.unit }); }); });
+        const d1 = !!p.name && !!p.desc, d2 = incN > 0, d3 = !!p.price;
+        const missing = [!p.name && 'a name', !incN && 'what’s included', !p.price && 'a price'].filter(Boolean);
+        edV = { id: p.id, isEdit: ed.mode === 'edit', isCreate: ed.mode === 'create', title: ed.mode === 'create' ? 'New package' : 'Edit package', sub: ed.mode === 'create' ? 'Name it, choose what’s included and set a price. You can change anything later.' : (p.name || 'Untitled package') + ' · changes save automatically',
+          name: p.name, desc: p.desc, nameCount: (p.name || '').length, descCount: (p.desc || '').length, avail: p.avail, availMin: p.avail <= 1,
+          n1: 'n' + (d1 ? ' done' : ''), d1, nd1: !d1, n2: 'n' + (d2 ? ' done' : ''), d2, nd2: !d2, n3: 'n' + (d3 ? ' done' : ''), d3, nd3: !d3,
+          incCount: incN + ' of ' + dl.length + ' selected', incRows, newOpen: !!S.nd, newClosed: !S.nd,
+          priceStr: p.price ? p.price.toLocaleString('en-US') : '', hasPrice: !!p.price, one: p.inst === 1, many: p.inst > 1, lastMany: String(ed.lastMany || 5),
+          instChips: [2, 3, 4, 5, 6, 10, 12].map((n) => ({ n: String(n), on: p.inst === n ? 'true' : 'false' })),
+          payLbl: p.inst > 1 ? p.inst + ' payments of' : 'One payment of', payEach: sp ? this.money2(p.inst > 1 ? sp.each : p.price) : '', hasLast: !!sp && p.inst > 1 && sp.uneven, payLast: sp ? this.money2(sp.last) : '', total: p.price ? this.money2(p.price) : '',
+          pub: !!p.pub, visHelp: p.pub ? 'Sponsors see the price and payment terms.' : 'Sponsors see “Price on request” and can ask you for it.',
+          pvName: p.name || 'Package name', pvDesc: p.desc || 'Short description', pvPrice: !p.price ? 'Price to come' : p.pub ? this.money(p.price) : 'Price on request', pvPriceCls: !p.price || !p.pub ? 'none' : '', pvTerms: p.price && p.pub ? (p.inst > 1 ? p.inst + ' payments of ' + this.money2(sp.each) : 'One payment') : (p.price ? 'Ask the creator for pricing' : ''),
+          pvIncs: dl.filter((d) => p.inc[d.id]).map((d) => ({ q: this.qtyTxt(d, p.inc[d.id]), name: d.name })), pvEmpty: !incN,
+          note: ed.mode === 'create' ? (missing.length ? 'Still needed: ' + missing.join(', ') : 'Ready to add') : 'All changes saved',
+          tone: p.tone || '#9AA6B8', tones: this.tones().map((t) => ({ v: t[0], name: t[1], on: (p.tone || '') === t[0] ? 'true' : 'false' })),
+          showNav: ed.mode === 'edit' && this.props.editorStyle !== 'panel' && pk.length > 1, pos: (pk.findIndex((x) => x.id === p.id) + 1) + ' of ' + pk.length,
+          prevDis: pk.findIndex((x) => x.id === p.id) <= 0, nextDis: pk.findIndex((x) => x.id === p.id) >= pk.length - 1,
+          prevLbl: 'Previous package' + (pk[pk.findIndex((x) => x.id === p.id) - 1] ? ': ' + pk[pk.findIndex((x) => x.id === p.id) - 1].name : ''), nextLbl: 'Next package' + (pk[pk.findIndex((x) => x.id === p.id) + 1] ? ': ' + pk[pk.findIndex((x) => x.id === p.id) + 1].name : ''),
+          steps: [[1, 'Details', d1, (p.name || 'Name and description') + (p.name ? ' · ' + p.avail + ' available' : '')], [2, 'What’s included', d2, incN ? incN + ' of ' + dl.length + ' deliverables' : 'Nothing selected yet'], [3, 'Price & payment', d3, p.price ? this.money(p.price) + ' · ' + (p.inst > 1 ? p.inst + ' payments' : 'one payment') + (p.pub ? '' : ' · on request') : 'No price yet']].map((x) => ({ n: String(x[0]), label: x[1], done: !!x[2], todo: !x[2], sum: x[3], nCls: 'n' + (x[2] ? ' done' : ''), cls: 'sh-step' + ((S.step || 1) === x[0] ? ' on' : ''), cur: (S.step || 1) === x[0] ? 'step' : undefined })), okLbl: ed.mode === 'create' ? 'Create package' : 'Done', okDis: ed.mode === 'create' && !p.name };
+      }
+    }
+    // library
+    let libV = { rows: [], newClosed: true, foot: '' };
+    if (lib) {
+      const lrows = [];
+      if (lib.edit === 'new') lrows.push({ form: true });
+      cats.forEach((c) => { lrows.push({ cat: true, label: c, cc: this.catColor(c) }); dl.filter((d) => d.cat === c).forEach((d) => { const n = pk.filter((p) => p.inc[d.id]).length; if (lib.edit === d.id) lrows.push({ form: true }); else lrows.push({ view: true, id: d.id, name: d.name, desc: d.desc, unit: d.unit, right: !!d.right, use: n ? 'In ' + n + (n === 1 ? ' package' : ' packages') : 'Not used', editLbl: 'Edit ' + d.name }); }); });
+      libV = { rows: lrows, newClosed: lib.edit !== 'new', foot: dl.length + ' deliverables across ' + cats.length + ' categories' };
+    }
+    const lfSrc = S.lf || (lib && lib.edit && lib.edit !== 'new' ? Object.assign({}, byId[lib.edit] || {}) : { name: '', desc: '', cat: cats[0] || 'Digital media', unit: '', right: false });
+    const useN = lib && lib.edit && lib.edit !== 'new' ? pk.filter((p) => p.inc[lib.edit]).length : 0;
+    const lf = Object.assign({}, lfSrc, { title: lib && lib.edit === 'new' ? 'New deliverable' : 'Edit deliverable', useNote: lib && lib.edit === 'new' ? 'Saved to your deliverables. Include it in any package.' : useN > 1 ? 'Used in ' + useN + ' packages. Changes apply to all of them.' : useN === 1 ? 'Used in 1 package.' : 'Not used in any package yet.', canDel: !!lib && lib.edit !== 'new', delNote: useN ? 'Removes it from ' + useN + (useN === 1 ? ' package' : ' packages') : '', dis: !lfSrc.name, okLbl: lib && lib.edit === 'new' ? 'Add deliverable' : 'Save' });
+    const nd = Object.assign({ name: '', desc: '', unit: '', cat: cats[0] || 'Digital media', right: false }, S.nd || {}); nd.dis = !nd.name;
+    const ieUse = S.ie ? pk.filter((p) => p.inc[S.ie.id]).length : 0;
+    const ie = Object.assign({ name: '', desc: '', unit: '', cat: '', right: false }, S.ie || {}, { dis: !(S.ie && S.ie.name), useNote: ieUse > 1 ? 'Used in ' + ieUse + ' packages. Changes apply to all of them.' : ieUse === 1 ? 'Used in 1 package.' : 'Not used in any package yet.' });
+    const catOpts = ['Experience & activation', 'Digital media', 'Physical placement', 'Tickets & hospitality', 'Content & media', 'Other'];
+    // ---------- handlers ----------
+    const curEdit = () => { const s2 = this.S; return s2.ed && (s2.ed.mode === 'create' ? s2.ed.draft : s2.pk.find((x) => x.id === s2.ed.id)); };
+    const patchEd = (fn) => { const s2 = this.S; if (!s2.ed) return; if (s2.ed.mode === 'create') { const d = fn(Object.assign({}, s2.ed.draft, { inc: Object.assign({}, s2.ed.draft.inc) })); this.setState({ ed: Object.assign({}, s2.ed, { draft: d }) }); } else { const npk = this.setPk(s2.ed.id, fn); this.setState({ pk: npk, ed: s2.ed }); this.emit(npk); } };
+    return {
+      hasPk: pk.length > 0, noPk: !pk.length, isCards: view === 'cards', isCompare: view === 'compare', cardsP: view === 'cards' ? 'true' : 'false', compareP: view === 'compare' ? 'true' : 'false',
+      st: { count: String(pk.length), countLbl: pk.length === 1 ? 'Package' : 'Packages', avail: String(pk.reduce((a, p) => a + p.avail, 0)), range: prices.length ? (prices.length > 1 ? this.short(Math.min.apply(null, prices)) + ' – ' + this.short(Math.max.apply(null, prices)) : this.money(prices[0])) : '—', dl: String(dl.length) },
+      readyCls: 'pq-ready' + (warnN ? ' warn' : ''), readyIcon: warnN ? 'i-alert-triangle' : 'i-check-circle', readyIconCls: 'vz-icon ' + (warnN ? 'ic-warn' : 'ic-ok'),
+      readyTitle: warnN ? warnN + (warnN === 1 ? ' thing to fix before publishing' : ' things to fix before publishing') : 'Ready to publish', readySub: warnN ? '' : ' · every package has a name, contents and a price',
+      issues: iss.map((x) => Object.assign({}, x, { ic: x.lvl === 'warn' ? 'i-alert-circle' : 'i-info', icCls: 'vz-icon ' + (x.lvl === 'warn' ? 'ic-warn' : 'ic-info') })),
+      cards, cols, rows, gridCols: 'minmax(200px, 260px) repeat(' + pk.length + ', minmax(168px, 1fr)) 112px', instOpts, catOpts, ie,
+      edOpen, ed: edV, isModal: this.props.editorStyle !== 'panel', shCls: 'sh' + (this.props.editorStyle !== 'panel' ? ' modal' : ''), scrimCls: 'sh-scrim' + (this.props.editorStyle !== 'panel' ? ' modal' : ''),
+      edNav: (e) => { const k = Number(e.currentTarget.getAttribute('data-k')); const s2 = this.S; const i = s2.pk.findIndex((x) => s2.ed && x.id === s2.ed.id); const n = s2.pk[i + k]; if (n) { this.setState({ ed: { mode: 'edit', id: n.id }, nd: null }); const box = document.querySelector('.sh-form'); if (box) box.scrollTop = 0; this.setState({ step: 1 }); } },
+      goStep: (e) => { const n = Number(e.currentTarget.getAttribute('data-n')); this.setState({ step: n }); const el = document.getElementById('sh-s' + n); const box = document.querySelector('.sh-form'); if (el && box) box.scrollTo({ top: el.offsetTop - box.offsetTop - 8, behavior: 'smooth' }); }, libOpen: !!lib, lib: libV, lf, nd,
+      hasToast: !!S.toast, toast: S.toast, canUndo: !!S.undo,
+      setView: (e) => this.setState({ view: e.currentTarget.getAttribute('data-v'), sel: '', menu: null }),
+      stop: (e) => e.stopPropagation(),
+      toggleMenu: (e) => { const id = e.currentTarget.getAttribute('data-id'); this.setState({ menu: S.menu === id ? null : id }); },
+      menuAct: (e) => { const id = e.currentTarget.getAttribute('data-id'), act = e.currentTarget.getAttribute('data-act'); const i = pk.findIndex((p) => p.id === id); const p = pk[i]; if (!p) return; const a = pk.slice();
+        if (act === 'dup') { const c = Object.assign({}, p, { id: 'p' + Date.now(), name: p.name + ' (copy)', inc: Object.assign({}, p.inc) }); a.splice(i + 1, 0, c); this.commit({ pk: a, menu: null }, 'Duplicated ' + p.name); }
+        if (act === 'left' && i > 0) { a.splice(i, 1); a.splice(i - 1, 0, p); this.commit({ pk: a, menu: null }); }
+        if (act === 'right' && i < a.length - 1) { a.splice(i, 1); a.splice(i + 1, 0, p); this.commit({ pk: a, menu: null }); }
+        if (act === 'del') { a.splice(i, 1); this.commit({ pk: a, menu: null, ed: null }, 'Deleted ' + (p.name || 'package'), true); } },
+      undo: () => { if (S.undo) { this.setState({ pk: S.undo.pk, dl: S.undo.dl, undo: null, toast: '' }); this.emit(S.undo.pk, S.undo.dl); } },
+      openEdit: (e) => this.setState({ ed: { mode: 'edit', id: e.currentTarget.getAttribute('data-id') }, menu: null, nd: null, sel: '', step: 1 }),
+      openCreate: () => this.setState({ step: 1, ed: { mode: 'create', draft: { id: 'new', tone: this.nextTone(), name: '', desc: '', avail: 1, price: 0, inst: 1, pub: true, inc: {} } }, menu: null, nd: null, sel: '', dl: S.dl }),
+      closeEd: () => this.setState({ ed: null, nd: null, ie: null }),
+      edOk: () => { const s2 = this.S; if (s2.ed && s2.ed.mode === 'create') { const d = Object.assign({}, s2.ed.draft, { id: 'p' + Date.now() }); this.commit({ pk: s2.pk.concat([d]), ed: null, nd: null }, 'Created ' + d.name); } else this.setState({ ed: null, nd: null }); },
+      onSheetKey: (e) => { if (e.key === 'Escape') { e.stopPropagation(); this.setState({ ed: null, lib: null, nd: null, lf: null }); } },
+      edField: (e) => { const k = e.currentTarget.getAttribute('data-k'), v = e.target.value; patchEd((p) => Object.assign(p, { [k]: v })); },
+      edAvail: (e) => { const k = Number(e.currentTarget.getAttribute('data-k')); patchEd((p) => Object.assign(p, { avail: Math.max(1, p.avail + k) })); },
+      edToggle: (e) => { e.stopPropagation(); const d = e.currentTarget.getAttribute('data-d'); patchEd((p) => { if (p.inc[d]) delete p.inc[d]; else p.inc[d] = 1; return p; }); },
+      edQty: (e) => { e.stopPropagation(); const d = e.currentTarget.getAttribute('data-d'), k = Number(e.currentTarget.getAttribute('data-k')); patchEd((p) => { p.inc[d] = Math.max(1, (p.inc[d] || 1) + k); return p; }); },
+      edPrice: (e) => { const v = Number(String(e.target.value).replace(/[^0-9]/g, '')) || 0; patchEd((p) => Object.assign(p, { price: Math.min(v, 99999999) })); },
+      edInst: (e) => { const n = Number(e.currentTarget.getAttribute('data-n')); const s2 = this.S; if (n > 1 && s2.ed) this.setState({ ed: Object.assign({}, s2.ed, { lastMany: n }) }); setTimeout(() => patchEd((p) => Object.assign(p, { inst: n })), 0); },
+      edTone: (e) => { const v = e.currentTarget.getAttribute('data-v'); patchEd((p) => Object.assign(p, { tone: v })); },
+      edVis: (e) => { const v = e.target.checked; patchEd((p) => Object.assign(p, { pub: v })); },
+      ndOpen: () => { this.setState({ nd: { name: '', desc: '', unit: '', cat: cats[0] || 'Digital media', right: false }, ie: null }); setTimeout(() => { const i = document.querySelector('.inc-form input'); if (i) { i.focus(); i.scrollIntoView({ block: 'nearest' }); } }, 40); },
+      ndCancel: () => this.setState({ nd: null }),
+      ieOpen: (e) => { e.stopPropagation(); const d = byId[e.currentTarget.getAttribute('data-d')]; if (!d) return; this.setState({ ie: { id: d.id, name: d.name, desc: d.desc || '', cat: d.cat, unit: d.unit, right: !!d.right }, nd: null }); setTimeout(() => { const i = document.querySelector('.inc-form input'); if (i) i.focus(); }, 40); },
+      ieField: (e) => { const k = e.currentTarget.getAttribute('data-k'); const v = k === 'right' ? e.target.checked : e.target.value; this.setState({ ie: Object.assign({}, this.S.ie, { [k]: v }) }); },
+      ieCancel: () => this.setState({ ie: null }),
+      ieSave: () => { const f = this.S.ie; if (!f || !f.name) return; const unit = f.unit || 'items'; const ndl = dl.map((d) => (d.id === f.id ? Object.assign({}, d, { name: f.name, desc: f.desc, cat: f.cat, unit, one: unit.replace(/s$/, ''), right: !!f.right }) : d)); this.commit({ dl: ndl, ie: null }, 'Updated ' + f.name + ' everywhere'); },
+      ndField: (e) => { const k = e.currentTarget.getAttribute('data-k'); const v = k === 'right' ? e.target.checked : e.target.value; this.setState({ nd: Object.assign({}, this.S.nd, { [k]: v }) }); },
+      ndAdd: () => { if (!nd.name) return; const id = 'd' + Date.now(); const unit = nd.unit || 'items'; const d = { id, name: nd.name, desc: nd.desc || '', cat: nd.cat, one: unit.replace(/s$/, ''), unit, right: !!nd.right }; const ndl = dl.concat([d]); this.setState({ dl: ndl, nd: null }); setTimeout(() => patchEd((p) => { p.inc[id] = 1; return p; }), 0); this.emit(null, ndl); },
+      // compare cells
+      selCell: (e) => { const d = e.currentTarget.getAttribute('data-d'), p = e.currentTarget.getAttribute('data-p'); const cur = (pk.find((x) => x.id === p) || {}).inc || {}; if (!cur[d]) { const npk = this.setPk(p, (x) => { x.inc[d] = 1; return x; }); this.setState({ pk: npk, sel: d + ':' + p }); this.emit(npk); } else this.setState({ sel: d + ':' + p }); },
+      bump: (e) => { const d = e.currentTarget.getAttribute('data-d'), p = e.currentTarget.getAttribute('data-p'), k = Number(e.currentTarget.getAttribute('data-k')); const npk = this.setPk(p, (x) => { const q = (x.inc[d] || 0) + k; if (q <= 0) delete x.inc[d]; else x.inc[d] = q; return x; }); const still = (npk.find((x) => x.id === p).inc[d] || 0) > 0; this.setState({ pk: npk, sel: still ? d + ':' + p : '' }); this.emit(npk); },
+      setPriceCell: (e) => { const p = e.currentTarget.getAttribute('data-p'); const v = Number(String(e.target.value).replace(/[^0-9]/g, '')) || 0; const npk = this.setPk(p, (x) => Object.assign(x, { price: Math.min(v, 99999999) })); this.setState({ pk: npk }); this.emit(npk); },
+      setInstCell: (e) => { const p = e.currentTarget.getAttribute('data-p'); const v = Number(e.target.value) || 1; const npk = this.setPk(p, (x) => Object.assign(x, { inst: v })); this.setState({ pk: npk }); this.emit(npk); },
+      setVisCell: (e) => { const p = e.currentTarget.getAttribute('data-p'); const v = e.target.checked; const npk = this.setPk(p, (x) => Object.assign(x, { pub: v })); this.setState({ pk: npk }); this.emit(npk); },
+      bumpAvail: (e) => { const p = e.currentTarget.getAttribute('data-p'), k = Number(e.currentTarget.getAttribute('data-k')); const npk = this.setPk(p, (x) => Object.assign(x, { avail: Math.max(1, x.avail + k) })); this.setState({ pk: npk }); this.emit(npk); },
+      // readiness
+      fix: (e) => { const f = e.currentTarget.getAttribute('data-fix'), id = e.currentTarget.getAttribute('data-id'); if (f === 'edit') this.setState({ ed: { mode: 'edit', id }, nd: null, step: Number(e.currentTarget.getAttribute('data-step')) || 1, jump: true }); else this.setState({ lib: { edit: id }, lf: null }); },
+      // library
+      openLib: () => this.setState({ lib: { edit: null }, lf: null }),
+      openLibAt: (e) => this.setState({ lib: { edit: e.currentTarget.getAttribute('data-d') }, lf: null, sel: '' }),
+      openLibNew: () => this.setState({ lib: { edit: 'new' }, lf: null, sel: '' }),
+      closeLib: () => this.setState({ lib: null, lf: null }),
+      libEdit: (e) => this.setState({ lib: { edit: e.currentTarget.getAttribute('data-d') }, lf: null }),
+      libCancel: () => this.setState({ lib: { edit: null }, lf: null }),
+      lfField: (e) => { const k = e.currentTarget.getAttribute('data-k'); const v = k === 'right' ? e.target.checked : e.target.value; this.setState({ lf: Object.assign({}, lfSrc, { [k]: v }) }); },
+      libSave: () => { const f = lfSrc; if (!f.name) return; const unit = f.unit || 'items'; if (lib.edit === 'new') { const d = { id: 'd' + Date.now(), name: f.name, desc: f.desc || '', cat: f.cat, one: unit.replace(/s$/, ''), unit, right: !!f.right }; this.commit({ dl: dl.concat([d]), lib: { edit: null }, lf: null }, 'Added ' + f.name); } else { const ndl = dl.map((d) => (d.id === lib.edit ? Object.assign({}, d, { name: f.name, desc: f.desc, cat: f.cat, unit, one: unit.replace(/s$/, ''), right: !!f.right }) : d)); this.commit({ dl: ndl, lib: { edit: null }, lf: null }, 'Updated ' + f.name + ' everywhere'); } },
+      libDel: () => { const id = lib.edit; const d = byId[id]; const ndl = dl.filter((x) => x.id !== id); const npk = pk.map((p) => { const inc = Object.assign({}, p.inc); delete inc[id]; return Object.assign({}, p, { inc }); }); this.commit({ dl: ndl, pk: npk, lib: { edit: null }, lf: null }, 'Deleted ' + (d ? d.name : 'deliverable'), true); },
+      useTiers: () => { const ndl = this.baseDl(); const t = [
+        { id: 'p' + Date.now(), tone: '#D9A66B', name: 'Supporter', desc: 'Entry-level presence across festival social channels', avail: 10, price: 0, inst: 1, pub: true, inc: { smc: 2 } },
+        { id: 'p' + (Date.now() + 1), tone: '#6EA8DE', name: 'Partner', desc: 'On-site activation plus social coverage', avail: 5, price: 0, inst: 1, pub: true, inc: { fga: 1, smc: 6 } },
+        { id: 'p' + (Date.now() + 2), tone: '#A18FE6', name: 'Headline', desc: 'Stage branding, VIP hospitality and full coverage', avail: 2, price: 0, inst: 1, pub: true, inc: { fga: 1, smc: 12, stb: 1, vip: 10 } }];
+        this.commit({ pk: t, dl: ndl }, 'Added three tiers. Set a price for each.'); }
+    };
+  }
+}
+</script>
+<script src="assets/components.js"></script><script>(function(m){var o={};for(var k in m)o["./"+k]=new Blob([m[k]],{type:"text/html"});window.__resourceBlobs=o;window.__resources={};})(window.__VZ_SRC||{});</script><script src="assets/vendor/react.production.min.js"></script><script src="assets/vendor/react-dom.production.min.js"></script><script src="assets/vendor/dc-runtime.js"></script><script src="assets/prototype-map.js"></script><script src="assets/proto-bar.js"></script>
+</body>
+</html>

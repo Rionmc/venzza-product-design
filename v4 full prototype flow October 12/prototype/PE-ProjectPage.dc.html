@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Project page · sponsor view</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="ds/venzza/components/bundle.css">
+<link rel="stylesheet" href="shared/venzza-dark.css">
+<link rel="stylesheet" href="shared/venzza-app.css">
+<script src="ds/venzza/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--bg-canvas)}
+</style>
+</helmet>
+<sc-if value="{{showHeader}}" hint-placeholder-val="{{true}}"><dc-import name="TopNav" flow-links="true" active="{{navActive}}" bell="rest" brand="lockup" brand-tone="white" brand-size="24" nav-layout="centered" search-mode="takeover" header-width="fluid" tone="raised" account="avatar" hint-size="100%,60px"></dc-import></sc-if>
+<sc-if value="{{showBanner}}" hint-placeholder-val="{{false}}"><div class="pp-pbar" role="banner">
+<a class="pp-pbar-back" href="{{backHref}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-left"></use></svg>{{backLbl}}</a>
+<div class="pp-pbar-mid"><svg class="vz-icon" aria-hidden="true"><use href="#i-eye"></use></svg><b>{{bannerTitle}}</b><span class="{{statusCls}}">{{statusLbl}}</span><span class="pp-pbar-note">{{bannerText}}</span></div>
+<div class="pp-pbar-end"><sc-if value="{{showPub}}" hint-placeholder-val="{{false}}"><button type="button" class="vz-btn vz-btn--primary sm" onClick="{{publish}}">{{pubTxt}}</button></sc-if><sc-if value="{{isDone}}" hint-placeholder-val="{{false}}"><a class="vz-btn vz-btn--secondary sm" href="PN-Project-Live-Owner.dc.html">View in marketplace<svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-up-right"></use></svg></a></sc-if><sc-if value="{{isPreview}}" hint-placeholder-val="{{true}}"><a class="vz-btn vz-btn--secondary sm" href="PN-Project-Review.dc.html">Review &amp; publish</a></sc-if></div>
+</div></sc-if></span></div></sc-if>
+<sc-if value="{{isOwner}}" hint-placeholder-val="{{false}}"><div class="pp-obar"><div class="pp-obar-in">
+<nav class="pp-crumb" aria-label="Breadcrumb"><a href="PN-Projects.dc.html">Projects</a><svg class="vz-icon" aria-hidden="true"><use href="#i-chevron-right"></use></svg><b>Sahara Sound Festival 2027</b></nav>
+<span class="pe-chip ok"><i class="pp-dot"></i>Published</span><a class="pp-chg-link" href="PN-Project-Review.dc.html">3 unpublished changes</a>
+<span class="pp-obar-end"><a class="vz-btn vz-btn--ghost sm" href="PN-Project-AsSponsor.dc.html"><svg class="vz-icon" aria-hidden="true"><use href="#i-eye"></use></svg>View as sponsor</a><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{copyLink}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-link"></use></svg>Copy link</button><a class="vz-btn vz-btn--secondary sm" href="PN-Overview.dc.html"><svg class="vz-icon" aria-hidden="true"><use href="#i-pencil"></use></svg>Edit project</a></span>
+</div></div>
+<div class="pp-band"><section class="pp-wrap pp-dash" aria-label="Project performance">
+<a class="pp-tile" href="CG-Deal-Creator.dc.html"><span>Sponsor requests</span><b>4</b><small><i class="pp-new"></i>2 new this week</small></a>
+<div class="pp-tile"><span>In negotiation</span><b>2</b><small>$187,500 in open offers</small></div>
+<a class="pp-tile" href="CG-Campaign-Participant.dc.html"><span>Packages sold</span><b>3 <em>of 17</em></b><small>Sahara Tent ×2 · Desert Oasis ×1</small></a>
+<div class="pp-tile"><span>Page views</span><b>1,240</b><small>Last 30 days · up 18%</small></div>
+</section></div></sc-if>
+<sc-if value="{{isOwnerLive}}" hint-placeholder-val="{{false}}"><div class="pp-ostrip"><div class="pp-wrap"><svg class="vz-icon" aria-hidden="true"><use href="#i-globe"></use></svg><span><b>Your project is live.</b> This is what sponsors see on the marketplace.</span><a href="PN-Project-Owner.dc.html">Project page</a><a class="vz-btn vz-btn--secondary sm" href="PN-Overview.dc.html"><svg class="vz-icon" aria-hidden="true"><use href="#i-pencil"></use></svg>Edit project</a></div></div></sc-if>
+<div class="{{ppCls}}" style="--pp-offset: {{offset}}px">
+<header class="pp-hero">
+<img class="pp-hero-bg" src="assets/img/sahara-main-stage.jpg" alt="" aria-hidden="true">
+<div class="pp-wrap pp-hero-in">
+<div>
+<span class="pp-org"><span class="av" aria-hidden="true">SS</span><span>by <b>Sahara Sound Collective</b></span><svg class="vz-icon" aria-label="Verified organizer"><use href="#i-circle-check"></use></svg></span>
+<h1>Sahara Sound Festival 2027</h1>
+<p class="pp-tag">Two weekends of music, art and desert sunsets for 120,000 fans.</p>
+<div class="pp-meta"><span><svg class="vz-icon" aria-hidden="true"><use href="#i-music"></use></svg>Music</span><span class="vz-moodline" aria-label="Mood: Euphoric, with energetic and dreamy"><span class="d" aria-hidden="true"><i style="--dot: var(--mood-euphoric-1)"></i><i style="--dot: var(--mood-energetic-1)"></i><i style="--dot: var(--mood-dreamy-1)"></i></span><span aria-hidden="true"><b>Euphoric</b> with energetic, dreamy</span></span><span><svg class="vz-icon" aria-hidden="true"><use href="#i-calendar"></use></svg>Apr 9 – 18, 2027</span><span><svg class="vz-icon" aria-hidden="true"><use href="#i-map-pin"></use></svg>Indio, CA</span><span><svg class="vz-icon" aria-hidden="true"><use href="#i-users"></use></svg>120K attendees · 642K followers</span></div>
+<sc-if value="{{notOwner}}" hint-placeholder-val="{{true}}"><div class="pp-acts"><button type="button" class="vz-btn vz-btn--secondary sm"><svg class="vz-icon" aria-hidden="true"><use href="#i-bookmark"></use></svg>Save</button><button type="button" class="vz-btn vz-btn--secondary sm"><svg class="vz-icon" aria-hidden="true"><use href="#i-share-2"></use></svg>Share</button><a class="vz-btn vz-btn--secondary sm" href="#pp-contact" onClick="{{jumpLink}}" data-s="contact"><svg class="vz-icon" aria-hidden="true"><use href="#i-mail"></use></svg>Contact creator</a></div></sc-if>
+</div>
+<aside class="pp-offer" aria-label="Sponsorship summary"><span class="k">Sponsorship</span><b class="big">From $50,000</b><span>3 packages · 17 available · installments up to 10 payments</span><a class="vz-btn vz-btn--secondary" href="#pp-packages" data-s="packages" onClick="{{jumpLink}}">Compare packages<svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-down"></use></svg></a><div class="pp-dl"><svg class="vz-icon" aria-hidden="true"><use href="#i-clock"></use></svg><span>Secure a package by <b>Jan 31, 2027</b></span></div></aside>
+</div>
+</header>
+
+<nav class="pp-nav" aria-label="On this page" style="top: {{navTop}}px"><div class="pp-wrap pp-nav-in">
+<sc-for list="{{nav}}" as="n" hint-placeholder-count="6"><a href="{{n.href}}" aria-current="{{n.cur}}" data-s="{{n.k}}" onClick="{{jumpLink}}">{{n.l}}<sc-if value="{{n.changed}}" hint-placeholder-val="{{false}}"><span class="pp-chg" aria-label="Changed"></span></sc-if></a></sc-for>
+<span class="pp-nav-end"><span>From <b>$50,000</b></span><a class="vz-btn vz-btn--secondary sm" href="#pp-packages" data-s="packages" onClick="{{jumpLink}}" style="height:32px">View packages</a></span>
+</div></nav>
+
+<main class="pp-wrap">
+<section class="pp-sec" id="pp-overview" aria-labelledby="pp-h-ov">
+<div class="pp-sh"><h2 id="pp-h-ov">Overview</h2><sc-if value="{{isOwner}}" hint-placeholder-val="{{false}}"><a class="pp-edit" href="PN-Basics.dc.html"><svg class="vz-icon" aria-hidden="true"><use href="#i-pencil"></use></svg>Edit</a></sc-if></div>
+<div class="pp-ov"><div>
+<p class="pp-desc">Sahara Sound brings 120,000 music fans to the desert across two April weekends. Six stages, large-scale art and a food program built with local chefs. Our audience is young, creative and highly social: last year’s edition reached 2.1M people online.</p>
+<div class="pp-hl">
+<div><span class="n">1</span><span><b>120,000 attendees across two weekends</b><p>Sold out for three straight years, with 38% of tickets bought by first-time visitors.</p></span></div>
+<div><span class="n">2</span><span><b>Audience that posts</b><p>2.1M social impressions during last year’s festival, 6.2% average engagement on Instagram.</p></span></div>
+<div><span class="n">3</span><span><b>Built-in content</b><p>Our in-house crew films every stage, so partners get edited content within 48 hours.</p></span></div>
+</div>
+</div>
+<aside class="pp-facts"><h3>At a glance</h3><dl>
+<div><dt>Dates</dt><dd>Apr 9 – 18, 2027</dd></div>
+<div><dt>Location</dt><dd>Indio, CA</dd></div>
+<div><dt>Category</dt><dd>Music</dd></div>
+<div><dt>Mood</dt><dd><span class="vz-moodline" aria-label="Mood: Euphoric, with energetic and dreamy"><span class="d" aria-hidden="true"><i style="--dot: var(--mood-euphoric-1)"></i><i style="--dot: var(--mood-energetic-1)"></i><i style="--dot: var(--mood-dreamy-1)"></i></span><span aria-hidden="true">Euphoric</span></span></dd></div>
+<div><dt>Attendance</dt><dd>120,000</dd></div>
+<div><dt>Editions</dt><dd>6th year</dd></div>
+<div><dt>Organizer</dt><dd>Sahara Sound Collective</dd></div>
+</dl></aside></div>
+<blockquote class="pp-quote"><p>“The most forward-looking festival in the desert, and the one brands are quietly lining up for.”</p><span>Maya Torres, Festival Weekly</span></blockquote>
+</section>
+
+<section class="pp-sec" id="pp-audience" aria-labelledby="pp-h-au">
+<div class="pp-sh"><h2 id="pp-h-au">Audience &amp; reach</h2><sc-if value="{{isOwner}}" hint-placeholder-val="{{false}}"><a class="pp-edit" href="PN-Overview.dc.html"><svg class="vz-icon" aria-hidden="true"><use href="#i-pencil"></use></svg>Edit</a></sc-if><span>Self-reported by the creator · updated Oct 2026</span></div>
+<div class="pp-kpis">
+<div><b>642K</b><span>Followers across channels</span><small>Instagram, YouTube, newsletter</small></div>
+<div><b>2.1M</b><span>Monthly impressions</span><small>Peaks at 4.8M in festival month</small></div>
+<div><b>5.6%</b><span>Average engagement</span><small>Instagram 6.2% · YouTube 4.1%</small></div>
+<div><b>120K</b><span>On-site attendance</span><small>Two weekends, sold out 2024–26</small></div>
+</div>
+<div class="pp-aud">
+<div class="pp-panel"><h3>Channels</h3>
+<div class="pp-ch"><span class="av"><svg class="vz-icon" aria-hidden="true"><use href="#i-camera"></use></svg></span><span class="t"><b>Instagram</b><span>@saharasound</span></span><span class="v"><b>480K</b><span>1.2M impr. / mo</span></span></div>
+<div class="pp-ch"><span class="av"><svg class="vz-icon" aria-hidden="true"><use href="#i-video"></use></svg></span><span class="t"><b>YouTube</b><span>Sahara Sound</span></span><span class="v"><b>120K</b><span>860K views / mo</span></span></div>
+<div class="pp-ch"><span class="av"><svg class="vz-icon" aria-hidden="true"><use href="#i-mail"></use></svg></span><span class="t"><b>Newsletter</b><span>Weekly</span></span><span class="v"><b>42K</b><span>42% open rate</span></span></div>
+</div>
+<div class="pp-panel"><h3>Age of attendees</h3>
+<sc-for list="{{ages}}" as="a" hint-placeholder-count="4"><div class="pp-bar" title="{{a.tip}}"><span>{{a.l}}</span><span class="tr"><i style="width: {{a.w}}%"></i></span><b>{{a.v}}</b></div></sc-for>
+<p class="pp-note">Share of 2026 ticket buyers</p>
+</div>
+<div class="pp-panel"><h3>Interests</h3><div class="pp-chips"><span>Music</span><span>Art</span><span>Fashion</span><span>Food &amp; drink</span></div><h3>Where they come from</h3>
+<sc-for list="{{locs}}" as="a" hint-placeholder-count="3"><div class="pp-bar" title="{{a.tip}}" style="grid-template-columns:110px minmax(0,1fr) 40px"><span>{{a.l}}</span><span class="tr"><i style="width: {{a.w}}%"></i></span><b>{{a.v}}</b></div></sc-for>
+</div>
+</div>
+</section>
+
+<section class="pp-sec" id="pp-packages" aria-labelledby="pp-h-pk">
+<div class="pp-sh"><h2 id="pp-h-pk">Sponsorship packages</h2><sc-if value="{{isOwner}}" hint-placeholder-val="{{false}}"><a class="pp-edit" href="PN-Pkg-Cards.dc.html"><svg class="vz-icon" aria-hidden="true"><use href="#i-pencil"></use></svg>Edit</a></sc-if><span>All prices in USD · installments carry no finance charge</span></div>
+<div class="spv-cards" role="radiogroup" aria-label="Choose a package">
+<sc-for list="{{cards}}" as="c" hint-placeholder-count="3"><div class="spv-card" style="--pk: {{c.tone}}" role="radio" tabIndex="0" aria-checked="{{c.sel}}" data-id="{{c.id}}" onClick="{{pick}}" onKeyDown="{{pickKey}}">
+<span class="spv-radio" aria-hidden="true"></span>
+<span class="{{c.tagCls}}">{{c.tag}}</span>
+<h3 style="margin:14px 0 4px;font-size:18px;font-weight:700"><i class="pk-dot" aria-hidden="true"></i>{{c.name}}</h3>
+<span class="pq-desc">{{c.desc}}</span>
+<span class="pq-price"><b class="{{c.priceCls}}">{{c.price}}</b><span>{{c.terms}}</span></span>
+<ul class="pq-inc"><sc-for list="{{c.incs}}" as="i" hint-placeholder-count="3"><li><svg class="vz-icon" aria-hidden="true"><use href="#i-check"></use></svg><span class="nm">{{i.name}}</span><b>{{i.q}}</b></li></sc-for></ul>
+</div></sc-for>
+</div>
+<div class="spv-h2" style="margin-top:32px"><h2 style="font-size:17px">Compare every inclusion</h2><span>Click a column to select that package</span></div>
+<div class="cq-wrap"><div class="cq spv-cmp" role="table" aria-label="Compare packages" style="grid-template-columns: minmax(220px, 300px) repeat(3, minmax(0, 1fr)); --stk: {{stk}}px">
+<div role="row"><div class="cell rh hd" role="columnheader"><span class="pe-eyebrow">Deliverable</span></div><sc-for list="{{cards}}" as="c" hint-placeholder-count="3"><div class="{{c.hdCls}}" style="--pk: {{c.tone}}" role="columnheader" data-id="{{c.id}}" onClick="{{pick}}"><i class="pk-dot" aria-hidden="true"></i>{{c.name}}</div></sc-for></div>
+<div role="row"><div class="cell rh" role="rowheader"><b style="font-weight:650">Price</b><span class="cq-rd">Payment terms</span></div><sc-for list="{{cards}}" as="c" hint-placeholder-count="3"><div class="{{c.cellCls}}" role="cell"><span class="pr">{{c.price}}</span><small>{{c.short}}</small></div></sc-for></div>
+<div role="row"><div class="cell rh" role="rowheader"><b style="font-weight:650">Available</b></div><sc-for list="{{cards}}" as="c" hint-placeholder-count="3"><div class="{{c.cellCls}}" role="cell">{{c.avail}}</div></sc-for></div>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6">
+<sc-if value="{{r.grp}}" hint-placeholder-val="{{false}}"><div role="row" class="grp"><div class="cell rh" role="rowheader">{{r.label}}</div><div class="cell fill"></div></div></sc-if>
+<sc-if value="{{r.row}}" hint-placeholder-val="{{true}}"><div role="row"><div class="cell rh" role="rowheader"><b style="font-weight:650">{{r.label}}</b><span class="cq-rd">{{r.desc}}</span></div><sc-for list="{{r.cells}}" as="x" hint-placeholder-count="3"><div class="{{x.cls}}" role="cell"><span>{{x.v}}</span><sc-if value="{{x.on}}" hint-placeholder-val="{{true}}"><small>{{x.u}}</small></sc-if></div></sc-for></div></sc-if>
+</sc-for>
+</div></div>
+</section>
+
+<section class="pp-sec" id="pp-gallery" aria-labelledby="pp-h-ga">
+<div class="pp-sh"><h2 id="pp-h-ga">Gallery</h2><sc-if value="{{isOwner}}" hint-placeholder-val="{{false}}"><a class="pp-edit" href="PN-Gallery-Filled.dc.html"><svg class="vz-icon" aria-hidden="true"><use href="#i-pencil"></use></svg>Edit</a></sc-if><span>From the 2026 edition</span></div>
+<div class="pp-gal">
+<figure><button type="button" class="pp-gbtn" data-gi="0" aria-label="Open photo: Main stage, Saturday sunset, 1 of 4" onClick="{{openGal}}"><img src="assets/img/sahara-main-stage.jpg" alt="" loading="lazy"></button><figcaption>Main stage, Saturday sunset</figcaption></figure>
+<figure><button type="button" class="pp-gbtn" data-gi="1" aria-label="Open photo: Desert art walk, 2 of 4" onClick="{{openGal}}"><img src="assets/img/robed-figure-desert.jpg" alt="" loading="lazy"></button><figcaption>Desert art walk</figcaption></figure>
+<figure><button type="button" class="pp-gbtn" data-gi="2" aria-label="Open photo: Installation by Studio Nordlys, 3 of 4" onClick="{{openGal}}"><img src="assets/img/robot-glowing-eye.jpg" alt="" loading="lazy"></button><figcaption>Installation by Studio Nordlys</figcaption></figure>
+<figure><button type="button" class="pp-gbtn" data-gi="3" aria-label="Play video: Opening film, 4 of 4" onClick="{{openGal}}"><img src="assets/img/figure-above-lake.jpg" alt="" loading="lazy"><span class="pp-gplay" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"></path></svg></span><span class="pp-gdur" aria-hidden="true">1:42</span></button><figcaption>Opening film</figcaption></figure>
+</div>
+</section>
+
+<section class="pp-sec" id="pp-dates" aria-labelledby="pp-h-da">
+<div class="pp-sh"><h2 id="pp-h-da">Key dates</h2><sc-if value="{{isOwner}}" hint-placeholder-val="{{false}}"><a class="pp-edit" href="PN-Overview.dc.html"><svg class="vz-icon" aria-hidden="true"><use href="#i-pencil"></use></svg>Edit</a></sc-if><span>Plan your campaign around these</span></div>
+<div class="pp-tl">
+<div><span class="pe-chip">Open now</span><b>Nov 15, 2026</b><span>Sponsorship applications open</span></div>
+<div class="next"><span class="pe-chip warn">Deadline</span><b>Jan 31, 2027</b><span>Last day to secure a package</span></div>
+<div><span class="pe-chip">Assets</span><b>Mar 1, 2027</b><span>Brand assets due for stage screens</span></div>
+<div><span class="pe-chip">Event</span><b>Apr 9 – 18, 2027</b><span>Two festival weekends in Indio, CA</span></div>
+</div>
+</section>
+
+<section class="pp-sec" id="pp-contact" aria-labelledby="pp-h-co">
+<div class="pp-sh"><h2 id="pp-h-co">Contact</h2><sc-if value="{{isOwner}}" hint-placeholder-val="{{false}}"><a class="pp-edit" href="PN-Overview.dc.html"><svg class="vz-icon" aria-hidden="true"><use href="#i-pencil"></use></svg>Edit</a></sc-if></div>
+<div class="pp-contact"><span class="av" aria-hidden="true">SS</span><span class="t"><b>Sahara Sound Collective</b><span><span><svg class="vz-icon" aria-hidden="true"><use href="#i-mail"></use></svg>partnerships@saharasound.example</span><span><svg class="vz-icon" aria-hidden="true"><use href="#i-phone"></use></svg>+1 760 555 2025</span><span><svg class="vz-icon" aria-hidden="true"><use href="#i-clock"></use></svg>Usually replies within a day</span></span></span><button type="button" class="vz-btn vz-btn--secondary"><svg class="vz-icon" aria-hidden="true"><use href="#i-mail"></use></svg>Message on Venzza</button></div>
+</section>
+<div class="pp-foot">Listed on Venzza · Report this project</div>
+</main>
+</div>
+<sc-if value="{{gvOpen}}" hint-placeholder-val="{{false}}"><div class="gv" role="dialog" aria-modal="true" aria-label="Gallery viewer" tabindex="-1">
+<div class="gv-hd"><span class="gv-t"><b>Gallery</b><span>Sahara Sound Festival · 2026 edition</span></span><span class="gv-count" aria-live="polite">{{gvCount}}</span><button type="button" class="gv-x" aria-label="Close viewer" onClick="{{gvClose}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-x"></use></svg></button></div>
+<div class="gv-stage" onPointerDown="{{gvDown}}" onPointerUp="{{gvUp}}">
+<sc-if value="{{gvMulti}}" hint-placeholder-val="{{true}}"><button type="button" class="gv-arr l" aria-label="Previous" disabled="{{gvFirst}}" onClick="{{gvPrev}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-chevron-left"></use></svg></button></sc-if>
+<figure class="gv-media">
+<sc-if value="{{gvImg}}" hint-placeholder-val="{{true}}"><img class="gv-img" src="{{gv.src}}" alt="{{gv.alt}}" draggable="false"></sc-if>
+<sc-if value="{{gvVid}}" hint-placeholder-val="{{false}}"><div class="gv-vid"><img class="gv-img" src="{{gv.src}}" alt="{{gv.alt}}" draggable="false"><button type="button" class="gv-play" aria-label="{{gvPlayLbl}}" onClick="{{gvToggle}}"><sc-if value="{{gvPlaying}}" hint-placeholder-val="{{false}}"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg></sc-if><sc-if value="{{gvPaused}}" hint-placeholder-val="{{true}}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"></path></svg></sc-if></button><div class="gv-vbar"><span>{{gvTime}}</span><i><em style="width: {{gvProg}}%"></em></i><span>1:42</span></div></div></sc-if>
+<sc-if value="{{gvMissing}}" hint-placeholder-val="{{false}}"><div class="gv-miss"><svg class="vz-icon" aria-hidden="true"><use href="#i-image"></use></svg><b>Media unavailable</b><span>This file couldn’t be loaded. You can keep browsing.</span></div></sc-if>
+<figcaption>{{gv.cap}}</figcaption>
+</figure>
+<sc-if value="{{gvMulti}}" hint-placeholder-val="{{true}}"><button type="button" class="gv-arr r" aria-label="Next" disabled="{{gvLast}}" onClick="{{gvNext}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-chevron-right"></use></svg></button></sc-if>
+</div>
+<sc-if value="{{gvMulti}}" hint-placeholder-val="{{true}}"><div class="gv-strip"><sc-for list="{{gvThumbs}}" as="t" hint-placeholder-count="4"><button type="button" class="{{t.cls}}" aria-current="{{t.cur}}" aria-label="{{t.aria}}" data-gi="{{t.i}}" onClick="{{gvGo}}"><sc-if value="{{t.ok}}" hint-placeholder-val="{{true}}"><img src="{{t.src}}" alt="" draggable="false"></sc-if><sc-if value="{{t.bad}}" hint-placeholder-val="{{false}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-image"></use></svg></sc-if><sc-if value="{{t.video}}" hint-placeholder-val="{{false}}"><span class="gv-thv" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"></path></svg></span></sc-if></button></sc-for></div></sc-if>
+</div></sc-if>
+<sc-if value="{{hasSel}}" hint-placeholder-val="{{false}}"><div class="spv-dock"><div><span class="t"><b>{{sel.name}}</b><span>{{sel.sub}}</span></span><button type="button" class="vz-btn vz-btn--ghost sm" onClick="{{clearSel}}">Clear</button><button type="button" class="vz-btn vz-btn--secondary" disabled="{{ctaDis}}" title="{{ctaTip}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-mail"></use></svg>Ask a question</button><button type="button" class="vz-btn vz-btn--primary" disabled="{{ctaDis}}" title="{{ctaTip}}">{{sel.cta}}<svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></button></div></div></sc-if>
+<sc-if value="{{hasToast}}" hint-placeholder-val="{{false}}"><div class="pe-toast" role="status"><svg class="vz-icon" aria-hidden="true"><use href="#i-check-circle"></use></svg>{{toast}}<sc-if value="{{toastLink}}" hint-placeholder-val="{{false}}"><a class="pe-toast-act" href="PN-Project-Live-Owner.dc.html">View in marketplace<svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-up-right"></use></svg></a></sc-if></div></sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"mode":{"editor":"enum","options":["live","owner","preview","review"],"default":"live","section":"State"},"ownerLive":{"editor":"boolean","default":false,"section":"State"},"status":{"editor":"enum","options":["draft","published"],"default":"published","section":"State"},"jump":{"editor":"enum","options":["top","overview","audience","packages","gallery","dates","contact"],"default":"top","section":"State"},"selected":{"editor":"enum","options":["none","p1","p2","p3"],"default":"none","section":"State"},"onRequest":{"editor":"boolean","default":false,"section":"State"},"justPublished":{"editor":"boolean","default":false,"section":"State"},"from":{"editor":"enum","options":["edit","project"],"default":"edit","section":"State"},"viewer":{"editor":"enum","options":["none","1","2","3","4"],"default":"none","section":"Gallery"},"mediaMissing":{"editor":"boolean","default":false,"section":"Gallery"},"colorMode":{"editor":"enum","options":["auto","subtle","mono"],"default":"auto","section":"Prototype"},"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    if (window.Venzza) window.Venzza.mountIcons();
+    if (!window.__cqStick) { window.__cqStick = () => { document.querySelectorAll('.cq').forEach((el) => { const r = el.getBoundingClientRect(); const st = parseFloat(getComputedStyle(el).getPropertyValue('--stk')) || 0; el.classList.toggle('stuck', r.top < st - 1 && r.bottom > st + 140); }); }; window.addEventListener('scroll', window.__cqStick, { passive: true }); window.addEventListener('resize', window.__cqStick); } setTimeout(window.__cqStick, 60); 
+    this.applyColor(this.colorMode());
+    if (this.props.justPublished) this.setState({ published: true, toast: this.props.status === 'draft' ? 'Published. Your project is now on the marketplace.' : 'Published. Sponsors now see your latest changes.' });
+    this.onScroll = () => { const off = this.offset() + 24; let cur = 'overview'; ['overview', 'audience', 'packages', 'gallery', 'dates', 'contact'].forEach((k) => { const el = document.getElementById('pp-' + k); if (el && el.getBoundingClientRect().top - off <= 0) cur = k; }); if (cur !== (this.state || {}).spy) this.setState({ spy: cur }); };
+    window.addEventListener('scroll', this.onScroll, { passive: true });
+    this.onDocKey = (e) => { if (this._gvKey) this._gvKey(e); }; document.addEventListener('keydown', this.onDocKey);
+    if (this.props.viewer && this.props.viewer !== 'none') this.gvOpenAt(parseInt(this.props.viewer, 10) - 1, true);
+    const j = this.props.jump; if (j && j !== 'top') setTimeout(() => { const el = document.getElementById('pp-' + j); if (el) { el.scrollIntoView(); this.onScroll(); } }, 80);
+  }
+  colorMode() { return this.props.colorMode === 'mono' ? 'mono' : 'subtle'; }
+  applyColor(m) { document.documentElement.classList.toggle('vz-color', m === 'subtle'); }
+  componentWillUnmount() { window.removeEventListener('scroll', this.onScroll); document.removeEventListener('keydown', this.onDocKey); document.documentElement.style.overflow = ''; clearInterval(this.pl); }
+  gvOpenAt(i, quiet) { clearInterval(this.pl); this.setState({ gv: i, gvPlay: false, gvProg: 0 }); document.documentElement.style.overflow = 'hidden'; setTimeout(() => { const d = document.querySelector('.gv'); if (d && !quiet) d.focus(); }, 30); }
+  gvShut() { const i = (this.state || {}).gv; clearInterval(this.pl); this.setState({ gv: -1, gvPlay: false, gvProg: 0 }); document.documentElement.style.overflow = ''; setTimeout(() => { const b = document.querySelector('.pp-gbtn[data-gi="' + i + '"]'); if (b) b.focus(); }, 30); }
+  componentDidUpdate(prev) { if (prev.viewer !== this.props.viewer) { if (this.props.viewer && this.props.viewer !== 'none') this.gvOpenAt(parseInt(this.props.viewer, 10) - 1, true); else this.gvShut(); } if (prev.selected !== this.props.selected || prev.mode !== this.props.mode) this.setState({ sel: undefined, published: false }); }
+  offset() { const m = this.props.mode || 'live'; return (m === 'preview' || m === 'review' ? 56 : m === 'owner' ? 60 + 56 : 60) + 52; }
+  renderVals() {
+    const mode = this.props.mode || 'live';
+    const draft = this.props.status === 'draft';
+    const fromProj = this.props.from === 'project';
+    const s = this.state || {};
+    const pkgVals = (sel) => {
+    const DL = [
+        { id: 'fga', name: 'Festival ground activation', desc: 'Branded booth or lounge on the festival grounds', cat: 'Experience & activation', one: 'activation', unit: 'activations' },
+        { id: 'smc', name: 'Social media coverage', desc: 'Instagram and TikTok festival content', cat: 'Digital media', one: 'post', unit: 'posts' },
+        { id: 'stb', name: 'Stage branding', desc: 'Logo placement on stage screens', cat: 'Physical placement', one: 'placement', unit: 'placements' },
+        { id: 'vip', name: 'VIP passes', desc: 'All-access passes for brand guests', cat: 'Tickets & hospitality', one: 'pass', unit: 'passes' }
+      ];
+      const PK = [
+        { id: 'p1', name: 'Desert Oasis', desc: 'Festival ground activation with a branded lounge', avail: 10, price: 50000, inst: 1, pub: true, inc: { fga: 1, smc: 3 }, tone: '#D9A66B' },
+        { id: 'p2', name: 'Sahara Tent', desc: 'Tent sponsorship with enhanced visibility across the weekend', avail: 5, price: 125000, inst: 5, pub: true, inc: { fga: 1, smc: 8, stb: 1 }, tone: '#6EA8DE', tag: 'Most requested' },
+        { id: 'p3', name: 'Main Stage Experience', desc: 'Premium main stage presence with VIP hospitality', avail: 2, price: 250000, inst: 10, pub: !this.props.onRequest, inc: { fga: 1, smc: 15, stb: 1, vip: 20 }, tone: '#A18FE6', tag: 'Only 2 left' }
+      ];
+      const m = (n) => '$' + Math.round(n).toLocaleString('en-US');
+      const q = (d, n) => n + ' ' + (n === 1 ? d.one : d.unit);
+      const cards = PK.map((p) => ({ id: p.id, tone: p.tone, name: p.name, desc: p.desc, sel: p.id === sel ? 'true' : 'false', tag: p.tag || p.avail + ' available', tagCls: 'pe-chip spv-tag', price: p.pub ? m(p.price) : 'Price on request', priceCls: p.pub ? '' : 'none',
+        terms: p.pub ? (p.inst > 1 ? p.inst + ' payments of ' + m(p.price / p.inst) : 'One payment') : 'Ask the creator for pricing', short: p.pub ? (p.inst > 1 ? p.inst + ' × ' + m(p.price / p.inst) : 'One payment') : 'Ask for pricing',
+        avail: p.avail + ' left', incs: DL.filter((d) => p.inc[d.id]).map((d) => ({ name: d.name, q: q(d, p.inc[d.id]) })), hdCls: 'cell hd c' + (p.id === sel ? ' sel' : ''), cellCls: 'cell c' + (p.id === sel ? ' sel' : '') }));
+      const rows = [];
+      const cats = []; DL.forEach((d) => { if (cats.indexOf(d.cat) < 0) cats.push(d.cat); });
+      cats.forEach((c) => { rows.push({ grp: true, label: c }); DL.filter((d) => d.cat === c).forEach((d) => rows.push({ row: true, label: d.name, desc: d.desc, cells: PK.map((p) => { const n = p.inc[d.id] || 0; return { v: n ? String(n) : 'Not included', on: !!n, u: n === 1 ? d.one : d.unit, cls: 'cell c' + (n ? '' : ' no') + (p.id === sel ? ' sel' : '') }; }) })); });
+      const sp = PK.find((p) => p.id === sel);
+      return { cards, rows, hasSel: !!sp,
+        sel: sp ? { name: sp.name, sub: sp.avail + ' available · ' + (sp.pub ? (sp.inst > 1 ? sp.inst + ' payments of ' + m(sp.price / sp.inst) + ' · total ' + m(sp.price) : m(sp.price) + ' · one payment') : 'Price on request'), cta: sp.pub ? 'Request this package' : 'Request pricing' } : { name: '', sub: '', cta: '' },
+        pick: (e) => this.setState({ sel: e.currentTarget.getAttribute('data-id') }),
+        pickKey: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.setState({ sel: e.currentTarget.getAttribute('data-id') }); } } };
+    };
+    const selId = s.sel !== undefined ? s.sel : (this.props.selected && this.props.selected !== 'none' ? this.props.selected : '');
+    const spy = s.spy || 'overview';
+    const CHANGED = mode === 'review' && !s.published && !draft ? { packages: true, overview: true } : {};
+    const NAV = [['overview', 'Overview'], ['audience', 'Audience & reach'], ['packages', 'Packages'], ['gallery', 'Gallery'], ['dates', 'Key dates'], ['contact', 'Contact']];
+    const ages = [['18–24', 46], ['25–34', 38], ['35–44', 12], ['45+', 4]].map((a) => ({ l: a[0], v: a[1] + '%', w: Math.round(a[1] / 46 * 100), tip: a[1] + '% of 2026 ticket buyers were ' + a[0] }));
+    const locs = [['Los Angeles', 41], ['Phoenix', 14], ['San Diego', 12], ['Other', 33]].map((a) => ({ l: a[0], v: a[1] + '%', w: Math.round(a[1] / 41 * 100), tip: a[1] + '% of attendees from ' + a[0] }));
+    const GAL = [
+      { src: 'assets/img/sahara-main-stage.jpg', alt: 'Crowd at the main stage at sunset', cap: 'Main stage, Saturday sunset' },
+      { src: 'assets/img/robed-figure-desert.jpg', alt: 'Performer in a red sash in the desert', cap: 'Desert art walk' },
+      { src: 'assets/img/robot-glowing-eye.jpg', alt: 'Robotic sculpture with a glowing eye', cap: 'Installation by Studio Nordlys', bad: this.props.mediaMissing === true || this.props.mediaMissing === 'true' },
+      { src: 'assets/img/figure-above-lake.jpg', alt: 'Figure in a flowing coat above a lake', cap: 'Opening film', video: true }
+    ];
+    const gi = typeof s.gv === 'number' ? s.gv : -1;
+    const gOpen = gi >= 0 && gi < GAL.length;
+    const gcur = gOpen ? GAL[gi] : GAL[0];
+    const gGo = (n) => { if (n < 0 || n >= GAL.length || n === gi) return; clearInterval(this.pl); this.setState({ gv: n, gvPlay: false, gvProg: 0 }); };
+    const gSec = Math.round((s.gvProg || 0) / 100 * 102);
+    this._gvKey = gOpen ? (e) => { if (e.key === 'Escape') { e.preventDefault(); this.gvShut(); } else if (e.key === 'ArrowRight') { e.preventDefault(); gGo(gi + 1); } else if (e.key === 'ArrowLeft') { e.preventDefault(); gGo(gi - 1); } else if (e.key === 'Tab') { const f = Array.from(document.querySelectorAll('.gv button:not([disabled])')); if (!f.length) return; const a = document.activeElement; if (e.shiftKey && (a === f[0] || !document.querySelector('.gv').contains(a))) { e.preventDefault(); f[f.length - 1].focus(); } else if (!e.shiftKey && a === f[f.length - 1]) { e.preventDefault(); f[0].focus(); } } } : null;
+    const GV = {
+      gvOpen: gOpen, gv: gcur, gvCount: (gi + 1) + ' of ' + GAL.length, gvMulti: GAL.length > 1, gvFirst: gi <= 0, gvLast: gi >= GAL.length - 1,
+      gvImg: gOpen && !gcur.video && !gcur.bad, gvVid: gOpen && !!gcur.video && !gcur.bad, gvMissing: gOpen && !!gcur.bad,
+      gvPlaying: !!s.gvPlay, gvPaused: !s.gvPlay, gvPlayLbl: s.gvPlay ? 'Pause video' : 'Play video', gvProg: String(s.gvProg || 0), gvTime: Math.floor(gSec / 60) + ':' + String(gSec % 60).padStart(2, '0'),
+      gvThumbs: GAL.map((g, i) => ({ i: String(i), src: g.src, ok: !g.bad, bad: !!g.bad, video: !!g.video && !g.bad, cur: i === gi ? 'true' : 'false', cls: 'gv-th' + (i === gi ? ' on' : '') + (g.bad ? ' bad' : ''), aria: (g.video ? 'Video: ' : 'Photo: ') + g.cap + ', ' + (i + 1) + ' of ' + GAL.length })),
+      openGal: (e) => this.gvOpenAt(parseInt(e.currentTarget.getAttribute('data-gi'), 10)),
+      gvClose: () => this.gvShut(),
+      gvPrev: () => gGo(gi - 1), gvNext: () => gGo(gi + 1),
+      gvGo: (e) => gGo(parseInt(e.currentTarget.getAttribute('data-gi'), 10)),
+      gvToggle: () => { if (s.gvPlay) { clearInterval(this.pl); this.setState({ gvPlay: false }); } else { this.setState({ gvPlay: true, gvProg: (s.gvProg || 0) >= 100 ? 0 : (s.gvProg || 0) }); clearInterval(this.pl); this.pl = setInterval(() => { const p = ((this.state || {}).gvProg || 0) + 1; if (p >= 100) { clearInterval(this.pl); this.setState({ gvProg: 100, gvPlay: false }); } else this.setState({ gvProg: p }); }, 1020); } },
+      gvDown: (e) => { this._px = e.clientX; },
+      gvUp: (e) => { if (this._px == null) return; const dx = e.clientX - this._px; this._px = null; if (e.pointerType !== 'mouse' && Math.abs(dx) > 50) gGo(dx < 0 ? gi + 1 : gi - 1); }
+    };
+    const PV = pkgVals(mode === 'owner' ? '' : selId); if (mode === 'owner') PV.pick = () => {}; return Object.assign(PV, GV, {
+      stk: this.offset(),
+      ppCls: 'pp', offset: String(this.offset()), navTop: String(mode === 'preview' || mode === 'review' ? 56 : mode === 'owner' ? 116 : 60), isLive: mode === 'live', isPreview: mode === 'preview', isOwner: mode === 'owner', notOwner: mode !== 'owner', isOwnerLive: mode === 'live' && (this.props.ownerLive === true || this.props.ownerLive === 'true'), showHeader: mode === 'live' || mode === 'owner', navActive: mode === 'owner' ? 'projects' : 'marketplace', ctaDis: mode !== 'live' || (this.props.ownerLive === true || this.props.ownerLive === 'true'), ctaTip: mode !== 'live' ? 'Sponsors can request this once it’s published' : undefined,
+      showBanner: mode === 'preview' || mode === 'review', isReview: mode === 'review',
+      bannerTitle: s.published ? 'Published' : mode === 'review' ? 'Review before publishing' : fromProj ? 'Viewing as a sponsor' : 'Sponsor preview',
+      statusCls: 'pe-chip' + (draft && !s.published ? ' warn' : ''), statusLbl: s.published ? 'Live on the marketplace' : draft ? 'Draft · not on the marketplace' : 'Published · 3 unpublished changes',
+      bannerText: s.published ? 'Sponsors now see this version.' : mode === 'review' ? (draft ? 'Publishing lists this project on the marketplace.' : 'Changed sections are marked with a dot.') : 'Only you can see this. Links and requests are disabled.',
+      backLbl: fromProj ? 'Back to project' : 'Back to editing', backHref: fromProj ? 'PN-Project-Owner.dc.html' : this.props.jump === 'packages' ? 'PN-Pkg-Cards.dc.html' : 'PN-Overview.dc.html', showPub: mode === 'review' && !s.published, isDone: mode === 'review' && !!s.published, toastLink: !!s.published && !s.toastNoLink, pubTxt: s.published ? 'Published' : draft ? 'Publish project' : 'Publish changes',
+      nav: NAV.map((n) => ({ k: n[0], l: n[1], href: '#pp-' + n[0], cur: spy === n[0] ? 'true' : 'false', changed: !!CHANGED[n[0]] })),
+      ages, locs,
+      hasToast: !!s.toast, toast: s.toast || '',
+      jumpLink: (e) => { const k = e.currentTarget.getAttribute('data-s'); const el = document.getElementById('pp-' + k); if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth' }); } },
+      publish: () => { this.setState({ published: true, toast: draft ? 'Published. Your project is now on the marketplace.' : 'Published. Sponsors now see your latest changes.' }); clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({ toast: '' }), 8000); },
+      clearSel: () => this.setState({ sel: '' }),
+      copyLink: () => { this.setState({ toast: 'Link copied. Anyone with it can view the live page.', toastNoLink: true }); clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({ toast: '', toastNoLink: false }), 3500); }
+    });
+  }
+}
+</script>
+<script src="assets/components.js"></script><script>(function(m){var o={};for(var k in m)o["./"+k]=new Blob([m[k]],{type:"text/html"});window.__resourceBlobs=o;window.__resources={};})(window.__VZ_SRC||{});</script><script src="assets/vendor/react.production.min.js"></script><script src="assets/vendor/react-dom.production.min.js"></script><script src="assets/vendor/dc-runtime.js"></script><script src="assets/prototype-map.js"></script><script src="assets/proto-bar.js"></script>
+</body>
+</html>

@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Marketplace · component</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="ds/venzza/components/bundle.css">
+<link rel="stylesheet" href="shared/venzza-dark.css">
+<link rel="stylesheet" href="shared/venzza-app.css">
+<script src="ds/venzza/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+
+body{margin:0;background:var(--bg-canvas)}
+.cm{padding:32px clamp(24px,3.2vw,64px) 72px;color:var(--text-primary);font-family:var(--font-product)}
+.cm-hd{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.cm-hd h1{margin:0;font-family:var(--font-marketing);font-size:32px;font-weight:700;letter-spacing:-.02em}
+.cm-hd p{margin:6px 0 0;max-width:640px;font-size:14.5px;line-height:1.55;color:var(--text-secondary)}
+.cm-how{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--text-secondary)}
+.cm-how .vz-icon{width:15px;height:15px}
+.cm-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:24px 0 20px;flex-wrap:wrap}
+.cm-sort{font-size:13px;color:var(--text-tertiary)}
+.cm-sort b{color:var(--text-primary);font-weight:600}
+.cm-feat{position:relative;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);height:360px;border-radius:var(--radius-xl);overflow:hidden;border:var(--bw-hairline) solid var(--border-subtle);background:var(--bg-surface);color:inherit;text-decoration:none;transition:border-color .15s}
+.cm-feat:hover{border-color:var(--border-strong)}
+.cm-feat:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.cm-feat img{width:100%;height:100%;min-height:0;object-fit:cover;object-position:50% 42%;display:block}
+.cm-feat-b{display:flex;flex-direction:column;gap:10px;padding:28px 30px}
+.cm-tag{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:var(--radius-pill);background:var(--bg-inset);border:var(--bw-hairline) solid var(--border-subtle);font:500 10.5px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--text-secondary)}
+.cm-feat h2{margin:4px 0 0;font-family:var(--font-marketing);font-size:28px;line-height:1.1;font-weight:700;letter-spacing:-.02em}
+.cm-tg{margin:0;font-size:14.5px;line-height:1.5;color:var(--text-secondary)}
+.cm-meta{font-size:13px;color:var(--text-tertiary)}
+.cm-why{margin:4px 0 0;padding:0;list-style:none;display:grid;gap:6px}
+.cm-why li{display:flex;gap:8px;font-size:13px;line-height:1.45;color:var(--text-secondary)}
+.cm-why .vz-icon{flex:none;width:14px;height:14px;margin-top:2px;color:var(--status-success-text)}
+.cm-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:auto;padding-top:14px;border-top:var(--bw-hairline) solid var(--border-subtle)}
+.cm-price{font-size:13px;color:var(--text-secondary)}
+.cm-price b{font-size:16px;color:var(--text-primary)}
+.cm-pk{display:inline-flex;gap:4px;margin-left:8px;vertical-align:1px}
+.cm-pk i{width:8px;height:8px;border-radius:50%}
+.cm-go{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:650}
+.cm-go .vz-icon{width:15px;height:15px}
+.cm-h2{display:flex;align-items:baseline;justify-content:space-between;margin:36px 0 14px}
+.cm-h2 h3{margin:0;font-size:17px}
+.cm-h2 span{font-size:13px;color:var(--text-tertiary)}
+.cm-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.cm-card{display:flex;flex-direction:column;border-radius:var(--radius-xl);overflow:hidden;border:var(--bw-hairline) solid var(--border-subtle);background:var(--bg-surface);transition:border-color .15s}
+.cm-card:hover{border-color:var(--border-strong)}
+.cm-cv{aspect-ratio:2/1}
+.cm-cb{display:flex;flex-direction:column;gap:6px;flex:1;padding:16px 18px 18px}
+.cm-cb b.n{font-size:15.5px}
+.cm-cb .cm-tg{font-size:13px}
+.cm-sel{display:flex;gap:7px;font-size:12.5px;line-height:1.45;color:var(--text-secondary)}
+.cm-sel .vz-icon{flex:none;width:13px;height:13px;margin-top:2px;color:var(--status-success-text)}
+.cm-cb .cm-foot{padding-top:12px}
+
+.cm-tools{display:flex;align-items:center;gap:10px;margin:24px 0 12px;flex-wrap:wrap}
+.cm-srch{position:relative;flex:0 1 420px;min-width:260px}
+.cm-srch .srch{display:flex;width:100%}
+.cm-srch .srch.tsearch{max-width:none;flex:1}
+.cm-sug{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:40;padding:6px;border-radius:var(--radius-lg);background:var(--bg-surface-raised);border:var(--bw-hairline) solid var(--border-default);box-shadow:var(--shadow-3,0 12px 32px rgba(0,0,0,.5))}
+.cm-sug h5{margin:6px 8px 4px;font:500 10.5px/1.4 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--text-tertiary)}
+.cm-sug button,.cm-sug a{display:flex;align-items:center;gap:10px;width:100%;padding:8px;border:0;border-radius:var(--radius-md);background:none;color:var(--text-primary);font:500 13.5px/1.3 var(--font-product);text-align:left;text-decoration:none;cursor:pointer}
+.cm-sug button:hover,.cm-sug a:hover,.cm-sug .on{background:var(--bg-surface)}
+.cm-sug .vz-icon{width:15px;height:15px;color:var(--text-tertiary)}
+.cm-sug small{margin-left:auto;font-size:12px;color:var(--text-tertiary)}
+.cm-sug-empty{padding:12px 8px;font-size:13px;color:var(--text-tertiary)}
+.cm-camp .vzpop-panel{width:340px;padding:6px;max-height:none;overflow:visible}
+.cm-card .cm-foot{flex-wrap:wrap;row-gap:10px}
+.cm-card .cm-price{white-space:nowrap}
+.cm-cbtn{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 12px;border-radius:var(--radius-md);border:var(--bw-hairline) solid var(--border-default);background:var(--field-bg,var(--bg-inset));color:var(--text-primary);font:500 13.5px/1 var(--font-product);cursor:pointer;max-width:340px}
+.cm-cbtn:hover{border-color:var(--border-strong)}
+.cm-cbtn:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.cm-cbtn span{color:var(--text-tertiary)}
+.cm-cbtn b{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cm-cbtn .vz-icon{width:15px;height:15px;color:var(--text-tertiary);flex:none}
+.cm-opt{display:flex;align-items:flex-start;gap:10px;width:100%;padding:9px 10px;border:0;border-radius:var(--radius-md);background:none;color:var(--text-primary);text-align:left;cursor:pointer;font-family:var(--font-product)}
+.cm-opt:hover:not([aria-disabled="true"]){background:var(--bg-surface)}
+.cm-opt .t{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.cm-opt b{font-size:13.5px;font-weight:600}
+.cm-opt small{font-size:12px;color:var(--text-tertiary)}
+.cm-opt .ck{width:15px;height:15px;margin-top:2px;flex:none;color:var(--text-primary);visibility:hidden}
+.cm-opt[aria-checked="true"] .ck{visibility:visible}
+.cm-opt[aria-disabled="true"]{cursor:default}
+.cm-opt[aria-disabled="true"] b{color:var(--text-tertiary)}
+.cm-opt .th{width:28px;height:28px;border-radius:var(--radius-sm);flex:none}
+.cm-mh{margin:8px 10px 4px;font:500 10.5px/1.4 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--text-tertiary)}
+.cm-msep{height:1px;margin:6px 4px;background:var(--border-subtle)}
+.cm-mnew{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:var(--radius-md);color:var(--text-primary);font-size:13.5px;font-weight:600;text-decoration:none}
+.cm-mnew:hover{background:var(--bg-surface)}
+.cm-mnew .vz-icon{width:15px;height:15px}
+.cm-fin{font-size:12px;font-weight:600;color:var(--text-primary);text-decoration:underline}
+.cm-sortr{margin-left:auto}
+.cm-match{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:16px 0 4px;padding:12px 16px;border-radius:var(--radius-lg);background:var(--bg-surface);border:var(--bw-hairline) solid var(--border-subtle);font-size:13.5px;color:var(--text-secondary)}
+.cm-match>.vz-icon{width:16px;height:16px;color:var(--text-primary)}
+.cm-match b{color:var(--text-primary)}
+.cm-match .end{margin-left:auto;display:flex;gap:8px}
+.cm-count{margin:20px 0 12px;font-size:13px;color:var(--text-tertiary)}
+.cm-count b{color:var(--text-primary)}
+.cm-card{position:relative}
+.cm-cv{position:relative}
+.cm-cv .vzfit{position:absolute;left:12px;top:12px;bottom:auto;right:auto;padding:5px 9px;border-radius:var(--radius-pill);background:rgba(0,0,0,.6);color:#fff}
+.cm-lnk{color:inherit;text-decoration:none}
+.cm-lnk::after{content:"";position:absolute;inset:0;z-index:1;border-radius:inherit}
+.cm-lnk:focus-visible{outline:none}
+.cm-card:has(.cm-lnk:focus-visible){box-shadow:var(--focus-ring)}
+.cm-card.lk:hover{border-color:var(--border-strong);cursor:pointer}
+.cm-over{display:inline-flex;align-self:flex-start;align-items:center;height:22px;padding:0 8px;border-radius:var(--radius-pill);background:var(--status-warning-bg);border:var(--bw-hairline) solid var(--status-warning-border);color:var(--status-warning-text);font-size:11.5px;font-weight:600}
+.cm-wish{position:relative;z-index:2}
+.cm-wish.on{border-color:var(--border-strong)}
+.cm-sk{border-radius:var(--radius-xl);background:var(--bg-surface);border:var(--bw-hairline) solid var(--border-subtle);height:330px;position:relative;overflow:hidden}
+.cm-sk::before{content:"";position:absolute;left:0;right:0;top:0;height:46%;background:var(--bg-surface-raised)}
+.cm-sk::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent);animation:cmsh 1.2s infinite}
+@keyframes cmsh{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+@media (prefers-reduced-motion:reduce){.cm-sk::after{animation:none}}
+.cm-empty{display:flex;flex-direction:column;align-items:center;gap:8px;padding:64px 24px;border-radius:var(--radius-xl);border:1.5px dashed var(--border-default);text-align:center}
+.cm-empty>.vz-icon{width:26px;height:26px;color:var(--text-tertiary)}
+.cm-empty b{font-size:16px}
+.cm-empty p{margin:0;max-width:480px;font-size:13.5px;line-height:1.55;color:var(--text-secondary)}
+.cm-empty div{display:flex;gap:8px;margin-top:8px}
+.cm-card,.cm-feat{overflow:visible}
+.cm-cv{border-radius:var(--radius-xl) var(--radius-xl) 0 0}
+.cm-feat img{border-radius:var(--radius-xl) 0 0 var(--radius-xl)}
+.cm-feat:hover{border-color:var(--border-strong)}
+.cm-feat:has(.cm-lnk:focus-visible){box-shadow:var(--focus-ring)}
+.sv{position:relative;z-index:2;display:inline-flex;align-items:stretch;height:32px;border-radius:var(--radius-md);border:var(--bw-hairline) solid var(--border-default);background:var(--bg-surface);flex:none}
+.sv>button,.sv-pop .sv-row,.sv-pop .sv-mnew{display:inline-flex;align-items:center;gap:6px;border:0;background:none;color:var(--text-primary);font:600 13px/1 var(--font-product);cursor:pointer;padding:0 10px}
+.sv>button:hover,.sv-pop .sv-row:hover,.sv-pop .sv-mnew:hover{background:var(--bg-surface-raised)}
+.sv>button:focus-visible,.sv-pop .sv-row:focus-visible,.sv-pop .sv-mnew:focus-visible{outline:none;box-shadow:var(--focus-ring);position:relative;z-index:1}
+.sv .vz-icon{width:14px;height:14px;flex:none}
+.sv-new .vz-btn{flex:none;height:34px}
+.sv-pick{max-width:150px;border-radius:var(--radius-md) 0 0 var(--radius-md)!important;color:var(--text-secondary)!important;font-weight:500!important}
+.sv-pick span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sv-add{border-left:var(--bw-hairline) solid var(--border-default)!important;border-radius:0 var(--radius-md) var(--radius-md) 0}
+.sv-one{border-radius:var(--radius-md);max-width:240px}
+.sv-one span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sv.saved{border-color:var(--border-strong)}
+.sv.saved .sv-one>.vz-icon:first-child{color:var(--status-success-text)}
+.sv.open{z-index:30}
+.sv-pop{position:absolute;right:0;top:calc(100% + 6px);width:348px;padding:6px;border-radius:var(--radius-lg);background:var(--bg-surface-raised);border:var(--bw-hairline) solid var(--border-default);box-shadow:0 16px 40px rgba(0,0,0,.55);text-align:left}
+.sv-h{padding:8px 10px 4px;font-size:14px;font-weight:700}
+.sv-sec{margin:8px 10px 4px;font:500 10.5px/1.4 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--text-tertiary)}
+.sv-pop .sv-row{display:flex;align-items:center;gap:10px;width:100%;height:auto;padding:8px 10px;border-radius:var(--radius-md);font-weight:400;text-align:left}
+.sv-row .th{width:28px;height:28px;border-radius:var(--radius-sm);flex:none}
+.sv-row .t{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.sv-row b{font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sv-row small{font-size:12px;color:var(--text-tertiary);font-weight:400}
+.sv-row .st{flex:none;padding:5px 10px;border-radius:var(--radius-pill);border:var(--bw-hairline) solid var(--border-default);font-size:12px;font-weight:600}
+.sv-row[aria-pressed="true"] .st{background:var(--neutral-100);border-color:var(--neutral-100);color:var(--neutral-950)}
+.sv-sep{height:1px;margin:6px 4px;background:var(--border-subtle)}
+.sv-srch{position:relative;margin:4px 6px 6px}
+.sv-srch .vz-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--text-tertiary)}
+.sv-q{width:100%;box-sizing:border-box;height:34px;padding:0 10px 0 32px;border-radius:var(--radius-md);border:var(--bw-hairline) solid var(--border-subtle);background:color-mix(in srgb,var(--text-primary) 4%,transparent);color:var(--text-primary);font:400 13.5px/1 var(--font-product)}
+.sv-q::placeholder{color:var(--text-tertiary)}
+.sv-q:hover{border-color:var(--border-default)}
+.sv-q:focus{outline:none;border-color:var(--lime-400);box-shadow:0 0 0 3px color-mix(in srgb,var(--lime-400) 18%,transparent)}
+.sv-list{max-height:330px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+.sv-none{margin:10px;font-size:13px;color:var(--text-tertiary)}
+.sv-pop .sv-cq,.sv-pop .sv-past{display:flex;align-items:center;gap:8px;width:100%;height:36px;padding:0 10px;border:0;border-radius:var(--radius-md);background:none;color:var(--text-primary);font:600 13px/1 var(--font-product);cursor:pointer;text-align:left}
+.sv-pop .sv-past{color:var(--text-secondary);font-weight:500}
+.sv-pop .sv-cq:hover,.sv-pop .sv-past:hover{background:var(--bg-surface)}
+.sv-pop .sv-cq:focus-visible,.sv-pop .sv-past:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.sv-pop .sv-cq .vz-icon{width:14px;height:14px}
+
+.sv-pop .sv-row{display:flex;align-items:center;gap:10px;padding:8px 8px 8px 10px;border-radius:var(--radius-md)}
+.sv-pop .sv-row:hover{background:var(--bg-surface)}
+.sv-tg,.sv-go{flex:none;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;border:var(--bw-hairline) solid var(--border-strong);background:none;color:var(--text-primary);cursor:pointer;text-decoration:none;padding:0}
+.sv-tg:hover,.sv-go:hover{background:var(--bg-surface-raised);border-color:var(--text-secondary)}
+.sv-tg:focus-visible,.sv-go:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.sv-tg .vz-icon,.sv-go .vz-icon{width:14px;height:14px}
+.sv-tg .i-on,.sv-tg .i-rm{display:none}
+.sv-tg[aria-pressed="true"]{background:var(--status-success-bg);border-color:var(--status-success-border);color:var(--status-success-text)}
+.sv-tg[aria-pressed="true"] .i-add{display:none}
+.sv-tg[aria-pressed="true"] .i-on{display:block}
+.sv-tg[aria-pressed="true"]:hover{background:var(--status-danger-bg,rgba(229,72,77,.14));border-color:var(--status-danger-border,rgba(229,72,77,.5));color:var(--status-danger-text,#ff8a8f)}
+.sv-tg[aria-pressed="true"]:hover .i-on{display:none}
+.sv-tg[aria-pressed="true"]:hover .i-rm{display:block}
+
+.sv-pop .sv-mnew{width:100%;height:36px;padding:0 10px;border-radius:var(--radius-md)}
+.sv-new{display:flex;gap:8px;padding:6px 6px 0}
+.sv-new .pe-in{flex:1;height:34px;min-width:0}
+.sv-note{margin:6px 8px 4px;font-size:12px;color:var(--text-tertiary)}
+.cm-feat .cm-foot{align-items:center}
+.cm-cb>.sv{display:flex;width:100%;height:40px;margin-top:14px}
+.cm-cb>.sv .sv-pick{flex:1;max-width:none;justify-content:space-between;padding:0 14px}
+.cm-cb>.sv .sv-add{padding:0 18px}
+.cm-cb>.sv .sv-one{flex:1;max-width:none;justify-content:center}
+.cm-cb>.sv .sv-pop{top:auto;bottom:calc(100% + 6px);left:0;right:0;width:auto}
+.cm-cb{position:relative}
+.cm-card .cm-foot{flex-wrap:nowrap}
+
+
+</style>
+</helmet>
+<dc-import name="TopNav" flow-links="true" active="marketplace" bell="rest" brand="lockup" brand-tone="white" brand-size="24" nav-layout="centered" search-mode="takeover" header-width="fluid" tone="raised" account="avatar" hint-size="100%,60px"></dc-import>
+<main class="cm">
+<div class="cm-hd"><div><h1>Marketplace</h1><p>Projects selected for engaged audiences, strong storytelling and proven results for sponsors.</p></div><span class="cm-how"><svg class="vz-icon" aria-hidden="true"><use href="#i-info"></use></svg>How projects are selected</span></div>
+<div class="cm-tools">
+<div class="cm-srch"><span class="srch tsearch"><svg class="vz-icon" aria-hidden="true"><use href="#i-search"></use></svg><input class="vz-input" type="search" placeholder="Search projects, categories, places, creators" aria-label="Search the marketplace" aria-autocomplete="list" aria-expanded="{{sugOpenA}}" value="{{q}}" onInput="{{onQ}}" onChange="{{onQ}}" onFocus="{{onFocus}}" onKeyDown="{{onKey}}"><sc-if value="{{hasQ}}" hint-placeholder-val="{{false}}"><button type="button" class="vzf-btn" aria-label="Clear search" onClick="{{clearQ}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-x"></use></svg></button></sc-if></span>
+<sc-if value="{{sugOpen}}" hint-placeholder-val="{{false}}"><div class="cm-sug" role="listbox" aria-label="Suggestions"><sc-for list="{{sug}}" as="g" hint-placeholder-count="3"><h5>{{g.h}}</h5><sc-for list="{{g.items}}" as="it" hint-placeholder-count="2"><button type="button" role="option" aria-selected="false" class="{{it.cls}}" data-k="{{it.k}}" data-v="{{it.v}}" onMouseDown="{{pickSug}}"><svg class="vz-icon" aria-hidden="true"><use href="#{{it.i}}"></use></svg>{{it.l}}<small>{{it.n}}</small></button></sc-for></sc-for><sc-if value="{{sugNone}}" hint-placeholder-val="{{false}}"><div class="cm-sug-empty">No suggestions. Press Enter to search for “{{q}}”.</div></sc-if></div></sc-if>
+</div>
+<div class="{{campCls}}"><button type="button" class="cm-cbtn" aria-haspopup="menu" aria-expanded="{{campOpenA}}" onClick="{{toggleCamp}}"><span>Match to:</span><b>{{campLabel}}</b><svg class="vz-icon" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
+<div class="vzpop-panel menu" role="menu" aria-label="Match to a campaign">
+<button type="button" class="cm-opt" role="menuitemradio" aria-checked="{{noneOn}}" data-c="none" onClick="{{pickCamp}}"><span class="t"><b>All projects</b><small>Browse without matching</small></span><svg class="vz-icon" aria-hidden="true"><use href="#i-check"></use></svg></button>
+<div class="cm-mh">Active campaigns</div>
+<sc-for list="{{camps}}" as="c" hint-placeholder-count="2"><button type="button" class="cm-opt" role="menuitemradio" aria-checked="{{c.on}}" data-c="{{c.id}}" onClick="{{pickCamp}}"><span class="th" style="background: {{c.bg}}"></span><span class="t"><b>{{c.name}}</b><small>{{c.meta}}</small></span><svg class="vz-icon ck" aria-hidden="true"><use href="#i-check"></use></svg></button></sc-for>
+<div class="cm-mh">Drafts</div>
+<sc-for list="{{drafts}}" as="d" hint-placeholder-count="2"><div class="cm-opt" role="menuitem" aria-disabled="true"><span class="th" style="background: {{d.bg}}"></span><span class="t"><b>{{d.name}}</b><small>Finish setup to match · <a class="cm-fin" href="CP-Campaigns.dc.html">Finish setup</a></small></span></div></sc-for>
+<div class="cm-msep"></div><a class="cm-mnew" href="CP-Campaigns-Empty.dc.html"><svg class="vz-icon" aria-hidden="true"><use href="#i-plus"></use></svg>New campaign</a>
+</div></div>
+<span class="cm-sort cm-sortr">Sort: <b>{{sortLbl}}</b></span>
+</div>
+<div class="vzchips" role="group" aria-label="Category"><sc-for list="{{cats}}" as="c" hint-placeholder-count="6"><button type="button" class="vzchip" aria-pressed="{{c.on}}" data-v="{{c.k}}" onClick="{{pickCat}}">{{c.l}}</button></sc-for></div>
+<sc-if value="{{isMatch}}" hint-placeholder-val="{{false}}"><div class="cm-match" role="status"><svg class="vz-icon" aria-hidden="true"><use href="#i-target"></use></svg><span>Matching <b>{{mc.name}}</b> · {{mc.detail}}</span><span class="end"><a class="vz-btn vz-btn--ghost sm" href="CG-Edit-Overview.dc.html">Edit campaign</a><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{clearCamp}}">Clear</button></span></div></sc-if>
+<sc-if value="{{showFeat}}" hint-placeholder-val="{{true}}">
+<div class="cm-feat" style="margin-top:20px">
+<img src="assets/img/sahara-main-stage.jpg" alt="">
+<div class="cm-feat-b"><span class="cm-tag">Featured this week</span><h2><a class="cm-lnk" href="PN-Project-Live.dc.html">Sahara Sound Festival 2027</a></h2><p class="cm-tg">Two weekends of music, art and desert sunsets for 120,000 fans.</p><span class="cm-meta">Music · Indio, CA · Apr 9 – 18, 2027</span>
+<ul class="cm-why" aria-label="Why it’s selected"><li><svg class="vz-icon" aria-hidden="true"><use href="#i-check-circle"></use></svg>Sold out three years running</li><li><svg class="vz-icon" aria-hidden="true"><use href="#i-check-circle"></use></svg>2.1M social impressions last edition, 6.2% engagement</li><li><svg class="vz-icon" aria-hidden="true"><use href="#i-check-circle"></use></svg>Secure a package by Jan 31, 2027</li></ul>
+<div class="cm-foot"><span class="cm-price">From <b>$50,000</b> · 3 packages<span class="cm-pk" aria-hidden="true"><i style="background:#D9A66B"></i><i style="background:#6EA8DE"></i><i style="background:#A18FE6"></i></span></span><div class="{{feat.svCls}}" data-p="sahara"><sc-if value="{{feat.svSug}}" hint-placeholder-val="{{true}}"><button type="button" class="sv-pick" aria-haspopup="dialog" aria-expanded="{{feat.svOpen}}" aria-label="{{feat.svPickA}}" title="{{feat.svFull}}" data-id="{{feat.id}}" onClick="{{togglePick}}"><span>{{feat.svName}}</span><svg class="vz-icon" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button><button type="button" class="sv-add" data-id="{{feat.id}}" data-c="{{feat.svCid}}" onClick="{{quickAdd}}">Add</button></sc-if><sc-if value="{{feat.svGen}}" hint-placeholder-val="{{false}}"><button type="button" class="sv-one" aria-haspopup="dialog" aria-expanded="{{feat.svOpen}}" data-id="{{feat.id}}" onClick="{{togglePick}}"><svg class="vz-icon" aria-hidden="true"><use href="#{{feat.svIcon}}"></use></svg><span>{{feat.svLbl}}</span><svg class="vz-icon" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button></sc-if><sc-if value="{{feat.svOpenB}}" hint-placeholder-val="{{false}}"><div class="sv-pop" role="dialog" aria-label="Save to a campaign wishlist" onKeyDown="{{popKey}}"><div class="sv-h">Save to a wishlist</div><sc-if value="{{feat.svHasSearch}}" hint-placeholder-val="{{false}}"><div class="sv-srch"><svg class="vz-icon" aria-hidden="true"><use href="#i-search"></use></svg><input class="sv-q" type="search" placeholder="Find a campaign" aria-label="Find a campaign" value="{{pq}}" onInput="{{onPq}}"></div></sc-if><div class="sv-list" role="group" aria-label="Campaigns"><sc-for list="{{feat.svSecs}}" as="g" hint-placeholder-count="3"><div class="sv-sec">{{g.h}}</div><sc-for list="{{g.items}}" as="c" hint-placeholder-count="3"><div class="sv-row"><span class="th" style="background: {{c.bg}}"></span><span class="t"><b>{{c.name}}</b><small>{{c.meta}}</small></span><button type="button" class="sv-tg" aria-pressed="{{c.on}}" aria-label="{{c.tgA}}" title="{{c.tgA}}" data-id="{{c.pid}}" data-c="{{c.id}}" onClick="{{toggleSave}}"><svg class="vz-icon i-add" aria-hidden="true"><use href="#i-plus"></use></svg><svg class="vz-icon i-on" aria-hidden="true"><use href="#i-check"></use></svg><svg class="vz-icon i-rm" aria-hidden="true"><use href="#i-x"></use></svg></button><a class="sv-go" href="CG-Campaign.dc.html" aria-label="Go to {{c.name}}" title="Go to campaign"><svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-up-right"></use></svg></a></div></sc-for></sc-for><sc-if value="{{feat.svNone}}" hint-placeholder-val="{{false}}"><p class="sv-none">{{noneLbl}}</p></sc-if><sc-if value="{{feat.svCreateQ}}" hint-placeholder-val="{{false}}"><button type="button" class="sv-cq" data-id="{{feat.id}}" onClick="{{createFromQ}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-plus"></use></svg>{{cqLbl}}</button></sc-if><sc-if value="{{feat.svPastBtn}}" hint-placeholder-val="{{false}}"><button type="button" class="sv-past" onClick="{{togglePast}}">{{feat.svPastLbl}}</button></sc-if></div><div class="sv-sep"></div><sc-if value="{{feat.svNewOn}}" hint-placeholder-val="{{false}}"><form class="sv-new" data-id="{{feat.id}}" onSubmit="{{createCamp}}"><input class="pe-in" aria-label="New campaign name" placeholder="Campaign name" value="{{newName}}" onInput="{{onNewName}}"><button type="submit" class="vz-btn sm pe-solid">Create &amp; add</button></form><p class="sv-note">Creates a draft campaign. You can finish its brief later.</p></sc-if><sc-if value="{{feat.svNewOff}}" hint-placeholder-val="{{true}}"><button type="button" class="sv-mnew" data-id="{{feat.id}}" onClick="{{startNew}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-plus"></use></svg>New campaign</button></sc-if></div></sc-if></div></div></div></div>
+<div class="cm-h2"><h3>Selected for you</h3><span>Pick a campaign above to see matches</span></div>
+</sc-if>
+<sc-if value="{{showCount}}" hint-placeholder-val="{{false}}"><p class="cm-count" role="status"><b>{{countTxt}}</b>{{countSub}}</p></sc-if>
+<sc-if value="{{isLoading}}" hint-placeholder-val="{{false}}"><div class="cm-grid" aria-busy="true" aria-label="Loading matches"><div class="cm-sk"></div><div class="cm-sk"></div><div class="cm-sk"></div></div></sc-if>
+<sc-if value="{{hasCards}}" hint-placeholder-val="{{true}}"><div class="cm-grid">
+<sc-for list="{{cards}}" as="p" hint-placeholder-count="6"><article class="{{p.cls}}" title="{{p.tip}}"><div class="cm-cv" style="background: {{p.bg}}"><sc-if value="{{p.hasFit}}" hint-placeholder-val="{{false}}"><span class="vzfit"><span class="dot"></span>Fit {{p.fit}}</span></sc-if></div><div class="cm-cb">
+<sc-if value="{{p.link}}" hint-placeholder-val="{{false}}"><a class="cm-lnk" href="PN-Project-Live.dc.html"><b class="n">{{p.name}}</b></a></sc-if><sc-if value="{{p.nolink}}" hint-placeholder-val="{{true}}"><b class="n">{{p.name}}</b></sc-if>
+<p class="cm-tg">{{p.tag}}</p><span class="cm-meta">{{p.meta}}</span>
+<sc-if value="{{p.hasMood}}" hint-placeholder-val="{{true}}"><span class="vz-moodline" aria-label="{{p.moodAria}}"><span class="d" aria-hidden="true"><sc-for list="{{p.moods}}" as="m" hint-placeholder-count="3"><i style="--dot: {{m.c}}"></i></sc-for></span><span aria-hidden="true"><b>{{p.moodMain}}</b>{{p.moodRest}}</span></span></sc-if>
+<sc-if value="{{p.over}}" hint-placeholder-val="{{false}}"><span class="cm-over">{{p.overL}}</span></sc-if>
+<span class="cm-sel"><svg class="vz-icon" aria-hidden="true"><use href="#i-check-circle"></use></svg>{{p.why}}</span>
+<div class="cm-foot"><span class="cm-price">From <b>{{p.price}}</b> · {{p.pk}} packages<span class="cm-pk" aria-hidden="true"><sc-for list="{{p.tones}}" as="t" hint-placeholder-count="3"><i style="background: {{t}}"></i></sc-for></span></span>
+</div>
+<div class="{{p.svCls}}" data-p="{{p.id}}"><sc-if value="{{p.svSug}}" hint-placeholder-val="{{true}}"><button type="button" class="sv-pick" aria-haspopup="dialog" aria-expanded="{{p.svOpen}}" aria-label="{{p.svPickA}}" title="{{p.svFull}}" data-id="{{p.id}}" onClick="{{togglePick}}"><span>{{p.svName}}</span><svg class="vz-icon" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button><button type="button" class="sv-add" data-id="{{p.id}}" data-c="{{p.svCid}}" onClick="{{quickAdd}}">Add</button></sc-if><sc-if value="{{p.svGen}}" hint-placeholder-val="{{false}}"><button type="button" class="sv-one" aria-haspopup="dialog" aria-expanded="{{p.svOpen}}" data-id="{{p.id}}" onClick="{{togglePick}}"><svg class="vz-icon" aria-hidden="true"><use href="#{{p.svIcon}}"></use></svg><span>{{p.svLbl}}</span><svg class="vz-icon" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button></sc-if><sc-if value="{{p.svOpenB}}" hint-placeholder-val="{{false}}"><div class="sv-pop" role="dialog" aria-label="Save to a campaign wishlist" onKeyDown="{{popKey}}"><div class="sv-h">Save to a wishlist</div><sc-if value="{{p.svHasSearch}}" hint-placeholder-val="{{false}}"><div class="sv-srch"><svg class="vz-icon" aria-hidden="true"><use href="#i-search"></use></svg><input class="sv-q" type="search" placeholder="Find a campaign" aria-label="Find a campaign" value="{{pq}}" onInput="{{onPq}}"></div></sc-if><div class="sv-list" role="group" aria-label="Campaigns"><sc-for list="{{p.svSecs}}" as="g" hint-placeholder-count="3"><div class="sv-sec">{{g.h}}</div><sc-for list="{{g.items}}" as="c" hint-placeholder-count="3"><div class="sv-row"><span class="th" style="background: {{c.bg}}"></span><span class="t"><b>{{c.name}}</b><small>{{c.meta}}</small></span><button type="button" class="sv-tg" aria-pressed="{{c.on}}" aria-label="{{c.tgA}}" title="{{c.tgA}}" data-id="{{c.pid}}" data-c="{{c.id}}" onClick="{{toggleSave}}"><svg class="vz-icon i-add" aria-hidden="true"><use href="#i-plus"></use></svg><svg class="vz-icon i-on" aria-hidden="true"><use href="#i-check"></use></svg><svg class="vz-icon i-rm" aria-hidden="true"><use href="#i-x"></use></svg></button><a class="sv-go" href="CG-Campaign.dc.html" aria-label="Go to {{c.name}}" title="Go to campaign"><svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-up-right"></use></svg></a></div></sc-for></sc-for><sc-if value="{{p.svNone}}" hint-placeholder-val="{{false}}"><p class="sv-none">{{noneLbl}}</p></sc-if><sc-if value="{{p.svCreateQ}}" hint-placeholder-val="{{false}}"><button type="button" class="sv-cq" data-id="{{p.id}}" onClick="{{createFromQ}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-plus"></use></svg>{{cqLbl}}</button></sc-if><sc-if value="{{p.svPastBtn}}" hint-placeholder-val="{{false}}"><button type="button" class="sv-past" onClick="{{togglePast}}">{{p.svPastLbl}}</button></sc-if></div><div class="sv-sep"></div><sc-if value="{{p.svNewOn}}" hint-placeholder-val="{{false}}"><form class="sv-new" data-id="{{p.id}}" onSubmit="{{createCamp}}"><input class="pe-in" aria-label="New campaign name" placeholder="Campaign name" value="{{newName}}" onInput="{{onNewName}}"><button type="submit" class="vz-btn sm pe-solid">Create &amp; add</button></form><p class="sv-note">Creates a draft campaign. You can finish its brief later.</p></sc-if><sc-if value="{{p.svNewOff}}" hint-placeholder-val="{{true}}"><button type="button" class="sv-mnew" data-id="{{p.id}}" onClick="{{startNew}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-plus"></use></svg>New campaign</button></sc-if></div></sc-if></div></div></article></sc-for>
+</div></sc-if>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}"><div class="cm-empty"><svg class="vz-icon" aria-hidden="true"><use href="#i-search"></use></svg><b>{{emptyT}}</b><p>{{emptyP}}</p><div><sc-if value="{{emptyCat}}" hint-placeholder-val="{{false}}"><button type="button" class="vz-btn vz-btn--secondary sm" data-v="all" onClick="{{pickCat}}">Show all categories</button></sc-if><sc-if value="{{hasQ}}" hint-placeholder-val="{{false}}"><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{clearQ}}">Clear search</button></sc-if><sc-if value="{{isMatch}}" hint-placeholder-val="{{false}}"><a class="vz-btn vz-btn--ghost sm" href="CG-Edit-Overview.dc.html">Edit campaign</a></sc-if></div></div></sc-if>
+</main>
+<sc-if value="{{hasToast}}" hint-placeholder-val="{{false}}"><div class="pe-toast" role="status"><svg class="vz-icon" aria-hidden="true"><use href="#i-check-circle"></use></svg>{{toast}}<button type="button" class="pe-toast-act" onClick="{{undo}}">Undo</button><a class="pe-toast-act" href="CG-Campaign.dc.html">View campaign</a></div></sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"campaign":{"editor":"enum","options":["none","c1","c3"],"default":"none","section":"State"},"query":{"editor":"string","default":"","section":"State"},"category":{"editor":"enum","options":["all","music","art","film","sports","events"],"default":"all","section":"State"},"suggestOpen":{"editor":"boolean","default":false,"section":"State"},"campOpen":{"editor":"boolean","default":false,"section":"State"},"loading":{"editor":"boolean","default":false,"section":"State"},"pickFor":{"editor":"enum","options":["none","sahara","pulse","basecamp","summit"],"default":"none","section":"State"},"newOpen":{"editor":"boolean","default":false,"section":"State"},"savedDemo":{"editor":"boolean","default":false,"section":"State"},"manyCamps":{"editor":"boolean","default":false,"section":"State"},"pickQuery":{"editor":"string","default":"","section":"State"},"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    document.documentElement.setAttribute('data-theme', 'dark'); document.documentElement.classList.add('vz-color'); if (window.Venzza) window.Venzza.mountIcons();
+    this.onDown = (e) => { const s = this.state || {}; const t = e.target; if (this.campOpen() && !(t.closest && t.closest('.cm-camp'))) this.setState({ campOpen: false }); if (this.sugOpen() && !(t.closest && t.closest('.cm-srch'))) this.setState({ sug: false }); if (this.pick() && !(t.closest && t.closest('.sv'))) this.setState({ pick: null, newFor: null }); };
+    this.onEsc = (e) => { if (e.key === 'Escape' && this.pick()) { const id = this.pick(); this.setState({ pick: null, newFor: null }); setTimeout(() => { const b = document.querySelector('.sv[data-p="' + id + '"] button'); if (b) b.focus(); }, 0); return; } if (e.key === 'Escape' && this.campOpen()) { this.setState({ campOpen: false }); const b = document.querySelector('.cm-cbtn'); if (b) b.focus(); } };
+    document.addEventListener('mousedown', this.onDown); document.addEventListener('keydown', this.onEsc);
+    if (this.b(this.props.savedDemo)) setTimeout(() => { try { window.dispatchEvent(new CustomEvent('vz-saved')); } catch (x) {} }, 900);
+  }
+  componentWillUnmount() { document.removeEventListener('mousedown', this.onDown); document.removeEventListener('keydown', this.onEsc); clearTimeout(this.lt); clearTimeout(this.tt); }
+  componentDidUpdate(prev) { const P = this.props; if (prev.campaign !== P.campaign || prev.query !== P.query || prev.category !== P.category || prev.suggestOpen !== P.suggestOpen || prev.campOpen !== P.campOpen || prev.loading !== P.loading || prev.pickFor !== P.pickFor || prev.newOpen !== P.newOpen || prev.savedDemo !== P.savedDemo || prev.manyCamps !== P.manyCamps || prev.pickQuery !== P.pickQuery) this.setState({ pq: undefined, showPast: undefined, recent: undefined, pick: undefined, saved: undefined, newFor: undefined, extraC: undefined, newName: undefined, camp: undefined, q: undefined, cat: undefined, sug: undefined, campOpen: undefined, loading: undefined, wish: undefined, toast: undefined }); }
+  b(v) { return v === true || v === 'true'; }
+  camp() { const s = this.state || {}; return s.camp !== undefined ? s.camp : (this.props.campaign || 'none'); }
+  q() { const s = this.state || {}; return s.q !== undefined ? s.q : (this.props.query || ''); }
+  cat() { const s = this.state || {}; return s.cat !== undefined ? s.cat : (this.props.category || 'all'); }
+  pick() { const s = this.state || {}; if (s.pick !== undefined) return s.pick; const v = this.props.pickFor; return v && v !== 'none' ? v : null; }
+  saved() { const s = this.state || {}; if (s.saved !== undefined) return s.saved; return this.b(this.props.savedDemo) ? { pulse: ['c1'], summit: ['c3', 'd2'] } : {}; }
+  allCamps() {
+    const s = this.state || {}; const many = this.b(this.props.manyCamps);
+    const base = { c1: 3, c3: 1, d2: 0, d4: 0, c5: 6, c6: 2, c7: 4, c8: 0, c9: 9, c10: 1, c11: 2, c12: 5, d5: 0, x1: 7, x2: 4, x3: 3 };
+    const sv = this.saved(); const n = (id) => (base[id] || 0) + Object.keys(sv).filter((k) => (sv[k] || []).indexOf(id) > -1).length; const pl = (k) => k + (k === 1 ? ' project' : ' projects');
+    const G = ['linear-gradient(135deg,#b4705a,#7a4a3a)', 'linear-gradient(135deg,#136a8a,#267871)', 'linear-gradient(135deg,#41295a,#2f0743)', 'linear-gradient(135deg,#c0455e,#6a2c70)', 'linear-gradient(135deg,#4a3f8c,#1e6b5c)', 'linear-gradient(135deg,#A9BBC4,#5E6E7A)'];
+    let L = this.camps().map((c) => ({ id: c.id, name: c.name, when: c.meta.split(' · ')[0], st: 'active', bg: c.bg }));
+    L = L.concat([{ id: 'd2', name: 'Summer Launch 2027', st: 'draft', bg: 'linear-gradient(135deg,#0f4c81,#2a9d8f)' }, { id: 'd4', name: 'Northern Lights Tour', st: 'draft', bg: 'linear-gradient(135deg,#3a1c71,#4a3f8c)' }]);
+    if (many) L = L.concat([
+      { id: 'c5', name: 'Holiday Gifting 2026', when: 'Nov 1 – Dec 31', st: 'active', bg: G[0] }, { id: 'c6', name: 'Spring Sneaker Drop', when: 'Feb 1 – Apr 30', st: 'active', bg: G[1] },
+      { id: 'c7', name: 'Summer Road Trip', when: 'Jun 1 – Aug 31', st: 'active', bg: G[2] }, { id: 'c8', name: 'Back to Campus', when: 'Aug 10 – Sep 30', st: 'active', bg: G[3] },
+      { id: 'c9', name: 'Fan Fest Sponsorships', when: 'Mar 1 – Oct 31', st: 'active', bg: G[4] }, { id: 'c10', name: 'Wellness Week', when: 'Jan 5 – Jan 12', st: 'active', bg: G[5] },
+      { id: 'c11', name: 'Night Market Pop-ups', when: 'May 1 – Jul 31', st: 'active', bg: G[0] }, { id: 'c12', name: 'Creator Residency', when: 'Ongoing', st: 'active', bg: G[1] },
+      { id: 'd5', name: 'Q3 Brand Refresh', st: 'draft', bg: G[2] },
+      { id: 'x1', name: 'Winter Lights 2025', when: 'Ended Jan 2026', st: 'past', bg: G[3] }, { id: 'x2', name: 'Fall Festival Tour 2025', when: 'Ended Nov 2025', st: 'past', bg: G[4] }, { id: 'x3', name: 'Launch Week 2025', when: 'Ended Jun 2025', st: 'past', bg: G[5] }]);
+    L = L.concat((s.extraC || []).map((c) => ({ id: c.id, name: c.name, st: 'draft', bg: c.bg })));
+    return L.map((c) => Object.assign(c, { meta: pl(n(c.id)) + ' · ' + (c.st === 'draft' ? 'Draft' : c.when) }));
+  }
+  campOpen() { const s = this.state || {}; return s.campOpen !== undefined ? s.campOpen : this.b(this.props.campOpen); }
+  sugOpen() { const s = this.state || {}; return (s.sug !== undefined ? s.sug : this.b(this.props.suggestOpen)) && !!this.q().trim(); }
+  data() {
+    return [
+      { id: 'sahara', name: 'Sahara Sound Festival 2027', tag: 'Two weekends of music, art and desert sunsets for 120,000 fans.', cat: 'music', catL: 'Music', loc: 'Indio, CA', when: 'Apr 2027', price: 50000, pk: 3, by: 'Sahara Sound Collective', tags: ['music', 'festival', 'arts', 'desert', 'outdoors'], why: 'Sold out three years running', fit: { c1: 96, c3: 72 }, bg: 'url(assets/img/sahara-main-stage.jpg) center 42% / cover', tones: ['#D9A66B', '#6EA8DE', '#A18FE6'], link: true },
+      { id: 'aurora', name: 'Aurora Field Sessions', tag: 'Live music sessions filmed in remote landscapes.', cat: 'music', catL: 'Music', loc: 'Reykjavík', when: 'Summer 2027', price: 15000, pk: 2, by: 'Meridian Hall', tags: ['music', 'outdoors', 'film', 'arts'], why: '3.4M views across the last season', fit: { c1: 93, c3: 80 }, bg: 'linear-gradient(140deg,#0f4c81,#2a9d8f)', tones: ['#D9A66B', '#6EA8DE'] },
+      { id: 'basecamp', name: 'Basecamp Kitchen Tour', tag: 'A chef-led food tour through six US cities.', cat: 'events', catL: 'Live events', loc: '6 US cities', when: '2027', price: 20000, pk: 3, by: 'Basecamp Kitchen', tags: ['food', 'travel', 'tour'], why: 'Sponsors renewed at 90% last year', fit: { c1: 61, c3: 64 }, bg: 'linear-gradient(140deg,#b4705a,#7a4a3a)', tones: ['#D9A66B', '#6EA8DE', '#A18FE6'] },
+      { id: 'pulse', name: 'Pulse Weekender', tag: 'Two nights of electronic music in a Berlin power station.', cat: 'events', catL: 'Live events', loc: 'Berlin', when: 'Oct 2027', price: 25000, pk: 2, by: 'Pulse Collective', tags: ['music', 'electronic', 'nightlife', 'festival'], why: 'Audience 82% aged 21–34, highly social', fit: { c1: 90, c3: 48 }, bg: 'linear-gradient(140deg,#41295a,#2f0743)', tones: ['#D9A66B', '#6EA8DE'] },
+      { id: 'neon', name: 'Neon Lotus Biennale', tag: 'Immersive light art across São Paulo’s old port.', cat: 'art', catL: 'Art & culture', loc: 'São Paulo', when: 'Jun 2027', price: 35000, pk: 4, by: 'Neon Lotus', tags: ['art', 'arts', 'immersive', 'light'], why: 'Every edition has sold out its brand partner slots', fit: { c1: 88, c3: 55 }, bg: 'linear-gradient(140deg,#0f4c81,#2a9d8f)', tones: ['#D9A66B', '#6EA8DE', '#A18FE6', '#E58E9F'] },
+      { id: 'nordlys', name: 'Studio Nordlys', tag: 'Large-scale robotic sculpture for public plazas.', cat: 'art', catL: 'Art & culture', loc: 'Oslo', when: '2027', price: 45000, pk: 2, by: 'Studio Nordlys', tags: ['art', 'arts', 'installation', 'sculpture'], why: 'Press coverage in 40+ outlets last year', fit: { c1: 84, c3: 50 }, bg: 'linear-gradient(140deg,#4a3f8c,#1e6b5c)', tones: ['#D9A66B', '#6EA8DE'] },
+      { id: 'summit', name: 'Summit Trail Series', tag: 'Trail running races across the Alps, filmed for YouTube.', cat: 'sports', catL: 'Sports', loc: 'Chamonix', when: 'Jul 2027', price: 18000, pk: 3, by: 'Summit Collective', tags: ['trail', 'running', 'fitness', 'outdoors'], why: 'Runners’ audience, 74% buy gear yearly', fit: { c1: 52, c3: 95 }, bg: 'linear-gradient(140deg,#1e6b5c,#2a9d8f)', tones: ['#D9A66B', '#6EA8DE', '#A18FE6'] },
+      { id: 'overland', name: 'Overland: The Long Road', tag: 'A 12-part travel series along the Pan-American Highway.', cat: 'film', catL: 'Film & series', loc: '12 countries', when: '2027', price: 80000, pk: 3, by: 'The Overland Two', tags: ['travel', 'outdoors', 'adventure', 'series', 'fitness'], why: 'Season one reached 9.4M viewers', fit: { c1: 62, c3: 91 }, bg: 'linear-gradient(140deg,#6a2c70,#c0455e)', tones: ['#D9A66B', '#6EA8DE', '#A18FE6'] },
+      { id: 'coast', name: 'Coastline Cup', tag: 'Pro surf competition with a global livestream.', cat: 'sports', catL: 'Sports', loc: 'Ericeira, Portugal', when: 'Sep 2027', price: 60000, pk: 3, by: 'Coastline Sports', tags: ['surf', 'sports', 'outdoors', 'livestream'], why: 'Livestream peaked at 1.1M concurrent viewers', fit: { c1: 58, c3: 86 }, bg: 'linear-gradient(140deg,#136a8a,#267871)', tones: ['#D9A66B', '#6EA8DE', '#A18FE6'] }
+    ];
+  }
+  camps() { return [
+    { id: 'c1', mood: 'euphoric', name: 'Desert Vibes Festival 2026', meta: 'Jan 1 – Apr 30 · up to $40K · Music, Festival, Arts', detail: 'Music, Festival, Arts · ages 18–34 · up to $40K', tags: ['music', 'festival', 'arts'], budget: 40000, bg: 'linear-gradient(135deg,#6a2c70,#c0455e)' },
+    { id: 'c3', mood: 'adventurous', name: 'Trail Shoe Launch', meta: 'Mar 1 – May 31 · up to $25K · Outdoors, Fitness', detail: 'Outdoors, Fitness · ages 25–44 · up to $25K', tags: ['outdoors', 'fitness'], budget: 25000, bg: 'linear-gradient(135deg,#1e6b5c,#2a9d8f)' }
+  ]; }
+  renderVals() {
+    const s = this.state || {};
+    const camp = this.camp(), q = this.q(), ql = q.trim().toLowerCase(), cat = this.cat();
+    const C = this.camps().find((c) => c.id === camp);
+    const loading = s.loading !== undefined ? s.loading : this.b(this.props.loading);
+    const wish = s.wish || {};
+    const m = (n) => '$' + (n >= 1000 ? Math.round(n / 1000) + 'K' : n);
+    const money = (n) => '$' + n.toLocaleString('en-US');
+    const hit = (p) => !ql || [p.name, p.tag, p.catL, p.loc, p.by].concat(p.tags).join(' ').toLowerCase().indexOf(ql) > -1;
+    let list = this.data().filter((p) => (cat === 'all' || p.cat === cat) && hit(p));
+    if (C) { list = list.filter((p) => p.fit[C.id] >= 70); list.sort((a, b) => ((a.price > C.budget) - (b.price > C.budget)) || (b.fit[C.id] - a.fit[C.id])); }
+    const curated = !C && !ql && cat === 'all';
+    if (curated) list = list.filter((p) => p.id !== 'sahara');
+    const MOODL = { energetic: 'Energetic', euphoric: 'Euphoric', chill: 'Chill', dreamy: 'Dreamy', bold: 'Bold', underground: 'Underground', premium: 'Premium', playful: 'Playful', wholesome: 'Wholesome', artsy: 'Artsy', adventurous: 'Adventurous', nocturnal: 'Nocturnal' };
+    const MOODS = {"sahara": ["euphoric", "energetic", "dreamy"], "aurora": ["dreamy", "chill", "artsy"], "basecamp": ["wholesome", "playful"], "pulse": ["underground", "nocturnal", "energetic"], "neon": ["artsy", "dreamy", "nocturnal"], "nordlys": ["artsy", "premium"], "summit": ["adventurous", "energetic"], "overland": ["adventurous", "chill", "dreamy"], "coast": ["energetic", "adventurous", "bold"], "lowend": ["underground", "energetic"], "palm": ["premium", "artsy"], "golden": ["chill", "dreamy", "euphoric"]};
+    const moodOf = (id, campMain) => { const ms = MOODS[id] || []; const same = !!campMain && ms[0] === campMain; return { moods: ms.map((x) => ({ c: 'var(--mood-' + x + '-1)' })), hasMood: ms.length > 0, moodMain: ms.length ? MOODL[ms[0]] : '', moodRest: same ? ' · same main mood as your campaign' : (ms.length > 1 ? ' with ' + ms.slice(1).map((x) => MOODL[x].toLowerCase()).join(', ') : ''), moodAria: ms.length ? 'Mood: ' + ms.map((x) => MOODL[x]).join(', ') : '' }; };
+    const cards0 = list.map((p) => {
+      const over = !!C && p.price > C.budget, w = !!wish[p.id];
+      const ov = C ? C.tags.filter((t) => p.tags.indexOf(t) > -1) : [];
+      return { id: p.id, name: p.name, tag: p.tag, meta: p.catL + ' · ' + p.loc + ' · ' + p.when, price: money(p.price), pk: String(p.pk), tones: p.tones, bg: p.bg,
+        why: C ? (ov.length ? 'Matches ' + ov.join(', ') + ' · ' + C.detail.split(' · ')[1] : 'Similar audience, ' + C.detail.split(' · ')[1]) : p.why,
+        hasFit: !!C, fit: C ? String(p.fit[C.id]) : '', over, overL: 'Above budget · from ' + money(p.price), link: !!p.link, nolink: !p.link, cls: 'cm-card' + (p.link ? ' lk' : ''), tip: p.link ? '' : 'Prototype: only Sahara Sound Festival opens',
+        wishCls: '', ...moodOf(p.id, C && C.mood) };
+    });
+    const catsL = [['all', 'All'], ['music', 'Music'], ['events', 'Live events'], ['art', 'Art & culture'], ['film', 'Film & series'], ['sports', 'Sports']];
+
+    const allC = this.allCamps(), saved = this.saved(), pickId = this.pick();
+    const newFor = s.newFor !== undefined ? s.newFor : (this.b(this.props.newOpen) ? pickId : null);
+    const cname = (id) => (allC.find((c) => c.id === id) || {}).name || '';
+    const pq = (s.pq !== undefined ? s.pq : (this.props.pickQuery || '')), pql = pq.trim().toLowerCase();
+    const recent = s.recent !== undefined ? s.recent : (this.b(this.props.manyCamps) ? ['c7', 'c9', 'c5'] : []);
+    const showPast = !!s.showPast;
+    const sv = (p) => {
+      const mine = saved[p.id] || [];
+      let best = null; const fits = [];
+      if (C) best = { id: C.id, fit: p.fit[C.id] };
+      else { this.camps().forEach((c) => { const f = p.fit[c.id]; if (f >= 70) fits.push({ id: c.id, fit: f }); }); fits.sort((a, b) => b.fit - a.fit); best = fits[0] || null; }
+      const bestList = C ? [best] : fits.slice(0, 2);
+      const bc = best ? allC.find((c) => c.id === best.id) : null;
+      const open = pickId === p.id;
+      const savedN = mine.length;
+      const sug = !!bc && savedN === 0;
+      const lbl = savedN === 1 ? 'Added to ' + cname(mine[0]) : savedN > 1 ? 'On ' + savedN + ' wishlists' : 'Add to wishlist';
+      const item = (c, fit) => ({ pid: p.id, id: c.id, name: c.name, bg: c.bg, meta: (fit ? 'Fit ' + fit + ' · ' : '') + c.meta + (c.st === 'past' ? '' : ''), on: mine.indexOf(c.id) > -1 ? 'true' : 'false', tgA: (mine.indexOf(c.id) > -1 ? 'Remove from ' : 'Add to ') + c.name });
+      const secs = []; let none = false, createQ = false, pastN = 0;
+      if (pql) {
+        const hits = allC.filter((c) => c.name.toLowerCase().indexOf(pql) > -1);
+        if (hits.length) secs.push({ h: 'Results', items: hits.map((c) => item(c)) });
+        none = !hits.length; createQ = !hits.find((c) => c.name.toLowerCase() === pql);
+      } else {
+        const used = {};
+        const take = (arr) => arr.filter((c) => c && !used[c.id]).map((c) => { used[c.id] = 1; return c; });
+        const onIt = take(allC.filter((c) => mine.indexOf(c.id) > -1));
+        if (onIt.length) secs.push({ h: 'On this project', items: onIt.map((c) => item(c)) });
+        const bl = take(bestList.map((b) => allC.find((c) => c.id === b.id)));
+        if (bl.length) secs.push({ h: 'Best match', items: bl.map((c) => item(c, (bestList.find((b) => b.id === c.id) || {}).fit)) });
+        const rc = take(recent.map((id) => allC.find((c) => c.id === id)).filter((c) => c && c.st !== 'past'));
+        if (rc.length) secs.push({ h: 'Recent', items: rc.map((c) => item(c)) });
+        const rest = allC.filter((c) => !used[c.id]);
+        const act = rest.filter((c) => c.st === 'active').sort((a, b) => a.name.localeCompare(b.name));
+        const dr = rest.filter((c) => c.st === 'draft').sort((a, b) => a.name.localeCompare(b.name));
+        const past = rest.filter((c) => c.st === 'past'); pastN = past.length;
+        const all = act.concat(dr).concat(showPast ? past : []);
+        if (all.length) secs.push({ h: secs.length ? 'All campaigns' : 'Campaigns', items: all.map((c) => item(c)) });
+      }
+      return { svCls: 'sv' + (savedN ? ' saved' : '') + (open ? ' open' : ''), svSug: sug, svGen: !sug, svOpen: open ? 'true' : 'false', svOpenB: open,
+        svName: bc ? bc.name : '', svFull: bc ? 'Suggested: ' + bc.name : '', svCid: bc ? bc.id : '', svPickA: bc ? 'Suggested campaign: ' + bc.name + '. Choose a different campaign' : '',
+        svLbl: lbl, svIcon: savedN ? 'i-check' : 'i-plus',
+        svHasSearch: allC.length >= 6, svSecs: secs, svNone: none, svCreateQ: !!pql && createQ, svPastBtn: !pql && pastN > 0, svPastLbl: showPast ? 'Hide past campaigns' : 'Show past campaigns (' + pastN + ')',
+        svNewOn: newFor === p.id, svNewOff: newFor !== p.id };
+    };
+    const addTo = (pid, cid, viaPicker) => { const cur = (saved[pid] || []).slice(); if (cur.indexOf(cid) < 0) cur.push(cid); const rec = [cid].concat(recent.filter((x) => x !== cid)).slice(0, 3); try { window.dispatchEvent(new CustomEvent('vz-saved')); } catch (x) {} this.setState({ recent: rec, saved: Object.assign({}, saved, { [pid]: cur }), pick: viaPicker ? pid : null, newFor: null, newName: '', toast: 'Added to ' + cname(cid) + ' wishlist', undo: { pid, cid } }); clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({ toast: '' }), 5000); };
+    const removeFrom = (pid, cid, quiet) => { const cur = (saved[pid] || []).filter((x) => x !== cid); this.setState({ saved: Object.assign({}, saved, { [pid]: cur }), toast: quiet ? '' : 'Removed from ' + cname(cid) + ' wishlist', undo: quiet ? null : { pid, cid, re: true } }); clearTimeout(this.tt); if (!quiet) this.tt = setTimeout(() => this.setState({ toast: '' }), 5000); };
+    const featP = this.data().find((p) => p.id === 'sahara');
+    const cards = cards0.map((c) => Object.assign(c, sv(this.data().find((p) => p.id === c.id))));
+    const sug = [];
+    if (ql) {
+      const cs = catsL.filter((c) => c[0] !== 'all' && c[1].toLowerCase().indexOf(ql) > -1).map((c) => ({ k: 'cat', v: c[0], l: c[1], n: 'Category', i: 'i-layout-grid' }));
+      const ps = this.data().filter((p) => p.name.toLowerCase().indexOf(ql) > -1 || p.tags.join(' ').indexOf(ql) > -1).slice(0, 3).map((p) => ({ k: 'q', v: p.name, l: p.name, n: p.catL, i: 'i-image' }));
+      const ls = []; this.data().forEach((p) => { if (p.loc.toLowerCase().indexOf(ql) > -1 && !ls.find((x) => x.v === p.loc)) ls.push({ k: 'q', v: p.loc, l: p.loc, n: 'Place', i: 'i-map-pin' }); });
+      const bs = this.data().filter((p) => p.by.toLowerCase().indexOf(ql) > -1).slice(0, 2).map((p) => ({ k: 'q', v: p.by, l: p.by, n: 'Creator', i: 'i-user' }));
+      if (cs.length) sug.push({ h: 'Categories', items: cs }); if (ps.length) sug.push({ h: 'Projects', items: ps }); if (ls.length) sug.push({ h: 'Places', items: ls.slice(0, 2) }); if (bs.length) sug.push({ h: 'Creators', items: bs });
+      sug.forEach((g) => g.items.forEach((it) => { it.cls = ''; }));
+    }
+    const sugOpen = this.sugOpen();
+    const camps = this.camps().map((c) => ({ id: c.id, name: c.name, meta: c.meta, bg: c.bg, on: camp === c.id ? 'true' : 'false' }));
+    const pickCampFn = (id) => { clearTimeout(this.lt); this.setState({ camp: id, campOpen: false, loading: true, wish: {} }); this.lt = setTimeout(() => this.setState({ loading: false }), 450); };
+    const nWithin = C ? list.filter((p) => p.price <= C.budget).length : 0;
+    const isEmpty = !loading && cards.length === 0;
+    const catName = (catsL.find((c) => c[0] === cat) || ['', ''])[1];
+    return {
+      q, hasQ: !!q, sug, sugOpen, sugNone: sugOpen && !sug.length, sugOpenA: sugOpen ? 'true' : 'false',
+      onQ: (e) => this.setState({ q: e.target.value, sug: true }),
+      onFocus: () => this.setState({ sug: true }),
+      onKey: (e) => { if (e.key === 'Escape') { e.preventDefault(); if (this.sugOpen()) this.setState({ sug: false }); else this.setState({ q: '' }); } else if (e.key === 'Enter') { e.preventDefault(); this.setState({ sug: false }); } },
+      clearQ: () => { this.setState({ q: '', sug: false }); const f = document.querySelector('.cm-srch input'); if (f) f.focus(); },
+      pickSug: (e) => { e.preventDefault(); const k = e.currentTarget.getAttribute('data-k'), v = e.currentTarget.getAttribute('data-v'); if (k === 'cat') this.setState({ cat: v, q: '', sug: false }); else this.setState({ q: v, sug: false }); },
+      campCls: 'vzpop cm-camp' + (this.campOpen() ? ' open' : ''), campOpenA: this.campOpen() ? 'true' : 'false', campLabel: C ? C.name : 'All projects',
+      toggleCamp: () => this.setState({ campOpen: !this.campOpen(), sug: false }),
+      noneOn: C ? 'false' : 'true', camps,
+      drafts: [{ name: 'Summer Launch 2027', bg: 'linear-gradient(135deg,#0f4c81,#2a9d8f)' }, { name: 'Northern Lights Tour', bg: 'linear-gradient(135deg,#3a1c71,#4a3f8c)' }],
+      pickCamp: (e) => { const id = e.currentTarget.getAttribute('data-c'); pickCampFn(id); },
+      clearCamp: () => pickCampFn('none'),
+      sortLbl: C ? 'Best fit' : 'Recommended',
+      cats: catsL.map(([k, l]) => ({ k, l, on: cat === k ? 'true' : 'false' })),
+      pickCat: (e) => this.setState({ cat: e.currentTarget.getAttribute('data-v') }),
+      isMatch: !!C, mc: C ? { name: C.name, detail: C.detail } : { name: '', detail: '' },
+      showFeat: curated, showCount: !curated && !loading && cards.length > 0,
+      countTxt: C ? nWithin + ' match' + (nWithin === 1 ? '' : 'es') + ' within budget' : cards.length + ' project' + (cards.length === 1 ? '' : 's'),
+      countSub: C ? (cards.length > nWithin ? ' · ' + (cards.length - nWithin) + ' more above budget, shown last' : '') : (ql ? ' for “' + q.trim() + '”' : '') + (cat !== 'all' ? ' in ' + catName : ''),
+      isLoading: loading, hasCards: !loading && cards.length > 0, cards,
+      isEmpty, emptyCat: cat !== 'all',
+      emptyT: C ? 'No matches for ' + C.name + (cat !== 'all' ? ' in ' + catName : '') + (ql ? ' for “' + q.trim() + '”' : '') : 'No projects match' + (ql ? ' “' + q.trim() + '”' : '') + (cat !== 'all' ? ' in ' + catName : ''),
+      emptyP: C ? 'Try all categories or a different search, or widen the campaign’s budget or tags.' : 'Try a different word, or clear the search and category to see every project.',
+      toggleWish: (e) => { const id = e.currentTarget.getAttribute('data-id'); const on = !wish[id]; this.setState({ wish: Object.assign({}, wish, { [id]: on }), toast: on ? 'Added to the ' + C.name + ' wishlist' : '' }); clearTimeout(this.tt); if (on) this.tt = setTimeout(() => this.setState({ toast: '' }), 4000); },
+      feat: Object.assign({ id: 'sahara' }, sv(featP)), newName: s.newName || '',
+      cqLbl: 'Create “' + pq.trim() + '” and add', noneLbl: 'No campaign called “' + pq.trim() + '”.',
+      pq, onPq: (e) => this.setState({ pq: e.target.value }),
+      togglePast: () => this.setState({ showPast: !showPast }),
+      togglePick: (e) => { const id = e.currentTarget.getAttribute('data-id'); const opening = this.pick() !== id; this.setState({ pick: opening ? id : null, newFor: null, campOpen: false, sug: false, pq: '', showPast: false }); if (opening) setTimeout(() => { const f = document.querySelector('.sv.open .sv-q') || document.querySelector('.sv.open .sv-tg'); if (f) f.focus(); }, 30); },
+      createFromQ: (e) => { const pid = e.currentTarget.getAttribute('data-id'); const nm = pq.trim(); const id = 'n' + Date.now().toString(36); const ex = (s.extraC || []).concat([{ id, name: nm, bg: 'linear-gradient(135deg,#5E6E7A,#A9BBC4)' }]); const cur = (saved[pid] || []).concat([id]); try { window.dispatchEvent(new CustomEvent('vz-saved')); } catch (x) {} this.setState({ extraC: ex, saved: Object.assign({}, saved, { [pid]: cur }), pq: '', pick: null, toast: 'Created ' + nm + ' and added this project', undo: { pid, cid: id } }); clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({ toast: '' }), 5000); },
+      popKey: (e) => { const pop = e.currentTarget; const els = Array.prototype.slice.call(pop.querySelectorAll('.sv-q, .sv-tg, .sv-cq')); const i = els.indexOf(document.activeElement); if (e.key === 'ArrowDown') { e.preventDefault(); const n = els[Math.min(els.length - 1, i + 1)]; if (n) { n.focus(); n.scrollIntoView({ block: 'nearest' }); } } else if (e.key === 'ArrowUp') { e.preventDefault(); const n = els[Math.max(0, i - 1)]; if (n) { n.focus(); n.scrollIntoView({ block: 'nearest' }); } } else if (e.key === 'Enter' && document.activeElement && document.activeElement.classList.contains('sv-q')) { e.preventDefault(); const f = pop.querySelector('.sv-tg') || pop.querySelector('.sv-cq'); if (f) f.click(); } },
+      quickAdd: (e) => addTo(e.currentTarget.getAttribute('data-id'), e.currentTarget.getAttribute('data-c'), false),
+      toggleSave: (e) => { const pid = e.currentTarget.getAttribute('data-id'), cid = e.currentTarget.getAttribute('data-c'); if ((saved[pid] || []).indexOf(cid) > -1) removeFrom(pid, cid); else addTo(pid, cid, true); },
+      startNew: (e) => { this.setState({ newFor: e.currentTarget.getAttribute('data-id'), newName: '' }); setTimeout(() => { const f = document.querySelector('.sv-new input'); if (f) f.focus(); }, 30); },
+      onNewName: (e) => this.setState({ newName: e.target.value }),
+      createCamp: (e) => { e.preventDefault(); const pid = e.currentTarget.getAttribute('data-id'); const nm = (s.newName || '').trim() || 'Untitled campaign'; const id = 'n' + Date.now().toString(36); const ex = (s.extraC || []).concat([{ id, name: nm, meta: 'Draft · just created', bg: 'linear-gradient(135deg,#5E6E7A,#A9BBC4)' }]); this.setState({ extraC: ex }); try { window.dispatchEvent(new CustomEvent('vz-saved')); } catch (x) {} const cur = (saved[pid] || []).concat([id]); this.setState({ saved: Object.assign({}, saved, { [pid]: cur }), pick: null, newFor: null, newName: '', toast: 'Created ' + nm + ' and added this project', undo: { pid, cid: id } }); clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({ toast: '' }), 5000); },
+      undo: () => { const u = s.undo; if (!u) return; if (u.re) { const cur = (saved[u.pid] || []).concat([u.cid]); this.setState({ saved: Object.assign({}, saved, { [u.pid]: cur }), toast: '', undo: null }); } else removeFrom(u.pid, u.cid, true); },
+      hasToast: !!s.toast, toast: s.toast || ''
+    };
+  }
+}
+</script>
+<script src="assets/components.js"></script><script>(function(m){var o={};for(var k in m)o["./"+k]=new Blob([m[k]],{type:"text/html"});window.__resourceBlobs=o;window.__resources={};})(window.__VZ_SRC||{});</script><script src="assets/vendor/react.production.min.js"></script><script src="assets/vendor/react-dom.production.min.js"></script><script src="assets/vendor/dc-runtime.js"></script><script src="assets/prototype-map.js"></script><script src="assets/proto-bar.js"></script>
+</body>
+</html>

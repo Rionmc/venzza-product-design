@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Projects</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="ds/venzza/components/bundle.css">
+<link rel="stylesheet" href="shared/venzza-dark.css">
+<link rel="stylesheet" href="shared/venzza-app.css">
+<script src="ds/venzza/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+.pl-cover-a{background-image:url(assets/img/sahara-main-stage.jpg);background-size:cover;background-position:center}
+</style>
+</helmet>
+<div class="app">
+<dc-import name="TopNav" flow-links="{{flowLinks}}" brand="{{brand}}" brand-tone="{{brandTone}}" brand-size="{{brandSize}}" nav-layout="{{navLayout}}" header-width="{{headerWidth}}" header-height="{{headerHeight}}" tone="{{headerTone}}" account="{{account}}" search-mode="{{searchMode}}" search-open="{{searchOpen}}" search-query="{{searchQuery}}" search-highlight="{{searchHighlight}}" search-status="{{searchStatus}}" search-history="{{searchHistory}}" active="projects" badge="{{badge}}" hint-size="100%,61px"></dc-import>
+<main class="{{mainCls}}">
+<div class="pl-hd">
+<div>
+<h1>Projects</h1>
+<sc-if value="{{hasAny}}" hint-placeholder-val="{{true}}"><p>Draft it, work on it privately, then publish it to sponsors.</p></sc-if>
+</div>
+<sc-if value="{{hasAny}}" hint-placeholder-val="{{true}}"><div class="pl-act">
+<a class="vz-btn vz-btn--primary" href="{{crNew}}"><svg class="vz-icon sm"><use href="#i-plus"></use></svg>New project</a>
+</div></sc-if>
+</div>
+
+<sc-if value="{{hasAny}}" hint-placeholder-val="{{true}}">
+<div class="ptool pl-tool">
+<div class="vztablist pill" role="tablist" aria-label="Filter by status">
+<sc-for list="{{filters}}" as="f" hint-placeholder-count="4"><button type="button" class="vztab" role="tab" aria-selected="{{f.sel}}" onClick="{{f.pick}}">{{f.label}}<span class="tcount">{{f.count}}</span></button></sc-for>
+</div>
+<div class="ptool__r">
+<span class="srch tsearch"><svg class="vz-icon"><use href="#i-search"></use></svg><input class="vz-input" type="search" placeholder="Search projects, tags, organizations" aria-label="Search projects" value="{{q}}" onChange="{{onSearch}}" onInput="{{onSearch}}" onKeyDown="{{onSearchKey}}"><sc-if value="{{hasQ}}" hint-placeholder-val="{{false}}"><button type="button" class="vzf-btn" aria-label="Clear search" onClick="{{clearQ}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-x"></use></svg></button></sc-if></span>
+<sc-if value="{{isCards}}" hint-placeholder-val="{{false}}">
+<div class="{{sortCls}}">
+<button type="button" class="vz-btn vz-btn--secondary sm" aria-haspopup="menu" aria-expanded="{{sortOpen}}" onClick="{{toggleSort}}"><svg class="vz-icon sm"><use href="#i-arrow-up-down"></use></svg>{{sortLabel}}</button>
+<div class="vzpop-panel menu right" role="menu" aria-label="Sort by">
+<div class="vzmenu-label">Sort by</div>
+<sc-for list="{{sorts}}" as="o" hint-placeholder-count="4"><button type="button" class="vzopt" role="menuitemradio" aria-checked="{{o.sel}}" aria-selected="{{o.sel}}" onClick="{{o.pick}}">{{o.label}}<svg class="vz-icon sm vzopt-check"><use href="#i-check"></use></svg></button></sc-for>
+</div>
+</div>
+</sc-if>
+<div class="vzseg pl-view" role="tablist" aria-label="View">
+<button type="button" role="tab" aria-selected="{{isCards}}" aria-label="Card view" data-tooltip="Card view" data-tooltip-pos="bottom" onClick="{{showCards}}"><svg class="vz-icon sm"><use href="#i-layout-grid"></use></svg></button>
+<button type="button" role="tab" aria-selected="{{isList}}" aria-label="List view" data-tooltip="List view" data-tooltip-pos="bottom" onClick="{{showList}}"><svg class="vz-icon sm"><use href="#i-list"></use></svg></button>
+</div>
+</div>
+</div>
+<div class="pl-cats vzchips" role="group" aria-label="Filter by category">
+<sc-for list="{{cats}}" as="c" hint-placeholder-count="7"><button type="button" class="vzchip" aria-pressed="{{c.sel}}" onClick="{{c.pick}}">{{c.label}}</button></sc-for>
+</div>
+
+<sc-if value="{{showListView}}" hint-placeholder-val="{{true}}">
+<div class="pl-cols pl-head">
+<sc-for list="{{heads}}" as="h" hint-placeholder-count="6"><span class="{{h.cls}}"><button type="button" class="pl-sort" aria-pressed="{{h.sel}}" aria-label="{{h.aria}}" onClick="{{h.pick}}">{{h.label}}<svg class="vz-icon"><use href="#{{h.icon}}"></use></svg></button></span></sc-for>
+<span class="pl-hlabel" aria-hidden="true"></span>
+</div>
+<div class="pl-list" role="list" aria-label="Projects">
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="7">
+<div class="{{r.rowCls}}" role="listitem" data-proto-id="{{r.id}}" data-proto-kind="project">
+<span class="pl-name">
+<sc-if value="{{r.isCover}}" hint-placeholder-val="{{false}}"><span class="pl-th pl-cover-a" aria-hidden="true"></span></sc-if>
+<sc-if value="{{r.isGrad}}" hint-placeholder-val="{{true}}"><span class="pl-th" style="background: {{r.media}}" aria-hidden="true"></span></sc-if>
+<sc-if value="{{r.noMedia}}" hint-placeholder-val="{{false}}"><span class="pl-th empty" aria-hidden="true"><svg class="vz-icon"><use href="#i-image"></use></svg></span></sc-if>
+<span class="pl-nt"><a class="pl-link" href="{{r.href}}" aria-label="{{r.aria}}"><span class="{{r.nameCls}}">{{r.name}}</span></a><span class="pl-tl">{{r.tagline}}</span><span class="pl-sub">{{r.sub}}</span></span>
+</span>
+<span class="pl-st">
+<span class="{{r.pstCls}}"><i></i>{{r.stLabel}}</span>
+<sc-if value="{{r.isDraft}}" hint-placeholder-val="{{false}}"><span class="pst-sub"><span class="pst-prog"><b style="width: {{r.pct}}"></b></span>{{r.done}} of 5 done</span></sc-if>
+<sc-if value="{{r.isWorking}}" hint-placeholder-val="{{false}}"><span class="pst-sub"><svg class="vz-icon"><use href="#i-lock"></use></svg>Private to your team</span></sc-if>
+<sc-if value="{{r.isPub}}" hint-placeholder-val="{{true}}"><span class="pst-sub"><svg class="vz-icon"><use href="#i-globe"></use></svg>In marketplace</span></sc-if>
+</span>
+<span class="{{r.dateCls}}">{{r.dates}}</span>
+<span class="{{r.valueCls}}">{{r.value}}</span>
+<span class="{{r.reachCls}}">{{r.reach}}</span>
+<span class="pl-meta dim pl-hide">{{r.upd}}</span>
+<span class="pl-acts">
+<sc-if value="{{r.isDraft}}" hint-placeholder-val="{{false}}"><a class="vz-btn vz-btn--secondary sm" href="{{lkx.cont}}">Continue</a></sc-if>
+<sc-if value="{{r.isWorking}}" hint-placeholder-val="{{false}}"><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{r.publish}}"><svg class="vz-icon sm"><use href="#i-globe"></use></svg>Publish</button></sc-if>
+<div class="{{r.menuCls}}" data-kind="menu">
+<button type="button" class="iconbtn pl-more" data-tooltip="More actions" aria-haspopup="menu" aria-expanded="{{r.menuOpen}}" aria-label="{{r.moreAria}}" onClick="{{r.toggleMenu}}"><svg class="vz-icon"><use href="#i-ellipsis"></use></svg></button>
+<div class="vzpop-panel menu right" role="menu" aria-label="Project actions">
+<a class="vzopt" role="menuitem" href="{{lkx.full}}"><svg class="vz-icon sm"><use href="#i-pencil"></use></svg>Edit in full form</a>
+<sc-if value="{{r.canPreview}}" hint-placeholder-val="{{true}}"><a class="vzopt" role="menuitem" href="{{r.previewHref}}"><svg class="vz-icon sm"><use href="#i-eye"></use></svg>Preview as sponsor</a></sc-if>
+<button type="button" class="vzopt" role="menuitem" onClick="{{r.duplicate}}"><svg class="vz-icon sm"><use href="#i-copy"></use></svg>Duplicate</button>
+<div class="vzsep" role="separator"></div>
+<sc-if value="{{r.isPub}}" hint-placeholder-val="{{true}}"><button type="button" class="vzopt" role="menuitem" onClick="{{r.unpublish}}"><svg class="vz-icon sm"><use href="#i-eye-off"></use></svg>Unpublish</button></sc-if>
+<sc-if value="{{r.canDelete}}" hint-placeholder-val="{{false}}"><button type="button" class="vzopt danger" role="menuitem" onClick="{{r.askDelete}}"><svg class="vz-icon sm"><use href="#i-trash-2"></use></svg>Delete</button></sc-if>
+</div>
+</div>
+</span>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{showCardView}}" hint-placeholder-val="{{false}}">
+<div class="pc-grid">
+<sc-for list="{{rows}}" as="c" hint-placeholder-count="7">
+<article class="{{c.cardCls}}" data-proto-id="{{c.id}}" data-proto-kind="project">
+<sc-if value="{{c.isCover}}" hint-placeholder-val="{{false}}"><div class="pc-media pl-cover-a"><span class="{{c.pstMedia}}"><i></i>{{c.stLabel}}</span></div></sc-if>
+<sc-if value="{{c.isGrad}}" hint-placeholder-val="{{true}}"><div class="pc-media" style="background: {{c.media}}"><span class="{{c.pstMedia}}"><i></i>{{c.stLabel}}</span></div></sc-if>
+<sc-if value="{{c.noMedia}}" hint-placeholder-val="{{false}}"><div class="pc-media empty"><svg class="vz-icon"><use href="#i-image"></use></svg><span class="{{c.pstMedia}}"><i></i>{{c.stLabel}}</span></div></sc-if>
+<div class="pc-top">
+<div class="{{c.menuCls}}" data-kind="menu">
+<button type="button" class="pc-ib" data-tooltip="More actions" data-tooltip-pos="bottom" aria-haspopup="menu" aria-expanded="{{c.menuOpen}}" aria-label="{{c.moreAria}}" onClick="{{c.toggleMenu}}"><svg class="vz-icon"><use href="#i-ellipsis"></use></svg></button>
+<div class="vzpop-panel menu right" role="menu" aria-label="Project actions">
+<a class="vzopt" role="menuitem" href="{{lkx.full}}"><svg class="vz-icon sm"><use href="#i-pencil"></use></svg>Edit in full form</a>
+<sc-if value="{{c.canPreview}}" hint-placeholder-val="{{true}}"><a class="vzopt" role="menuitem" href="{{c.previewHref}}"><svg class="vz-icon sm"><use href="#i-eye"></use></svg>Preview as sponsor</a></sc-if>
+<button type="button" class="vzopt" role="menuitem" onClick="{{c.duplicate}}"><svg class="vz-icon sm"><use href="#i-copy"></use></svg>Duplicate</button>
+<div class="vzsep" role="separator"></div>
+<sc-if value="{{c.isPub}}" hint-placeholder-val="{{true}}"><button type="button" class="vzopt" role="menuitem" onClick="{{c.unpublish}}"><svg class="vz-icon sm"><use href="#i-eye-off"></use></svg>Unpublish</button></sc-if>
+<sc-if value="{{c.canDelete}}" hint-placeholder-val="{{false}}"><button type="button" class="vzopt danger" role="menuitem" onClick="{{c.askDelete}}"><svg class="vz-icon sm"><use href="#i-trash-2"></use></svg>Delete</button></sc-if>
+</div>
+</div>
+</div>
+<div class="pc-body">
+<h3 class="{{c.titleCls}}"><a class="pc-link" href="{{c.href}}" aria-label="{{c.aria}}">{{c.name}}</a></h3>
+<p class="{{c.tagCls}}">{{c.taglineCard}}</p>
+<sc-if value="{{c.hasTags}}" hint-placeholder-val="{{true}}"><div class="pc-tags"><sc-for list="{{c.tags}}" as="t"><span>{{t}}</span></sc-for></div></sc-if>
+<dl class="pc-facts">
+<div><dt>Investment</dt><dd class="{{c.valueDd}}">{{c.value}}</dd></div>
+<div><dt>Reach</dt><dd class="{{c.reachDd}}">{{c.reach}}</dd></div>
+<div><dt>Dates</dt><dd class="{{c.dateDd}}">{{c.dates}}</dd></div>
+</dl>
+<sc-if value="{{c.isDraft}}" hint-placeholder-val="{{false}}"><div class="pc-setup"><span class="pst-prog"><b style="width: {{c.pct}}"></b></span>{{c.done}} of 5 sections done</div></sc-if>
+<div class="pc-foot">
+<sc-if value="{{c.isDraft}}" hint-placeholder-val="{{false}}"><a class="vz-btn vz-btn--secondary" href="{{lkx.cont}}"><svg class="vz-icon sm"><use href="#i-pencil"></use></svg>Continue setup</a></sc-if>
+<sc-if value="{{c.isWorking}}" hint-placeholder-val="{{false}}"><a class="vz-btn vz-btn--secondary" href="{{lkx.wprev}}"><svg class="vz-icon sm"><use href="#i-eye"></use></svg>Preview</a><button type="button" class="vz-btn vz-btn--primary" onClick="{{c.publish}}"><svg class="vz-icon sm"><use href="#i-globe"></use></svg>Publish</button></sc-if>
+<sc-if value="{{c.isPub}}" hint-placeholder-val="{{true}}"><a class="vz-btn vz-btn--secondary" href="{{c.href}}"><svg class="vz-icon sm"><use href="#i-eye"></use></svg>View project</a><button type="button" class="vz-btn vz-btn--secondary fit" aria-label="Copy link" data-tooltip="Copy link" onClick="{{c.share}}"><svg class="vz-icon sm"><use href="#i-link"></use></svg></button></sc-if>
+</div>
+</div>
+</article>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{noResults}}" hint-placeholder-val="{{false}}">
+<div class="vzempty compact plain"><div class="vzempty-ic"><svg class="vz-icon"><use href="#i-search"></use></svg></div><h4>{{emptyTitle}}</h4><p>{{emptyText}}</p><div class="vzempty-actions"><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{clear}}">Clear filters</button></div></div>
+</sc-if>
+</sc-if>
+
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}">
+<section class="pl-first" aria-labelledby="pl-first-t">
+<h2 id="pl-first-t">Create your first project</h2>
+<p>Projects are what sponsors discover in the marketplace. Setting one up takes about 3 minutes.</p>
+<div class="pl-first-cta">
+<a class="vz-btn vz-btn--primary lg" href="{{crFirst}}"><svg class="vz-icon sm"><use href="#i-plus"></use></svg>Create project</a>
+</div>
+<ol class="pl-life" aria-label="How a project goes live">
+<li><span class="pst draft"><i></i>Draft</span><span>Set it up</span></li>
+<li><span class="pst working"><i></i>Working</span><span>Private to your team</span></li>
+<li><span class="pst published"><i></i>Published</span><span>Live to sponsors</span></li>
+</ol>
+</section>
+</sc-if>
+</main>
+
+<sc-if value="{{dlgPublish}}" hint-placeholder-val="{{false}}">
+<div class="vzdlg-backdrop open" onClick="{{onBackdrop}}" onKeyDown="{{onDlgKey}}">
+<div class="vzdlg sm" role="dialog" aria-modal="true" aria-labelledby="pl-pub-t">
+<div class="vzdlg-head"><div class="vzdlg-ic info"><svg class="vz-icon"><use href="#i-globe"></use></svg></div><div><h3 class="vzdlg-title" id="pl-pub-t">Publish “{{dlgName}}”?</h3></div></div>
+<div class="vzdlg-body">It will appear in the marketplace, where sponsors can view packages and add it to their wishlist. You can unpublish at any time.</div>
+<div class="vzdlg-foot"><button type="button" class="vz-btn vz-btn--secondary" onClick="{{closeDlg}}">Cancel</button><button type="button" class="vz-btn vz-btn--primary" onClick="{{confirmPublish}}"><svg class="vz-icon sm"><use href="#i-globe"></use></svg>Publish</button></div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{dlgDelete}}" hint-placeholder-val="{{false}}">
+<div class="vzdlg-backdrop open" onClick="{{onBackdrop}}" onKeyDown="{{onDlgKey}}">
+<div class="vzdlg sm" role="alertdialog" aria-modal="true" aria-labelledby="pl-del-t">
+<div class="vzdlg-head"><div class="vzdlg-ic danger"><svg class="vz-icon"><use href="#i-trash-2"></use></svg></div><div><h3 class="vzdlg-title" id="pl-del-t">Delete “{{dlgName}}”?</h3></div></div>
+<div class="vzdlg-body">This permanently removes the project, its media and packages. It can't be undone.</div>
+<div class="vzdlg-foot"><button type="button" class="vz-btn vz-btn--secondary" onClick="{{closeDlg}}">Cancel</button><button type="button" class="vz-btn vz-btn--danger" onClick="{{confirmDelete}}">Delete project</button></div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{hasToast}}" hint-placeholder-val="{{false}}">
+<div class="vztoast-region bc"><div class="vztoast success" role="status"><span class="ti"><svg class="vz-icon vz-icon--fill"><use href="#i-circle-check-fill"></use></svg></span><div class="tc"><div class="tt">{{toast}}</div></div><button type="button" class="tx" aria-label="Dismiss" onClick="{{dismissToast}}"><svg class="vz-icon sm"><use href="#i-x"></use></svg></button></div></div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"brand":{"editor":"enum","options":["mark","lockup","stacked"],"default":"lockup","section":"Brand"},"brandTone":{"editor":"enum","options":["gray","white","gradient"],"default":"white","section":"Brand"},"brandSize":{"editor":"enum","options":["28","26","24","38","44","64"],"default":"24","section":"Brand"},"navLayout":{"editor":"enum","options":["left","centered","brand-center"],"default":"centered","section":"Header"},"headerWidth":{"editor":"enum","options":["default","wide","fluid","app"],"default":"fluid","section":"Header"},"headerTone":{"editor":"enum","options":["flat","raised"],"default":"raised","section":"Header"},"account":{"editor":"enum","options":["full","avatar"],"default":"avatar","section":"Header"},"listWidth":{"editor":"enum","options":["centered","full"],"default":"full","section":"Header"},"flowRow":{"editor":"boolean","default":true,"section":"State"},"headerHeight":{"editor":"enum","options":["60","88"],"default":"60","section":"Header"},"searchMode":{"editor":"enum","options":["field","takeover","page"],"default":"takeover","section":"Header"},"searchOpen":{"editor":"boolean","default":false,"section":"Header"},"searchQuery":{"editor":"string","default":"","section":"Header"},"searchHighlight":{"editor":"int","default":-1,"min":-1,"max":12,"section":"Header"},"searchStatus":{"editor":"enum","options":["ready","loading","error"],"default":"ready","section":"Header"},"searchHistory":{"editor":"boolean","default":true,"section":"Header"},"scenario":{"editor":"enum","options":["populated","menu","publish","empty"],"default":"populated","section":"State"},"view":{"editor":"enum","options":["auto","cards","list"],"default":"auto","section":"State"},"$preview":{"width":1440,"height":1240}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    if (window.Venzza) window.Venzza.mountIcons();
+    this.onDown = (e) => {
+      const s = this.state || {};
+      const inPop = e.target.closest && e.target.closest('.vzpop');
+      if (inPop) return;
+      if (s.sortOpen) this.setState({ sortOpen: false });
+      if (this.menuFor()) this.setState({ menuFor: null });
+    };
+    document.addEventListener('mousedown', this.onDown);
+  }
+  componentWillUnmount() { document.removeEventListener('mousedown', this.onDown); }
+  componentDidUpdate(prev) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    if (prev.view !== this.props.view || prev.scenario !== this.props.scenario) this.setState({ view: undefined, menuFor: undefined, dlg: undefined });
+  }
+  menuFor() { const s = this.state || {}; return s.menuFor !== undefined ? s.menuFor : (this.props.scenario === 'menu' ? 'p4' : null); }
+  dlg() { const s = this.state || {}; return s.dlg !== undefined ? s.dlg : (this.props.scenario === 'publish' ? { kind: 'publish', id: 'p4' } : null); }
+  // Living prototype: the user's own projects; list actions are saved back.
+  protoRows() {
+    const P = window.VzProto;
+    return P.data().projects.slice().reverse().map((p) => {
+      const pd = p.pd || {}, pk = pd.pkgs || [];
+      const reachN = parseFloat(('' + (p.reach || '')).replace(/[^0-9.]/g, '')) || 0;
+      const r = pd.reach || { social: [], media: [], venues: [] };
+      const prices = pk.map((x) => parseFloat(('' + x.price).replace(/[^0-9.]/g, ''))).filter((n) => n > 0);
+      const k = (n) => n >= 1000 ? '$' + Math.round(n / 1000) + 'K' : '$' + n;
+      const hasCover = pd.cover !== undefined ? pd.cover : p.cover;
+      const done = [p.name && p.desc, hasCover, (r.social.length + r.media.length + r.venues.length) > 0, pk.length > 0, (pd.gallery || []).length > 0].filter(Boolean).length;
+      return { id: p.id, name: p.name || '', tagline: p.tagline || '', cat: p.category || '', tags: p.audience || [], org: p.org || '', loc: p.location || '', st: p.status || 'draft', done: done,
+        dates: P.fmtDates(p.start, p.end), ds: p.start ? parseInt(p.start.replace(/-/g, ''), 10) : 0,
+        value: prices.length ? (prices.length > 1 ? k(Math.min.apply(null, prices)) + '–' + k(Math.max.apply(null, prices)) : k(prices[0])) : '', vMax: prices.length ? Math.max.apply(null, prices) : -1,
+        reachN, upd: P.ago(p.updated), u: p.updated || 0, media: hasCover ? 'cover' : P.grad(p.id) };
+    });
+  }
+  protoSync() {
+    const P = window.VzProto, s = this.state || {};
+    Object.keys(s.st || {}).forEach((id) => { const p = P.data().projects.find((x) => x.id === id); if (p && p.status !== s.st[id]) P.putProject({ id, status: s.st[id], pd: Object.assign({}, p.pd || {}, { status: s.st[id] }) }); });
+    Object.keys(s.del || {}).forEach((id) => { if (s.del[id]) P.remove('projects', id); });
+  }
+  renderVals() { const v = this.renderVals0(); v.brand = this.props.brand || 'lockup'; v.brandTone = this.props.brandTone || 'white'; v.brandSize = String(this.props.brandSize || '24'); v.navLayout = this.props.navLayout || 'centered'; v.headerWidth = this.props.headerWidth || 'fluid'; v.headerTone = this.props.headerTone || 'raised'; v.account = this.props.account || 'avatar'; v.mainCls = 'canvas' + (this.props.listWidth !== 'centered' ? ' canvas-fluid' : ''); v.headerHeight = String(this.props.headerHeight || '60'); v.searchMode = this.props.searchMode || 'takeover'; v.searchOpen = this.props.searchOpen === true || this.props.searchOpen === 'true'; v.searchQuery = this.props.searchQuery || ''; v.searchHighlight = this.props.searchHighlight ?? -1; v.searchStatus = this.props.searchStatus || 'ready'; v.searchHistory = String(this.props.searchHistory) !== 'false'; return v; }
+  renderVals0() {
+    if (window.VzProto) { clearTimeout(this._ps); this._ps = setTimeout(() => this.protoSync(), 0); }
+    const s = this.state || {};
+    const sc = this.props.scenario || 'populated';
+    const pv = this.props.view; let pref = null; try { pref = localStorage.getItem('vz-projects-view'); } catch (e) {}
+    const sc0 = this.props.scenario || 'populated';
+    const view = s.view || (pv === 'list' || pv === 'cards' ? pv : (sc0 === 'menu' || sc0 === 'publish' ? 'list' : (pref === 'list' || pref === 'cards' ? pref : 'cards')));
+    const filter = s.filter || 'all';
+    const cat = s.cat || 'all';
+    const sortKey = s.sort || 'updated';
+    const dir = s.dir || 'desc';
+    const q = (s.q || '').trim().toLowerCase();
+    const stOver = s.st || {};
+    const del = s.del || {};
+    const extra = s.extra || [];
+    const menuFor = this.menuFor();
+    const dlg = this.dlg();
+
+    const base = window.VzProto ? this.protoRows() : sc === 'empty' ? [] : [
+      { id: 'p7', name: '', tagline: '', cat: '', tags: [], org: '', st: 'draft', done: 1, dates: '', ds: 0, value: '', vMax: -1, reachN: 0, upd: 'Just now', u: 10, media: '' },
+      { id: 'p4', name: 'Summer Bass Series', tagline: 'Six warehouse nights of bass music and live visuals', cat: 'Live events', tags: ['Music', 'Nightlife'], org: 'Warehouse 9', loc: 'London, UK', st: 'working', done: 5, dates: 'Jul 12 – Aug 30', ds: 20270712, value: '$2K–$15K', vMax: 15000, reachN: 2400000, upd: '1h ago', u: 9, media: 'linear-gradient(135deg,#0f4c81,#2a9d8f)' },
+      { id: 'p1', name: '3D Projection mapping', tagline: 'Quantum design exploration through consciousness', cat: 'Technology', tags: ['AI', 'Art', 'Visual design'], org: 'Justaverse', loc: 'São Paulo, BR', st: 'published', done: 5, dates: 'Sep 24 – Sep 29', ds: 20260924, value: 'On request', vMax: 0, reachN: 1200000, upd: '2h ago', u: 8, media: 'url(assets/img/robot-glowing-eye.jpg) center / cover' },
+      { id: 'p5', name: 'Aurora Field Sessions', tagline: 'Ambient sets recorded under the northern lights', cat: 'Music', tags: ['Ambient', 'Film'], org: 'Meridian Hall', loc: 'Reykjavík, IS', st: 'working', done: 5, dates: 'Nov 6 – Dec 12', ds: 20261106, value: '$8K–$40K', vMax: 40000, reachN: 480000, upd: '5h ago', u: 7, media: 'linear-gradient(135deg,#0b3d5c,#2a9d8f)' },
+      { id: 'p2', name: 'Projection Mapping & VX Artists', tagline: 'A touring residency pairing VX artists with city landmarks', cat: 'Art & culture', tags: ['Projection', 'Touring'], org: 'Neon Lotus', loc: 'Berlin, DE', st: 'published', done: 5, dates: 'Mar 1 – Jun 30', ds: 20270301, value: '$10K–$50K', vMax: 50000, reachN: 5100000, upd: 'Yesterday', u: 6, media: 'linear-gradient(135deg,#3a1c71,#4a3f8c,#1e6b5c)' },
+      { id: 'p3', name: 'Amazing Tech Festival', tagline: 'Three days of talks, demos and live builds', cat: 'Technology', tags: ['Tech', 'Live'], org: 'Northlight', loc: 'Lisbon, PT', st: 'published', done: 5, dates: 'Oct 3 – Oct 5', ds: 20261003, value: '$5K–$25K', vMax: 25000, reachN: 860000, upd: 'Sep 26', u: 5, media: 'linear-gradient(135deg,#1e2a44,#3a5a8c)' },
+      { id: 'p6', name: 'Alpine Light Installation', tagline: '', cat: 'Art & culture', tags: [], org: 'Basin Arts', loc: 'Zurich, CH', st: 'draft', done: 3, dates: '', ds: 0, value: '', vMax: -1, reachN: 0, upd: 'Sep 21', u: 4, media: 'linear-gradient(135deg,#1e6b5c,#3a1c71)' }
+    ];
+    const SAHARA = { id: 'pss', name: 'Sahara Sound Festival 2027', tagline: 'Two weekends of music, art and desert sunsets', cat: 'Music', tags: ['Music', 'Art'], org: 'Sahara Sound Collective', loc: 'Indio, CA', st: 'published', done: 5, dates: 'Apr 9 – Apr 18', ds: 20270409, value: '$50K-$250K', vMax: 250000, reachN: 642000, upd: 'Just now', u: 11, media: 'url(assets/img/sahara-main-stage.jpg) center / cover', href: 'PN-Project-Owner.dc.html' };
+    const flow = this.props.flowRow !== false && this.props.flowRow !== 'false';
+    const all = (flow && sc !== 'empty' ? [SAHARA] : []).concat(base, extra).filter((p) => !del[p.id]).map((p) => Object.assign({}, p, { st: stOver[p.id] || p.st }));
+    const byId = (id) => all.find((p) => p.id === id);
+    const title = (p) => p.name || 'Untitled project';
+    const LABEL = { draft: 'Draft', working: 'Working', published: 'Published' };
+    const ORDER = { draft: 0, working: 1, published: 2 };
+    const fmt = (n) => n >= 1e6 ? (n / 1e6).toFixed(1).replace(/\.0$/, '') + 'M' : n >= 1e3 ? Math.round(n / 1e3) + 'K' : String(n);
+
+    const count = (k) => all.filter((p) => k === 'all' || p.st === k).length;
+    const catList = ['all'].concat(Array.from(new Set(base.map((p) => p.cat).filter(Boolean))));
+    let list = all.filter((p) => (filter === 'all' || p.st === filter)
+      && (cat === 'all' || p.cat === cat)
+      && (!q || [p.name, p.tagline, p.cat, p.org, (p.tags || []).join(' ')].join(' ').toLowerCase().indexOf(q) > -1));
+
+    const SORT = {
+      name: { label: 'Project', first: 'asc', v: (p) => title(p).toLowerCase() },
+      status: { label: 'Status', first: 'asc', v: (p) => ORDER[p.st] },
+      dates: { label: 'Dates', first: 'asc', v: (p) => p.ds || 99999999 },
+      value: { label: 'Value', first: 'desc', v: (p) => p.vMax },
+      reach: { label: 'Reach', first: 'desc', v: (p) => p.reachN },
+      updated: { label: 'Updated', first: 'desc', v: (p) => p.u }
+    };
+    const cur = SORT[sortKey];
+    list = list.slice().sort((a, b) => {
+      const x = cur.v(a), y = cur.v(b);
+      const r = x < y ? -1 : x > y ? 1 : 0;
+      return dir === 'asc' ? r : -r;
+    });
+    const pickSort = (k) => {
+      if (k === sortKey) this.setState({ dir: dir === 'asc' ? 'desc' : 'asc' });
+      else this.setState({ sort: k, dir: SORT[k].first });
+    };
+
+    const setStatus = (id, st, msg) => this.setState({ st: Object.assign({}, stOver, { [id]: st }), menuFor: null, dlg: null, toast: msg });
+
+    const rows = list.map((p) => {
+      const isDraft = p.st === 'draft', isWorking = p.st === 'working', isPub = p.st === 'published';
+      const open = menuFor === p.id;
+      const name = title(p);
+      return {
+        id: p.id, name, tagline: p.tagline || (isDraft ? 'Add a tagline' : ''),
+        taglineCard: p.tagline || 'No tagline yet',
+        tagCls: p.tagline ? 'pc-tag' : 'pc-tag dim',
+        sub: [p.cat, p.org, p.loc].filter(Boolean).join(' · ') || 'Basics not started',
+        nameCls: p.name ? 'pl-nm' : 'pl-nm dim',
+        titleCls: p.name ? 'pc-title' : 'pc-title dim',
+        isCover: p.media === 'cover', isGrad: !!p.media && p.media !== 'cover', noMedia: !p.media, media: p.media,
+        tags: [p.cat].concat(p.tags || []).filter(Boolean), hasTags: !!p.cat,
+        isDraft, isWorking, isPub, canPreview: !isDraft, canDelete: !isPub,
+        stLabel: LABEL[p.st], pstCls: 'pst ' + p.st, pstMedia: 'pst on-media ' + p.st,
+        done: p.done, pct: Math.round(p.done / 5 * 100) + '%',
+        dates: p.dates || 'Not set', dateCls: p.dates ? 'pl-meta pl-hide' : 'pl-meta dim pl-hide', dateDd: p.dates ? '' : 'dim',
+        value: p.value || 'Not set', valueCls: p.vMax > 0 ? 'pl-meta strong pl-hide' : 'pl-meta dim pl-hide', valueDd: p.vMax > 0 ? '' : 'dim',
+        reach: p.reachN > 0 ? fmt(p.reachN) : '—', reachCls: p.reachN > 0 ? 'pl-meta pl-hide' : 'pl-meta dim pl-hide', reachDd: p.reachN > 0 ? '' : 'dim',
+        upd: p.upd,
+        href: p.href ? p.href : flow ? (isDraft ? 'PN-New-Overview.dc.html' : isWorking ? 'PN-Overview.dc.html' : 'PN-Project-Owner.dc.html') : isDraft ? 'ProjectDetail-Draft.dc.html' : isWorking ? 'ProjectDetail-Working.dc.html' : 'ProjectDetail.dc.html',
+        previewHref: p.id === 'pss' ? 'PN-Project-AsSponsor.dc.html' : flow ? 'PN-Project-Preview.dc.html' : isWorking ? 'ProjectDetail-WorkingPreview.dc.html' : 'ProjectDetail-Sponsor.dc.html',
+        aria: name + ', ' + LABEL[p.st],
+        moreAria: 'More actions for ' + name,
+        rowCls: open ? 'pl-row pl-cols menu-open' : 'pl-row pl-cols',
+        cardCls: open ? 'pc menu-open' : 'pc',
+        menuOpen: open, menuCls: open ? 'vzpop open' : 'vzpop',
+        toggleMenu: () => this.setState({ menuFor: open ? null : p.id, sortOpen: false }),
+        publish: () => this.setState({ dlg: { kind: 'publish', id: p.id }, menuFor: null }),
+        askDelete: () => this.setState({ dlg: { kind: 'delete', id: p.id }, menuFor: null }),
+        unpublish: () => setStatus(p.id, 'working', name + ' moved to Working. Sponsors can no longer see it.'),
+        duplicate: () => {
+          const n = extra.length + 1;
+          const copy = Object.assign({}, p, { id: p.id + '-c' + n, name: 'Copy of ' + name, st: isDraft ? 'draft' : 'working', upd: 'Just now', u: 20 + n });
+          this.setState({ extra: extra.concat([copy]), menuFor: null, toast: 'Copy created in ' + (isDraft ? 'Draft' : 'Working') + '. Copies are never published automatically.' });
+        },
+        share: () => this.setState({ toast: 'Link to ' + name + ' copied.' })
+      };
+    });
+
+    const dp = dlg ? byId(dlg.id) : null;
+    const FILTERS = [['all', 'All'], ['draft', 'Draft'], ['working', 'Working'], ['published', 'Published']];
+    const CARD_SORTS = [['updated', 'Recently updated'], ['name', 'Name A–Z'], ['value', 'Value: high to low'], ['reach', 'Reach: high to low']];
+    const COLS = [['name', 'Project', ''], ['status', 'Status', ''], ['dates', 'Dates', 'pl-hide'], ['value', 'Value', 'pl-hide'], ['reach', 'Reach', 'pl-hide'], ['updated', 'Updated', 'pl-hide']];
+    return {
+      flowLinks: (this.props.flowRow !== false && this.props.flowRow !== 'false') ? 'true' : 'false',
+      lkx: flow ? { cont: 'PN-New-Overview.dc.html', full: 'PN-Overview.dc.html', wprev: 'PN-Project-Preview.dc.html' } : { cont: 'ProjectDetail-DraftChecklist.dc.html', full: 'ProjectForm-Edit.dc.html', wprev: 'ProjectDetail-WorkingPreview.dc.html' },
+      crNew: (this.props.flowRow !== false && this.props.flowRow !== 'false') ? 'CR-NewProject.dc.html' : 'ProjectForm.dc.html', crFirst: (this.props.flowRow !== false && this.props.flowRow !== 'false') ? 'OB-Project-FirstTime.dc.html' : 'ProjectOnboarding.dc.html',
+      badge: 0,
+      hasAny: all.length > 0, isEmpty: all.length === 0,
+      filters: FILTERS.map((f) => ({ label: f[1], count: count(f[0]), sel: filter === f[0], pick: () => this.setState({ filter: f[0] }) })),
+      cats: catList.map((c) => ({ label: c === 'all' ? 'All categories' : c, sel: cat === c, pick: () => this.setState({ cat: c }) })),
+      q: s.q || '', onSearch: (e) => this.setState({ q: e.target.value }), hasQ: !!(s.q), clearQ: (e) => { this.setState({ q: '' }); const f = e && e.currentTarget && e.currentTarget.parentNode && e.currentTarget.parentNode.querySelector('input'); if (f) f.focus(); }, onSearchKey: (e) => { if (e.key === 'Escape' && e.target.value) { e.preventDefault(); this.setState({ q: '' }); } },
+      heads: COLS.map((c) => {
+        const sel = sortKey === c[0];
+        return {
+          label: c[1], sel, cls: c[2],
+          icon: sel ? (dir === 'asc' ? 'i-arrow-up' : 'i-arrow-down') : 'i-chevrons-up-down',
+          aria: 'Sort by ' + c[1] + (sel ? (dir === 'asc' ? ', ascending' : ', descending') : ''),
+          pick: () => pickSort(c[0])
+        };
+      }),
+      sortOpen: !!s.sortOpen, sortCls: s.sortOpen ? 'vzpop open' : 'vzpop',
+      sortLabel: (CARD_SORTS.find((o) => o[0] === sortKey) || ['', SORT[sortKey].label])[1],
+      toggleSort: () => this.setState({ sortOpen: !s.sortOpen, menuFor: null }),
+      sorts: CARD_SORTS.map((o) => ({ label: o[1], sel: sortKey === o[0], pick: () => this.setState({ sort: o[0], dir: SORT[o[0]].first, sortOpen: false }) })),
+      isList: view === 'list', isCards: view === 'cards',
+      showList: () => { try { localStorage.setItem('vz-projects-view', 'list'); } catch (e) {} this.setState({ view: 'list', menuFor: null }); }, showCards: () => { try { localStorage.setItem('vz-projects-view', 'cards'); } catch (e) {} this.setState({ view: 'cards', menuFor: null }); },
+      rows,
+      showListView: view === 'list' && rows.length > 0,
+      showCardView: view === 'cards' && rows.length > 0,
+      noResults: all.length > 0 && rows.length === 0,
+      emptyTitle: filter !== 'all' && !q && cat === 'all' ? 'No ' + LABEL[filter] + ' projects' : 'No projects found',
+      emptyText: filter === 'working' && !q && cat === 'all' ? 'Projects move here when setup is complete. They stay private until you publish.' : 'Try a different search or clear the filters to see everything.',
+      clear: () => this.setState({ q: '', filter: 'all', cat: 'all' }),
+      dlgPublish: !!dp && dlg.kind === 'publish', dlgDelete: !!dp && dlg.kind === 'delete',
+      dlgName: dp ? title(dp) : '',
+      closeDlg: () => this.setState({ dlg: null }),
+      onBackdrop: (e) => { if (e.target === e.currentTarget) this.setState({ dlg: null }); },
+      onDlgKey: (e) => { if (e.key === 'Escape') this.setState({ dlg: null }); },
+      confirmPublish: () => dp && setStatus(dp.id, 'published', title(dp) + ' is live in the marketplace.'),
+      confirmDelete: () => dp && this.setState({ del: Object.assign({}, del, { [dp.id]: true }), dlg: null, toast: title(dp) + ' was deleted.' }),
+      hasToast: !!s.toast, toast: s.toast || '',
+      dismissToast: () => this.setState({ toast: '' })
+    };
+  }
+}
+</script>
+<script src="assets/components.js"></script><script>(function(m){var o={};for(var k in m)o["./"+k]=new Blob([m[k]],{type:"text/html"});window.__resourceBlobs=o;window.__resources={};})(window.__VZ_SRC||{});</script><script src="assets/vendor/react.production.min.js"></script><script src="assets/vendor/react-dom.production.min.js"></script><script src="assets/vendor/dc-runtime.js"></script><script src="assets/prototype-map.js"></script><script src="assets/proto-bar.js"></script>
+</body>
+</html>

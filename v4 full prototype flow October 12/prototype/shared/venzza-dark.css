@@ -1,0 +1,74 @@
+/* Venzza product canvas is dark-only.
+   The design system scopes its dark theme to :root[data-theme="dark"]; the canvas
+   editor does not reliably keep that attribute on the artboard document, so this file
+   re-applies every dark-theme rule from ds/venzza/components/bundle.css without the
+   attribute (same specificity). Generated from the design system; regenerate it when
+   the design system is updated. */
+:root:not([data-vz-light]){--logo-header:var(--neutral-400);--logo-header-hover:var(--neutral-50);--logo-header-active:var(--lime-400);
+  --bg-canvas:var(--neutral-950);--bg-surface:var(--neutral-900);--bg-surface-raised:var(--neutral-800);--field-bg:var(--neutral-950);
+  --bg-inset:var(--neutral-950);
+--bg-surface-deep:var(--neutral-925);--bg-overlay:rgba(0,0,0,.7);
+  --text-primary:var(--neutral-50);--text-secondary:var(--neutral-300);--text-tertiary:var(--neutral-400);
+  --text-disabled:var(--neutral-600);--text-inverse:var(--neutral-950);--text-on-cta:var(--neutral-950);--text-link:var(--info-300);
+  --border-subtle:var(--neutral-800);
+--border-on-deep:var(--neutral-900);--border-default:var(--neutral-700);--border-strong:var(--neutral-600);--border-focus:var(--lime-400);
+  --cta-default:var(--lime-400);--cta-hover:var(--lime-300);--cta-active:var(--lime-500);--cta-disabled:var(--neutral-800);--cta-subtle-bg:var(--lime-950);
+  --status-success-bg:var(--success-950);--status-success-border:var(--success-800);--status-success-text:var(--success-200);
+  --status-warning-bg:var(--warning-950);--status-warning-border:var(--warning-800);--status-warning-text:var(--warning-200);
+  --status-error-bg:var(--error-950);--status-error-border:var(--error-800);--status-error-text:var(--error-200);
+  --status-info-bg:var(--info-950);--status-info-border:var(--info-800);--status-info-text:var(--info-200);
+  --shadow-1:0 1px 2px rgba(0,0,0,.5);--shadow-2:0 4px 10px rgba(0,0,0,.55);--shadow-3:0 16px 32px rgba(0,0,0,.6);}
+:root:not([data-vz-light]) .brandlogo .logo-on-light{display:none}
+:root:not([data-vz-light]) .brandlogo .logo-on-dark{display:inline-flex}
+:root:not([data-vz-light]) .g-nav a.active{color:var(--lime-300)}
+:root:not([data-vz-light]) .homecard .hc-ic{color:var(--lime-400)}
+:root:not([data-vz-light]) .vz-badge--lime{color:var(--lime-300)}
+:root:not([data-vz-light]) .vz-tip .bubble{background:var(--neutral-100);color:var(--neutral-950)}
+:root:not([data-vz-light]) .toast{background:var(--lime-400);color:var(--neutral-950)}
+:root:not([data-vz-light]) .vz-btn--tertiary{background:var(--neutral-800)}
+:root:not([data-vz-light]) .vz-btn--tertiary:hover{background:var(--neutral-700)}
+:root:not([data-vz-light]) .vz-btngroup .vz-btn[aria-pressed="true"]{color:var(--lime-300)}
+:root:not([data-vz-light]) .vzopt[aria-selected="true"]{color:var(--lime-300)}
+:root:not([data-vz-light]) .vzopt .vzopt-check{color:var(--lime-400)}
+:root:not([data-vz-light]) .vzopt.danger{color:var(--status-error-text)}
+:root:not([data-vz-light]) .vzchip{color:var(--lime-300)}
+:root:not([data-vz-light]) .vztip-bubble{background:var(--neutral-100);color:var(--neutral-950)}
+:root:not([data-vz-light]) .vzcallout .co-ic{color:var(--lime-400)}
+:root:not([data-vz-light]) .vzcallout.warn .co-ic{color:var(--warning-400)}
+:root:not([data-vz-light]) .vzfloat>input:focus+label{color:var(--lime-400)}
+:root:not([data-vz-light]) .vztab[aria-selected="true"] .tcount{color:var(--lime-300)}
+:root:not([data-vz-light]) .vvtab[aria-selected="true"]{color:var(--lime-300)}
+:root:not([data-vz-light]) .vzstep.current .dot{color:var(--lime-300)}
+:root:not([data-vz-light]) .vzsb-item.active{color:var(--lime-300)}
+:root:not([data-vz-light]) .vz-card .media{background:linear-gradient(120deg,var(--lime-700),var(--info-800))}
+:root:not([data-vz-light]) .vzdt-sort.asc .vz-icon,:root:not([data-vz-light]) .vzdt-sort.desc .vz-icon{color:var(--lime-400)}
+:root:not([data-vz-light]) .vzbar-fill{background:var(--lime-400)}
+:root:not([data-vz-light]) .vzsld-fill{background:var(--lime-400)}
+:root:not([data-vz-light]) .vzsld-handle{border-color:var(--lime-400)}
+:root:not([data-vz-light]) .vzmx-cell.on{color:var(--lime-400)}
+:root:not([data-vz-light]) .vzrole.owner{background:color-mix(in srgb,var(--info-500) 20%,transparent);border-color:transparent;color:var(--info-300)}
+:root:not([data-vz-light]) .vzrole.participant{background:color-mix(in srgb,var(--success-500) 20%,transparent);border-color:transparent;color:var(--success-300)}
+:root:not([data-vz-light]) .vzkb-card .kpill{color:var(--lime-400)}
+:root:not([data-vz-light]) .tpl-ai h5 .vz-icon{color:var(--lime-400)}
+:root:not([data-vz-light]) .vzsoc-stats .eng{color:var(--lime-400)}
+:root:not([data-vz-light]) .vzhi-card h5{color:var(--lime-400)}
+:root:not([data-vz-light]) .vzmx-q{color:var(--info-400)}
+:root:not([data-vz-light]) .tpl-secnav a.on{color:var(--lime-300)}
+:root:not([data-vz-light]) .tpl-statetoggle button.on{color:var(--lime-300)}
+:root:not([data-vz-light]) .vznav-item.active{color:var(--lime-300)}
+:root:not([data-vz-light]) .vznav-item.active .vz-icon{color:var(--lime-400)}
+:root:not([data-vz-light]) .lg-dlrow:hover svg{color:var(--lime-400)}
+:root:not([data-vz-light]) .btable td:last-child{color:var(--lime-300)}
+:root:not([data-vz-light]) .bprinc-card .n{color:var(--lime-400)}
+:root:not([data-vz-light]) .g-pop button.on{color:var(--lime-300)}
+:root:not([data-vz-light]) .g-nav .navwip{color:var(--lime-300)}
+:root:not([data-vz-light]) .mk-badge{color:var(--lime-300)}
+:root:not([data-vz-light]) .mk-badge--promote{color:var(--info-300)}
+:root:not([data-vz-light]) .vznav-mark .logo-on-light{display:none}
+:root:not([data-vz-light]) .vznav-mark .logo-on-dark{display:inline-flex}
+:root:not([data-vz-light]) .ob-eyebrow{color:var(--cta-default)}
+:root:not([data-vz-light]) .obh-ic{color:var(--lime-400)}
+:root:not([data-vz-light]) .vzhdr-brand .logo-on-light{display:none}
+:root:not([data-vz-light]) .vzhdr-brand .logo-on-dark{display:inline-flex}
+:root:not([data-vz-light]) .vzpkg.is-selected{border-color:var(--cta-default)}
+:root:not([data-vz-light]) .vzfit{color:var(--lime-300)}

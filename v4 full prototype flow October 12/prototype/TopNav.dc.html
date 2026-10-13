@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Top navigation (NavTopHeader)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="ds/venzza/components/bundle.css">
+<link rel="stylesheet" href="shared/venzza-dark.css">
+<link rel="stylesheet" href="shared/venzza-app.css">
+<script src="ds/venzza/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<header class="{{hdrCls}}">
+<div class="{{inCls}}">
+<a class="{{brandCls}}" href="{{lnk.home}}" aria-label="Venzza, Home" aria-current="{{cur.home}}"><sc-if value="{{isMark}}" hint-placeholder-val="{{true}}"><svg class="vzhdr-mark" viewBox="0 0 410 424" aria-hidden="true" focusable="false"><path d="M204.942 224.153H108.345L0 0H75.657C88.4625 0 100.139 7.32421 105.711 18.8512L204.942 224.153Z"/><path d="M301.655 224.153H205.056L304.289 18.8511C309.861 7.32412 321.537 0 334.343 0H410L301.655 224.153Z"/><path d="M253.256 324.074L204.956 424L156.658 324.074L204.956 224.149L253.256 324.074Z"/></svg></sc-if><sc-if value="{{isLockup}}" hint-placeholder-val="{{false}}"><svg class="vzhdr-lockup" style="height: {{brandH}}px" viewBox="0 0 800 161" aria-hidden="true" focusable="false"><defs><linearGradient id="vzhdr-lk-grad" gradientUnits="userSpaceOnUse" x1="156" y1="0" x2="64" y2="161"><stop offset="0" stop-color="#EEEFF0"/><stop offset=".5" stop-color="#C3C7CA"/><stop offset="1" stop-color="#92979D"/></linearGradient></defs><path class="w" d="M388.176 49.2953C384.714 44.9136 380.288 41.3572 374.911 38.6389C369.532 35.9197 362.945 34.5601 355.149 34.5601C348.589 34.5601 342.531 35.7346 336.968 38.0838C331.399 40.433 326.609 43.6737 322.592 47.8106C318.569 51.9547 315.418 56.8317 313.131 62.4533C310.839 68.0759 309.696 74.1601 309.696 80.706C309.696 87.2519 310.747 93.3361 312.847 98.9578C314.948 104.58 317.948 109.456 321.846 113.594C325.743 117.732 330.501 120.978 336.129 123.321C341.758 125.663 348.034 126.837 354.958 126.837C370.668 126.837 383.095 121.532 392.239 110.921C393.184 109.826 392.993 108.15 391.836 107.266L383.214 100.68C382.164 99.8757 380.665 100.021 379.786 101.01C376.985 104.151 373.965 106.732 370.728 108.771C366.89 111.179 362.377 112.387 357.185 112.387C353.346 112.387 349.639 111.773 346.052 110.532C342.465 109.299 339.307 107.57 336.592 105.346C333.87 103.122 331.676 100.436 330.005 97.2816C328.743 94.9062 327.964 92.3393 327.653 89.5811C327.487 88.1027 328.684 86.8165 330.17 86.8165H395.463C396.864 86.8165 398 85.681 398 84.2824V80.8838C398 75.2023 397.228 69.6133 395.681 64.1168C394.136 58.6194 391.631 53.6771 388.169 49.289L388.176 49.2953ZM377.5 73.4735H330.223C328.704 73.4735 327.501 72.1475 327.706 70.6427C327.99 68.6038 328.571 66.5512 329.457 64.4859C330.758 61.4638 332.581 58.7119 334.927 56.2376C337.272 53.7696 340.153 51.7633 343.555 50.2123C346.957 48.6686 350.697 47.8967 354.779 47.8967C358.863 47.8967 362.661 48.5434 365.82 49.8432C368.97 51.1429 371.6 52.9315 373.701 55.2145C375.802 57.5047 377.381 60.1903 378.432 63.2787C379.211 65.568 379.733 68.0233 380.003 70.6491C380.156 72.1538 379.007 73.4672 377.494 73.4672L377.5 73.4735Z"/><path class="w" d="M597.04 110.168H552.22C550.053 110.168 548.884 107.628 550.292 105.985L596.366 52.3235C596.762 51.8618 596.98 51.2804 596.98 50.6736V39.317C596.98 37.9184 595.844 36.7837 594.443 36.7837H530.875C529.474 36.7837 528.338 37.9184 528.338 39.317V48.7009C528.338 50.0995 529.474 51.2342 530.875 51.2342H571.07C573.236 51.2342 574.406 53.7684 572.998 55.4182L527.274 108.895C526.885 109.357 526.666 109.938 526.666 110.538V122.079C526.666 123.478 527.802 124.613 529.203 124.613H597.04C598.44 124.613 599.577 123.478 599.577 122.079V112.696C599.577 111.296 598.44 110.162 597.04 110.162V110.168Z"/><path class="w" d="M463.313 34.3281H462.361C441.207 34.3281 423.897 51.6166 423.897 72.7463V122.085C423.897 123.484 425.034 124.619 426.434 124.619H437.752C439.152 124.619 440.289 123.484 440.289 122.085V72.7463C440.289 60.5716 450.173 50.706 462.355 50.706H463.306C475.495 50.706 485.372 60.5779 485.372 72.7463V122.085C485.372 123.484 486.508 124.619 487.909 124.619H499.226C500.627 124.619 501.763 123.484 501.763 122.085V72.7463C501.763 51.6166 484.454 34.3281 463.3 34.3281H463.313Z"/><path class="w" d="M691.341 52.3235C691.737 51.8618 691.955 51.2804 691.955 50.6736V39.317C691.955 37.9184 690.818 36.7837 689.418 36.7837H625.849C624.449 36.7837 623.312 37.9184 623.312 39.317V48.7009C623.312 50.0995 624.449 51.2342 625.849 51.2342H666.044C668.211 51.2342 669.38 53.7684 667.973 55.4119L622.248 108.895C621.859 109.357 621.641 109.938 621.641 110.538V122.079C621.641 123.478 622.777 124.613 624.178 124.613H628.181C628.921 124.613 629.629 124.29 630.11 123.729L641.732 110.162H641.678L691.347 52.3172L691.341 52.3235Z"/><path class="w" d="M692.02 110.168H651.37C649.969 110.168 648.833 111.303 648.833 112.702V122.085C648.833 123.485 649.969 124.619 651.37 124.619H692.02C693.422 124.619 694.557 123.485 694.557 122.085V112.702C694.557 111.303 693.422 110.168 692.02 110.168Z"/><path class="w" d="M293.402 36.7969H279.251C278.544 36.7969 277.91 37.2322 277.665 37.8925L254.397 99.9211C254.119 100.667 253.439 101.029 252.765 101.017C252.098 101.029 251.417 100.667 251.133 99.9211L227.871 37.8925C227.627 37.2322 226.992 36.7969 226.286 36.7969H212.134C210.938 36.7969 210.119 37.9978 210.555 39.107L243.734 123.558C243.985 124.205 244.612 124.634 245.313 124.634H260.23C260.924 124.634 261.552 124.205 261.809 123.558L294.981 39.107C295.417 37.9978 294.598 36.7969 293.402 36.7969Z"/><path class="w" d="M717.027 124.619H731.178C731.886 124.619 732.52 124.184 732.764 123.525L756.032 61.4961C756.31 60.7505 756.99 60.3868 757.664 60.4004C758.331 60.3868 759.012 60.7505 759.296 61.4961L782.565 123.525C782.809 124.184 783.443 124.619 784.15 124.619H798.301C799.497 124.619 800.317 123.419 799.88 122.31L766.702 37.8585C766.451 37.2118 765.823 36.7837 765.123 36.7837H750.205C749.511 36.7837 748.884 37.2118 748.626 37.8585L715.448 122.31C715.012 123.419 715.832 124.619 717.027 124.619Z"/><path class="m" d="M77.978 85.1148H41.2238L0 0H28.7866C33.6589 0 38.1017 2.78113 40.2216 7.15813L77.978 85.1148Z"/><path class="m" d="M114.776 85.1148H78.0214L115.778 7.15807C117.898 2.78109 122.341 0 127.213 0H156L114.776 85.1148Z"/><path class="m" d="M96.3606 123.056L77.9833 161L59.6064 123.056L77.9833 85.1133L96.3606 123.056Z"/></svg></sc-if><sc-if value="{{isStacked}}" hint-placeholder-val="{{false}}"><svg class="vzhdr-lockup vzhdr-stacked" style="height: {{brandH}}px" viewBox="0 0 500 448" aria-hidden="true" focusable="false"><path class="m" d="M250.358 161.212H180.902L103 0H157.399C166.607 0 175.002 5.2676 179.009 13.5579L250.358 161.212Z"/><path class="m" d="M319.897 161.212H250.44L321.791 13.5578C325.797 5.26754 334.193 0 343.401 0H397.8L319.897 161.212Z"/><path class="m" d="M285.097 233.075L250.368 304.943L215.641 233.075L250.368 161.209L285.097 233.075Z"/><path class="w" d="M150.747 381.636C147.811 377.92 144.057 374.904 139.497 372.598C134.935 370.292 129.349 369.139 122.738 369.139C117.174 369.139 112.036 370.135 107.319 372.128C102.595 374.12 98.5333 376.868 95.1264 380.377C91.7141 383.891 89.0419 388.027 87.1027 392.795C85.1588 397.563 84.1895 402.723 84.1895 408.275C84.1895 413.826 85.0804 418.986 86.8619 423.754C88.6434 428.522 91.1872 432.658 94.4933 436.167C97.7987 439.676 101.833 442.429 106.607 444.416C111.381 446.402 116.703 447.398 122.575 447.398C135.899 447.398 146.438 442.899 154.193 433.9C154.994 432.971 154.832 431.55 153.851 430.8L146.539 425.215C145.648 424.532 144.377 424.655 143.631 425.495C141.256 428.158 138.695 430.347 135.95 432.076C132.694 434.118 128.868 435.143 124.464 435.143C121.208 435.143 118.065 434.622 115.022 433.57C111.98 432.524 109.302 431.058 106.999 429.171C104.691 427.285 102.83 425.008 101.413 422.332C100.342 420.318 99.6817 418.141 99.4187 415.802C99.2779 414.548 100.293 413.457 101.553 413.457H156.927C158.115 413.457 159.079 412.494 159.079 411.308V408.426C159.079 403.607 158.423 398.867 157.112 394.206C155.801 389.544 153.677 385.352 150.741 381.631L150.747 381.636ZM141.693 402.141H101.598C100.309 402.141 99.2894 401.016 99.4633 399.74C99.704 398.011 100.197 396.27 100.948 394.519C102.052 391.956 103.598 389.622 105.587 387.524C107.576 385.43 110.019 383.729 112.905 382.414C115.79 381.104 118.962 380.45 122.424 380.45C125.887 380.45 129.108 380.998 131.787 382.101C134.459 383.203 136.689 384.72 138.471 386.656C140.253 388.598 141.592 390.876 142.483 393.495C143.144 395.437 143.587 397.519 143.816 399.746C143.945 401.022 142.97 402.136 141.687 402.136L141.693 402.141Z"/><path class="w" d="M327.881 433.262H289.87C288.033 433.262 287.041 431.108 288.235 429.715L327.31 384.205C327.646 383.814 327.831 383.321 327.831 382.806V373.175C327.831 371.989 326.867 371.026 325.679 371.026H271.767C270.58 371.026 269.616 371.989 269.616 373.175V381.133C269.616 382.319 270.58 383.282 271.767 383.282H305.856C307.694 383.282 308.685 385.431 307.492 386.83L268.714 432.183C268.384 432.575 268.198 433.067 268.198 433.576V443.364C268.198 444.551 269.162 445.513 270.35 445.513H327.881C329.069 445.513 330.033 444.551 330.033 443.364V435.406C330.033 434.219 329.069 433.257 327.881 433.257V433.262Z"/><path class="w" d="M214.458 368.943H213.651C195.71 368.943 181.03 383.605 181.03 401.525V443.368C181.03 444.555 181.994 445.517 183.182 445.517H192.78C193.968 445.517 194.932 444.555 194.932 443.368V401.525C194.932 391.199 203.314 382.832 213.645 382.832H214.452C224.79 382.832 233.166 391.205 233.166 401.525V443.368C233.166 444.555 234.13 445.517 235.317 445.517H244.916C246.103 445.517 247.067 444.555 247.067 443.368V401.525C247.067 383.605 232.387 368.943 214.447 368.943H214.458Z"/><path class="w" d="M407.849 384.206C408.185 383.814 408.37 383.321 408.37 382.806V373.175C408.37 371.989 407.406 371.027 406.218 371.027H352.306C351.119 371.027 350.155 371.989 350.155 373.175V381.133C350.155 382.32 351.119 383.282 352.306 383.282H386.395C388.233 383.282 389.225 385.431 388.031 386.825L349.253 432.183C348.923 432.575 348.737 433.067 348.737 433.577V443.364C348.737 444.551 349.701 445.513 350.889 445.513H354.284C354.912 445.513 355.512 445.24 355.92 444.763L365.776 433.257H365.731L407.854 384.2L407.849 384.206Z"/><path class="w" d="M408.42 433.263H373.945C372.757 433.263 371.794 434.225 371.794 435.412V443.37C371.794 444.557 372.757 445.519 373.945 445.519H408.42C409.609 445.519 410.572 444.557 410.572 443.37V435.412C410.572 434.225 409.609 433.263 408.42 433.263Z"/><path class="w" d="M70.3619 371.036H58.3603C57.7608 371.036 57.2229 371.405 57.0156 371.965L37.282 424.571C37.0466 425.203 36.4695 425.511 35.898 425.5C35.3321 425.511 34.755 425.203 34.5141 424.571L14.786 371.965C14.5787 371.405 14.0408 371.036 13.4413 371.036H1.43976C0.425625 371.036 -0.269143 372.055 0.100652 372.995L28.2388 444.617C28.4517 445.165 28.984 445.529 29.5778 445.529H42.2294C42.8177 445.529 43.35 445.165 43.5684 444.617L71.7009 372.995C72.0708 372.055 71.3759 371.036 70.3619 371.036Z"/><path class="w" d="M429.633 445.519H441.635C442.235 445.519 442.772 445.149 442.979 444.59L462.713 391.985C462.948 391.352 463.525 391.044 464.097 391.055C464.663 391.044 465.24 391.352 465.481 391.985L485.215 444.59C485.422 445.149 485.96 445.519 486.56 445.519H498.561C499.575 445.519 500.27 444.5 499.9 443.56L471.762 371.938C471.549 371.389 471.017 371.026 470.423 371.026H457.771C457.183 371.026 456.651 371.389 456.432 371.938L428.294 443.56C427.924 444.5 428.619 445.519 429.633 445.519Z"/></svg></sc-if></a>
+<nav class="vzhdr-nav" aria-label="Primary" aria-hidden="{{navHidden}}">
+<a class="vzhdr-link" data-nav="campaigns" href="{{lnk.campaigns}}" aria-current="{{cur.campaigns}}">Campaigns<sc-if value="{{hasBadge}}" hint-placeholder-val="{{true}}"><span class="vzhdr-count" aria-label="{{badgeLabel}}">{{badgeText}}</span></sc-if></a>
+<a class="vzhdr-link" href="{{lnk.projects}}" aria-current="{{cur.projects}}">Projects</a>
+<a class="vzhdr-link" href="{{lnk.market}}" aria-current="{{cur.marketplace}}">Marketplace</a>
+</nav>
+<sc-if value="{{isTakeover}}" hint-placeholder-val="{{false}}"><div class="vzs-over" id="vzs-over" role="search">
+<label class="vzs-field"><svg class="vz-icon" aria-hidden="true"><use href="#i-search"></use></svg><input class="vzs-input" type="text" role="combobox" autocomplete="off" aria-autocomplete="list" aria-expanded="{{sOpen}}" aria-controls="vzs-pop" aria-label="Search Venzza" placeholder="Search campaigns, projects and creators" value="{{q}}" onChange="{{onQ}}" onInput="{{onQ}}" onKeyDown="{{onSKey}}"><sc-if value="{{qFull}}" hint-placeholder-val="{{false}}"><button type="button" class="vzs-clear" aria-label="Clear search" onClick="{{clearQ}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-x"></use></svg></button></sc-if></label>
+<div class="vzs-pop" id="vzs-pop" role="listbox" aria-label="Search suggestions">
+<sc-for list="{{sItems}}" as="it" hint-placeholder-count="6"><sc-if value="{{it.head}}" hint-placeholder-val="{{false}}"><div class="vzs-h" role="presentation">{{it.label}}</div></sc-if><sc-if value="{{it.skel}}" hint-placeholder-val="{{false}}"><div class="vzs-skel" aria-hidden="true"><span class="th"></span><span class="l"><i></i><i></i></span></div></sc-if><sc-if value="{{it.hint}}" hint-placeholder-val="{{false}}"><p class="vzs-hint">{{it.label}}</p></sc-if><sc-if value="{{it.rec}}" hint-placeholder-val="{{false}}"><button type="button" class="{{it.cls}}" role="option" aria-selected="{{it.on}}" data-q="{{it.t}}" onClick="{{pickRecent}}"><svg class="vz-icon sm" aria-hidden="true"><use href="#{{it.icon}}"></use></svg><span class="vzs-rt">{{it.t}}</span><svg class="vz-icon sm vzs-go" aria-hidden="true"><use href="#i-arrow-up-right"></use></svg></button></sc-if><sc-if value="{{it.row}}" hint-placeholder-val="{{true}}"><a class="{{it.cls}}" href="{{it.href}}" role="option" aria-selected="{{it.on}}"><span class="{{it.thCls}}" style="background: {{it.bg}}" aria-hidden="true">{{it.ini}}</span><span class="vzs-t"><b>{{it.pre}}<mark>{{it.hit}}</mark>{{it.post}}</b><span>{{it.meta}}</span></span><sc-if value="{{it.hasSt}}" hint-placeholder-val="{{false}}"><span class="{{it.stCls}}"><i></i>{{it.stl}}</span></sc-if></a></sc-if></sc-for>
+<sc-if value="{{sErr}}" hint-placeholder-val="{{false}}"><div class="vzs-none err" role="alert"><b>Search isn’t available right now</b>Check your connection and try again.<button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{retryS}}">Try again</button></div></sc-if><span class="vzs-live" aria-live="polite">{{sLive}}</span>
+<sc-if value="{{noHits}}" hint-placeholder-val="{{false}}"><div class="vzs-none"><b>No matches for “{{q}}”</b>Try a campaign, project or creator name.</div></sc-if>
+<sc-if value="{{showAll}}" hint-placeholder-val="{{false}}"><a class="{{allCls}}" href="SearchPage.dc.html"><svg class="vz-icon sm" aria-hidden="true"><use href="#i-search"></use></svg><span class="vzs-all-t">See all results for “{{q}}”</span><span class="kbd">Enter</span></a></sc-if>
+</div>
+</div>
+<div class="vzs-scrim" aria-hidden="true"></div></sc-if>
+<div class="vzhdr-end">
+<sc-if value="{{isField}}" hint-placeholder-val="{{true}}"><label class="vzhdr-search"><svg class="vz-icon" aria-hidden="true"><use href="#i-search"></use></svg><input class="vz-input" type="search" placeholder="Search..." aria-label="Search"><button type="button" class="vzf-btn" data-clear aria-label="Clear search"><svg class="vz-icon" aria-hidden="true"><use href="#i-x"></use></svg></button></label>
+<button type="button" class="iconbtn vzhdr-search-btn" aria-label="Search"><svg class="vz-icon" aria-hidden="true"><use href="#i-search"></use></svg></button></sc-if>
+<sc-if value="{{isTakeover}}" hint-placeholder-val="{{false}}"><div class="{{sWrapCls}}"><button type="button" class="iconbtn vzs-btn" aria-label="{{sBtnLabel}}" aria-expanded="{{sOpen}}" aria-controls="vzs-over" onClick="{{toggleS}}"><svg class="vz-icon" aria-hidden="true"><use href="#{{sIcon}}"></use></svg></button><span class="nt-tip" role="tooltip">{{sTip}}</span></div></sc-if>
+<sc-if value="{{isPage}}" hint-placeholder-val="{{false}}"><div class="nt-bell vzs-wrap"><a class="iconbtn vzs-btn" href="SearchPage.dc.html" aria-label="Search" aria-current="{{cur.search}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-search"></use></svg></a><span class="nt-tip" role="tooltip">Search · ⌘K</span></div></sc-if>
+<div class="{{bellCls}}" onKeyDown="{{onBellKey}}"><button type="button" class="iconbtn" aria-label="{{bellLabel}}" aria-haspopup="dialog" aria-expanded="{{notifOpen}}" onClick="{{toggleNotif}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-bell"></use></svg><sc-if value="{{bellDot}}" hint-placeholder-val="{{true}}"><span class="ndot"></span></sc-if></button><span class="nt-tip" role="tooltip">{{bellTip}}</span><sc-if value="{{notifOpen}}" hint-placeholder-val="{{false}}"><div class="nt-pop"><dc-import name="NotifPanel" layout="dropdown" role="{{notifRole}}" empty="{{notifEmpty}}" hint-size="400px,560px"></dc-import></div></sc-if></div>
+<span class="vzhdr-div" aria-hidden="true"></span>
+<div class="{{menuCls}}" data-kind="menu" onKeyDown="{{onKey}}">
+<button type="button" class="vzpop-trigger vzhdr-acct" aria-haspopup="menu" aria-expanded="{{open}}" aria-label="Account, Cassiano Coria" onClick="{{toggle}}"><span class="vzav sm c" aria-hidden="true">CC</span><span class="name">Cassiano Coria</span><svg class="vz-icon" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
+<div class="vzpop-panel menu right" role="menu" aria-label="Account">
+<sc-if value="{{acctMin}}" hint-placeholder-val="{{false}}"><div class="vzhdr-who"><b>Cassiano Coria</b><span>cassiano@saharasound.example</span></div><div class="vzsep" role="separator"></div></sc-if>
+<a class="vzopt" role="menuitem" href="{{lnk.home}}" aria-current="{{cur.home}}"><svg class="vz-icon sm" aria-hidden="true"><use href="#i-home"></use></svg> Home</a>
+<a class="vzopt" role="menuitem" href="#"><svg class="vz-icon sm" aria-hidden="true"><use href="#i-settings"></use></svg> Settings</a>
+<a class="vzopt" role="menuitem" href="#"><svg class="vz-icon sm" aria-hidden="true"><use href="#i-chart-bar"></use></svg> Analytics</a>
+<div class="vzsep" role="separator"></div>
+<a class="vzopt" role="menuitem" href="#"><svg class="vz-icon sm" aria-hidden="true"><use href="#i-log-out"></use></svg> Sign out</a>
+</div>
+</div>
+</div>
+</div>
+</header>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"flowLinks":{"editor":"boolean","default":true,"section":"Links"},"active":{"editor":"enum","options":["home","campaigns","projects","marketplace","search","none"],"default":"home"},"badge":{"editor":"int","default":0,"min":0,"max":120},"menuOpen":{"editor":"boolean","default":false},"brand":{"editor":"enum","options":["mark","lockup","stacked"],"default":"lockup","section":"Brand"},"brandTone":{"editor":"enum","options":["gray","white","gradient"],"default":"white","section":"Brand"},"brandSize":{"editor":"enum","options":["28","26","24","38","44","64"],"default":"24","section":"Brand"},"navLayout":{"editor":"enum","options":["left","centered","brand-center"],"default":"centered","section":"Header"},"headerWidth":{"editor":"enum","options":["default","wide","fluid","app"],"default":"fluid","section":"Header"},"divider":{"editor":"boolean","default":false,"section":"Header"},"tone":{"editor":"enum","options":["flat","raised"],"default":"raised","section":"Header"},"account":{"editor":"enum","options":["full","avatar"],"default":"avatar","section":"Header"},"headerHeight":{"editor":"enum","options":["60","88"],"default":"60","section":"Header"},"searchMode":{"editor":"enum","options":["field","takeover","page"],"default":"takeover","section":"Header"},"searchOpen":{"editor":"boolean","default":false,"section":"Header"},"searchQuery":{"editor":"string","default":"","section":"Header"},"searchHighlight":{"editor":"int","default":-1,"min":-1,"max":12,"section":"Header"},"searchStatus":{"editor":"enum","options":["ready","loading","error"],"default":"ready","section":"Header"},"searchHistory":{"editor":"boolean","default":true,"section":"Header"},"bell":{"editor":"enum","options":["unread","rest","arrive","hover","focus","open"],"default":"unread","section":"Notifications"},"notifRole":{"editor":"enum","options":["both","creator","sponsor"],"default":"both","section":"Notifications"},"notifEmpty":{"editor":"boolean","default":false,"section":"Notifications"},"$preview":{"width":1440,"height":320}}'>
+class Component extends DCLogic {
+  // The current header is the default. A board only passes a prop to differ from it (explorations, archive).
+  get pp() { const D = { brand: 'lockup', brandTone: 'white', brandSize: '24', navLayout: 'centered', headerWidth: 'fluid', tone: 'raised', account: 'avatar', searchMode: 'takeover', flowLinks: true }; const o = Object.assign({}, this.props); Object.keys(D).forEach((k) => { if (o[k] === undefined || o[k] === null || o[k] === '') o[k] = D[k]; }); return o; }
+  componentDidMount() {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    if (window.Venzza) window.Venzza.mountIcons();
+    this.onDown = (e) => { const t = e.target.closest ? e.target : null; if (this.isOpen() && !(t && t.closest('.vzhdr-menu'))) this.setState({ open: false }); if (this.notifOpen() && !(t && t.closest('.nt-bell'))) this.setState({ nOpen: false }); if (this.sOpen() && !(t && (t.closest('.vzs-over') || t.closest('.vzs-wrap')))) this.setState({ sOpen: false }); };
+    document.addEventListener('mousedown', this.onDown);
+    // Cmd/Ctrl+K opens search in either concept
+    this.onKeyG = (e) => { if ((e.metaKey || e.ctrlKey) && (e.key || '').toLowerCase() === 'k') { const m = this.pp.searchMode; if (m === 'takeover') { e.preventDefault(); this.openS(); } else if (m === 'page') { e.preventDefault(); const a = document.querySelector('a.vzs-btn'); if (a) a.click(); } } };
+    document.addEventListener('keydown', this.onKeyG);
+    this.onSaved = () => { const a = document.querySelector('.vzhdr-link[data-nav="campaigns"]'); if (!a) return; a.classList.remove('vz-pulse'); void a.offsetWidth; a.classList.add('vz-pulse'); clearTimeout(this.pt); this.pt = setTimeout(() => a.classList.remove('vz-pulse'), 1300); };
+    window.addEventListener('vz-saved', this.onSaved);
+  }
+  componentWillUnmount() { window.removeEventListener('vz-saved', this.onSaved); clearTimeout(this.pt); document.removeEventListener('mousedown', this.onDown); document.removeEventListener('keydown', this.onKeyG); }
+  componentDidUpdate(prev) { if (prev.menuOpen !== this.props.menuOpen) this.setState({ open: undefined }); if (prev.bell !== this.props.bell) this.setState({ nOpen: undefined, seen: undefined }); if (prev.searchOpen !== this.pp.searchOpen || prev.searchQuery !== this.pp.searchQuery || prev.searchHighlight !== this.pp.searchHighlight || prev.searchStatus !== this.pp.searchStatus || prev.searchHistory !== this.pp.searchHistory) this.setState({ sOpen: undefined, q: undefined, ai: undefined, status: undefined }); }
+  // Search takeover (concept B): the nav fades out and a centred field + suggestions take its place. Esc or a click outside restores the nav.
+  sOpen() { const s = this.state || {}; return s.sOpen !== undefined ? s.sOpen : !!this.pp.searchOpen; }
+  openS() { this.setState({ sOpen: true, open: false, nOpen: false, ai: -1 }); setTimeout(() => { const i = document.querySelector('.vzs-input'); if (i) i.focus(); }, 40); }
+  closeS(refocus) { this.setState({ sOpen: false, ai: -1 }); if (refocus) setTimeout(() => { const b = document.querySelector('button.vzs-btn'); if (b) b.focus(); }, 0); }
+  searchItems(q, ai, status, history) {
+    const D = [
+      { k: 'campaign', name: 'Desert Vibes Festival 2026', meta: 'Campaign \u00b7 3 projects in wishlist', st: 'published', stl: 'Active', bg: 'linear-gradient(135deg,#6a2c70,#c0455e)', href: 'Campaign-Populated.dc.html' },
+      { k: 'campaign', name: 'Trail Shoe Launch', meta: 'Campaign \u00b7 Mar 1 \u2013 May 31', st: 'published', stl: 'Active', bg: 'linear-gradient(135deg,#1e6b5c,#2a9d8f)', href: 'Campaign-Populated.dc.html' },
+      { k: 'campaign', name: 'Summer Launch 2027', meta: 'Campaign \u00b7 Setup step 2 of 4', st: 'draft', stl: 'Draft', bg: 'linear-gradient(135deg,#0f4c81,#2a9d8f)', href: 'Onboarding-Audience.dc.html' },
+      { k: 'project', name: 'Aurora Field Sessions', meta: 'Project \u00b7 Portland, OR', st: 'published', stl: 'Published', bg: 'linear-gradient(135deg,#0b3d5c,#2a9d8f)', href: 'ProjectDetail.dc.html' },
+      { k: 'project', name: 'Summer Bass Series', meta: 'Project \u00b7 Ready to publish', st: 'working', stl: 'Working', bg: 'linear-gradient(135deg,#0f4c81,#2a9d8f)', href: 'ProjectDetail-Working.dc.html' },
+      { k: 'project', name: 'Summer Rooftop Cinema', meta: 'Project \u00b7 2 of 5 sections done', st: 'draft', stl: 'Draft', bg: 'linear-gradient(135deg,#7a3e1d,#c0455e)', href: 'ProjectDetail-DraftChecklist.dc.html' },
+      { k: 'project', name: 'Alpine Light Installation', meta: 'Project \u00b7 3 of 5 sections done', st: 'draft', stl: 'Draft', bg: 'linear-gradient(135deg,#1e6b5c,#3a1c71)', href: 'ProjectDetail-DraftChecklist.dc.html' },
+      { k: 'market', name: 'Summer Nights Collective', meta: 'Creator \u00b7 Music \u00b7 Austin, TX \u00b7 220K reach', bg: 'linear-gradient(135deg,#c0455e,#6a2c70)', href: 'Marketplace.dc.html' },
+      { k: 'market', name: 'Summer Solstice Run', meta: 'Organizer \u00b7 Outdoors \u00b7 Boulder, CO', bg: 'linear-gradient(135deg,#2a9d8f,#0f4c81)', href: 'Marketplace.dc.html' },
+      { k: 'market', name: 'Studio Nordlys', meta: 'Creator \u00b7 Art \u00b7 Oslo', bg: 'linear-gradient(135deg,#3a1c71,#4a3f8c)', href: 'Marketplace.dc.html' },
+      { k: 'market', name: 'Low End Society', meta: 'Organizer \u00b7 Music \u00b7 480K reach', bg: 'linear-gradient(135deg,#1e1e2e,#4a3f8c)', href: 'Marketplace.dc.html' }
+    ];
+    const LBL = { campaign: 'Campaigns', project: 'Projects', market: 'Marketplace' };
+    const out = []; let n = 0;
+    const FLW = this.pp.flowLinks === true || this.pp.flowLinks === 'true';
+    const fhref = (d) => !FLW ? d.href : d.name === 'Desert Vibes Festival 2026' ? 'CG-Campaign.dc.html' : d.k === 'campaign' ? (d.st === 'draft' ? 'OB-Campaign-Returning.dc.html' : 'CP-Campaigns.dc.html') : d.k === 'project' ? 'PN-Projects.dc.html' : 'PN-Marketplace.dc.html';
+    const row = (d, ql) => { const nm = d.name, i = ql ? nm.toLowerCase().indexOf(ql) : -1; const idx = n++;
+      return { row: true, href: fhref(d), cls: 'vzs-row' + (idx === ai ? ' on' : ''), on: idx === ai ? 'true' : 'false', thCls: 'vzs-th' + (d.k === 'market' ? ' av' : ''), bg: d.bg, ini: d.k === 'market' ? nm.split(' ').map((w) => w[0]).slice(0, 2).join('') : '',
+        pre: i < 0 ? nm : nm.slice(0, i), hit: i < 0 ? '' : nm.slice(i, i + ql.length), post: i < 0 ? '' : nm.slice(i + ql.length), meta: d.meta, hasSt: !!d.st, stCls: 'pst ' + (d.st || ''), stl: d.stl || '' }; };
+    const ql = q.trim().toLowerCase();
+    const rec = (t, icon) => { const idx = n++; out.push({ rec: true, t, icon, cls: 'vzs-row rec' + (idx === ai ? ' on' : ''), on: idx === ai ? 'true' : 'false' }); };
+    if (!ql && !history) {
+      // first run: nothing searched or viewed yet, so teach what search covers
+      out.push({ hint: true, label: 'Search your campaigns and projects, and every creator and organizer in the marketplace.' });
+      out.push({ head: true, label: 'Try searching for' });
+      ['music festivals', 'outdoor creators', 'Portland, OR'].forEach((t) => rec(t, 'i-search'));
+      return { items: out, count: n, hits: 0 };
+    }
+    if (ql && status === 'loading') { [0, 1, 2, 3].forEach(() => out.push({ skel: true })); return { items: out, count: 0, hits: -1 }; }
+    if (ql && status === 'error') return { items: [], count: 0, hits: -1 };
+    if (!ql) {
+      out.push({ head: true, label: 'Recent searches' });
+      ['music festivals portland', 'low end society', 'outdoor creators'].forEach((t) => rec(t, 'i-clock'));
+      out.push({ head: true, label: 'Recently viewed' });
+      [D[0], D[3], D[9]].forEach((d) => out.push(row(d, '')));
+      return { items: out, count: n, hits: 0 };
+    }
+    let hits = 0;
+    ['campaign', 'project', 'market'].forEach((k) => { const g = D.filter((d) => d.k === k && (d.name + ' ' + d.meta).toLowerCase().includes(ql)); if (!g.length) return; hits += g.length; out.push({ head: true, label: LBL[k] }); g.slice(0, 3).forEach((d) => out.push(row(d, ql))); });
+    return { items: out, count: n + 1, hits };
+  }
+  // Notifications: the dot means something is unseen. Opening the panel marks everything seen (dot clears); rows stay unread until opened.
+  notifOpen() { const s = this.state || {}; return s.nOpen !== undefined ? s.nOpen : this.pp.bell === 'open'; }
+  isOpen() { const s = this.state || {}; return s.open !== undefined ? s.open : !!this.pp.menuOpen; }
+  renderVals() {
+    const active = this.pp.active || 'home';
+    const badge = Number(this.pp.badge ?? 0) || 0;
+    const open = this.isOpen();
+    const bell = this.pp.bell || 'unread';
+    const nOpen = this.notifOpen();
+    const seen = (this.state || {}).seen || bell === 'open';
+    const bellDot = bell !== 'rest' && !this.pp.notifEmpty && !seen;
+    const cur = {};
+    ['home', 'campaigns', 'projects', 'marketplace'].forEach((k) => { cur[k] = active === k ? 'page' : undefined; });
+    // Brand: the V mark (default, approved) or the horizontal lockup (logo exploration). Tone only applies to the lockup.
+    const stacked = this.pp.brand === 'stacked';
+    const lockup = this.pp.brand === 'lockup' || stacked;
+    const bc = this.pp.navLayout === 'brand-center';
+    const centered = this.pp.navLayout === 'centered' || bc;
+    const mode = this.pp.searchMode === 'takeover' || this.pp.searchMode === 'page' ? this.pp.searchMode : 'field';
+    const st = this.state || {};
+    const sOpen = mode === 'takeover' && this.sOpen();
+    const q = st.q !== undefined ? st.q : (this.pp.searchQuery || '');
+    const ai = st.ai === undefined ? (Number(this.pp.searchHighlight ?? -1)) : st.ai;
+    const status = st.status || this.pp.searchStatus || 'ready';
+    const history = this.pp.searchHistory !== false && this.pp.searchHistory !== 'false';
+    const S = mode === 'takeover' ? this.searchItems(q, ai, status, history) : { items: [], count: 0, hits: 0 };
+    const busy = S.hits === -1;
+    const qFull = !!q.trim();
+    cur.search = active === 'search' ? 'page' : undefined;
+    const fl = this.pp.flowLinks === true || this.pp.flowLinks === 'true';
+    return {
+      lnk: { home: fl ? 'PN-Home.dc.html' : 'HomeReturning.dc.html', campaigns: fl ? 'CP-Campaigns.dc.html' : 'CampaignsList.dc.html', projects: fl ? 'PN-Projects.dc.html' : 'ProjectsList.dc.html', market: fl ? 'PN-Marketplace.dc.html' : 'Marketplace.dc.html' },
+      hdrCls: 'vzhdr' + (sOpen ? ' vzs-open' : '') + (this.pp.divider === true || this.pp.divider === 'true' ? ' vzhdr-divided' : '') + (this.pp.tone === 'raised' ? ' vzhdr-raised' : '') + (this.pp.account === 'avatar' ? ' acct-min' : ''), acctMin: this.pp.account === 'avatar',
+      inCls: 'vzhdr-in' + (mode === 'takeover' ? ' vzt' : '') + (centered ? ' vzc' : '') + (bc ? ' vzbc' : '') + (this.pp.headerWidth === 'wide' ? ' wide' : this.pp.headerWidth === 'fluid' ? ' w-fluid' : this.pp.headerWidth === 'app' ? ' w-app' : '') + (String(this.pp.headerHeight) === '88' ? ' h88' : ''),
+      brandH: String(Number(this.pp.brandSize) || 28),
+      isField: mode === 'field', isTakeover: mode === 'takeover', isPage: mode === 'page',
+      navHidden: sOpen && !bc ? 'true' : undefined,
+      sOpen,
+      sWrapCls: 'nt-bell vzs-wrap' + (sOpen ? ' open' : ''),
+      sIcon: sOpen ? 'i-x' : 'i-search',
+      sBtnLabel: sOpen ? 'Close search' : 'Search',
+      sTip: 'Search \u00b7 \u2318K',
+      toggleS: () => (sOpen ? this.closeS(false) : this.openS()),
+      q, qFull, showAll: qFull && !busy,
+      sItems: S.items,
+      noHits: qFull && !S.hits,
+      sErr: qFull && status === 'error',
+      sLive: !qFull ? '' : status === 'loading' ? 'Searching\u2026' : status === 'error' ? 'Search isn\u2019t available' : S.hits ? S.hits + (S.hits === 1 ? ' result' : ' results') : 'No results',
+      retryS: () => { this.setState({ status: 'ready' }); const i = document.querySelector('.vzs-input'); if (i) i.focus(); },
+      allCls: 'vzs-all' + (qFull && ai === S.count - 1 ? ' on' : ''),
+      onQ: (e) => this.setState({ q: e.target.value, ai: -1, status: status === 'error' ? 'error' : 'ready' }),
+      clearQ: (e) => { e.preventDefault(); this.setState({ q: '', ai: -1 }); const i = document.querySelector('.vzs-input'); if (i) i.focus(); },
+      pickRecent: (e) => { const t = e.currentTarget.getAttribute('data-q'); this.setState({ q: t, ai: -1, status: 'ready' }); const i = document.querySelector('.vzs-input'); if (i) i.focus(); },
+      onSKey: (e) => {
+        if (e.key === 'Escape') { e.preventDefault(); this.closeS(true); return; }
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); if (!S.count) return; const d = e.key === 'ArrowDown' ? 1 : -1; let nx = ai + d; if (nx >= S.count) nx = -1; if (nx < -1) nx = S.count - 1; this.setState({ ai: nx }); return; }
+        if (e.key === 'Enter') { const el = document.querySelector('.vzs-pop .on') || (qFull ? document.querySelector('.vzs-all') : null); if (el) { e.preventDefault(); el.click(); } }
+      },
+      cur,
+      isMark: !lockup, isLockup: lockup && !stacked, isStacked: stacked,
+      brandCls: 'vzhdr-brand' + (lockup ? ' lk lk-' + (this.pp.brandTone || 'gray') : ''),
+      hasBadge: badge > 0,
+      badgeText: badge > 99 ? '99+' : String(badge),
+      badgeLabel: badge + ' new',
+      open,
+      menuCls: open ? 'vzpop vzhdr-menu open' : 'vzpop vzhdr-menu',
+      toggle: () => this.setState({ open: !open, nOpen: false }),
+      notifOpen: nOpen,
+      notifRole: this.pp.notifRole || 'both',
+      notifEmpty: !!this.pp.notifEmpty,
+      bellDot,
+      bellCls: 'nt-bell' + (nOpen ? ' open' : '') + (bell === 'arrive' && bellDot ? ' arrive' : '') + (bell === 'hover' && !nOpen ? ' hover' : '') + (bell === 'focus' && !nOpen ? ' focus' : ''),
+      bellLabel: bellDot ? 'Notifications, new activity' : 'Notifications',
+      bellTip: bellDot ? 'Notifications \u00b7 4 unread' : 'Notifications',
+      toggleNotif: () => this.setState({ nOpen: !nOpen, seen: true, open: false }),
+      onBellKey: (e) => { if (e.key === 'Escape' && nOpen) { this.setState({ nOpen: false }); const b = e.currentTarget.querySelector('.iconbtn'); if (b) b.focus(); } },
+      onKey: (e) => { if (e.key === 'Escape' && open) this.setState({ open: false }); }
+    };
+  }
+}
+</script>
+<script src="assets/components.js"></script><script>(function(m){var o={};for(var k in m)o["./"+k]=new Blob([m[k]],{type:"text/html"});window.__resourceBlobs=o;window.__resources={};})(window.__VZ_SRC||{});</script><script src="assets/vendor/react.production.min.js"></script><script src="assets/vendor/react-dom.production.min.js"></script><script src="assets/vendor/dc-runtime.js"></script><script src="assets/prototype-map.js"></script><script src="assets/proto-bar.js"></script>
+</body>
+</html>
