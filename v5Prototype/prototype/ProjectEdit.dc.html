@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Project edit workspace</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="ds/venzza/components/bundle.css">
+<link rel="stylesheet" href="shared/venzza-dark.css">
+<link rel="stylesheet" href="shared/venzza-app.css">
+<script src="ds/venzza/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--bg-canvas)}
+</style>
+</helmet>
+<dc-import name="TopNav" flow-links="true" active="projects" bell="rest" brand="lockup" brand-tone="white" brand-size="24" nav-layout="centered" search-mode="takeover" header-width="{{hw}}" divider="{{hdiv}}" tone="{{htone}}" account="avatar" hint-size="100%,60px"></dc-import>
+<div class="{{peCls}}">
+<aside class="pe-rail" aria-label="Project sections">
+<a class="pe-back" href="{{backHref}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-left"></use></svg><span>{{backLbl}}</span></a>
+<div class="{{projCls}}"><span class="th" aria-hidden="true"></span><span class="t"><b>{{f.name}}</b><span><i></i>{{projSt}}</span></span></div>
+<div class="pe-str"><div class="pe-str-top"><span>Project strength</span><b>{{strength}}%</b></div><div class="pe-bar-track"><i style="width: {{strength}}%"></i></div><p>{{strengthTxt}}</p></div>
+<nav class="pe-nav">
+<sc-for list="{{nav}}" as="n" hint-placeholder-count="10"><sc-if value="{{n.g}}" hint-placeholder-val="{{false}}"><div class="pe-grp">{{n.g}}</div></sc-if><button type="button" class="pe-item" aria-current="{{n.cur}}" title="{{n.l}}" data-s="{{n.k}}" onClick="{{go}}"><svg class="vz-icon" aria-hidden="true"><use href="#{{n.i}}"></use></svg><span class="l">{{n.l}}</span><span class="{{n.stCls}}" aria-label="{{n.stLbl}}"><sc-if value="{{n.ok}}" hint-placeholder-val="{{true}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-check"></use></svg></sc-if></span></button></sc-for>
+</nav>
+<div class="pe-rail-foot"><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{importDoc}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-upload"></use></svg>Import from document</button><button type="button" class="iconbtn" aria-label="{{collapseLbl}}" title="{{collapseLbl}}" onClick="{{toggleRail}}"><svg class="vz-icon" aria-hidden="true"><use href="#{{collapseIcon}}"></use></svg></button></div>
+</aside>
+
+<main class="pe-main">
+<div class="pe-top">
+<div class="pe-crumb"><span>Edit project</span><svg class="vz-icon" aria-hidden="true"><use href="#i-chevron-right"></use></svg><b>{{secLabel}}</b></div>
+<div class="pe-top-end">
+<span class="{{saveCls}}" role="status"><sc-if value="{{isSaved}}" hint-placeholder-val="{{true}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-check"></use></svg></sc-if><sc-if value="{{notSaved}}" hint-placeholder-val="{{false}}"><i></i></sc-if>{{saveTxt}}</span>
+<a class="vz-btn vz-btn--secondary sm" href="{{previewHref}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-eye"></use></svg>Sponsor preview</a>
+<sc-if value="{{hasChanges}}" hint-placeholder-val="{{true}}"><a class="vz-btn vz-btn--primary sm pe-pub" href="PN-Project-Review.dc.html">Review &amp; publish<span class="n">{{changes}}</span></a></sc-if><sc-if value="{{noChanges}}" hint-placeholder-val="{{false}}"><button type="button" class="vz-btn vz-btn--primary sm pe-pub" disabled title="{{pubTip}}">{{pubLbl}}</button></sc-if>
+</div>
+</div>
+
+<div class="pe-body">
+<sc-if value="{{s.overview}}" hint-placeholder-val="{{false}}">
+<div class="pe-head"><div><h1>Overview</h1><p>Everything sponsors see about this project, section by section. Pick one to edit it. Changes save as you go and go live when you publish.</p></div></div>
+<div class="pe-ov">
+<div class="pe-card"><div class="pe-ring"><div class="{{ringCls}}"><svg viewBox="0 0 92 92" aria-hidden="true"><circle class="bg" cx="46" cy="46" r="40"></circle><circle class="fg" cx="46" cy="46" r="40" stroke-dasharray="{{ringDash}}"></circle></svg><b>{{strength}}%</b></div><div><h3>Project strength</h3><p>{{strengthTxt}}. Complete projects get about 3× more sponsor requests.</p><sc-if value="{{galleryEmpty}}" hint-placeholder-val="{{true}}"><button type="button" class="vz-btn vz-btn--secondary sm" data-s="{{ringGo}}" onClick="{{go}}"><svg class="vz-icon" aria-hidden="true"><use href="#{{ringIc}}"></use></svg>{{ringLbl}}</button></sc-if></div></div></div>
+<div class="pe-card"><h2>Before you publish</h2><p class="sub">{{pubNote}}</p>
+<div class="pe-todo">
+<sc-for list="{{todo}}" as="t" hint-placeholder-count="3"><div class="pe-todo-r"><svg class="{{t.icCls}}" aria-hidden="true"><use href="#{{t.ic}}"></use></svg><span class="t">{{t.title}}<span>{{t.sub}}</span></span><sc-if value="{{t.hasGo}}" hint-placeholder-val="{{true}}"><button type="button" class="pe-go" data-s="{{t.s}}" onClick="{{go}}">{{t.act}}<svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></button></sc-if></div></sc-for>
+</div></div>
+</div>
+<div class="pe-secs"><sc-for list="{{secCards}}" as="c" hint-placeholder-count="9"><button type="button" class="pe-sc" data-s="{{c.k}}" onClick="{{go}}"><span class="pe-sc-h"><svg class="vz-icon" aria-hidden="true"><use href="#{{c.i}}"></use></svg>{{c.l}}<span class="{{c.stCls}}"><sc-if value="{{c.ok}}" hint-placeholder-val="{{true}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-check"></use></svg></sc-if></span></span><span>{{c.sum}}</span></button></sc-for></div>
+</sc-if>
+
+<sc-if value="{{s.basics}}" hint-placeholder-val="{{false}}">
+<div class="pe-head"><div><h1>Project basics</h1><p>The first thing sponsors read. Keep the name and tagline short; the description can tell the story.</p></div></div>
+<sc-if value="{{cvHero}}" hint-placeholder-val="{{true}}"><section class="cv" aria-labelledby="cv-h"><div class="cv-top"><div><h2 id="cv-h" class="cv-t">Cover image</h2><p class="cv-sub">Full width at the top of your project page, and on your marketplace card.</p></div><sc-if value="{{cvHas}}" hint-placeholder-val="{{true}}"><div class="cv-acts"><div class="pe-seg" role="group" aria-label="Preview size"><sc-for list="{{cvTabs}}" as="t" hint-placeholder-count="3"><button type="button" aria-pressed="{{t.on}}" data-v="{{t.k}}" onClick="{{cvTab}}"><svg class="vz-icon" aria-hidden="true"><use href="#{{t.i}}"></use></svg>{{t.l}}</button></sc-for></div><sc-if value="{{cvIdle}}" hint-placeholder-val="{{true}}"><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{cvRepoStart}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-up-down"></use></svg>Reposition</button><button type="button" class="vz-btn vz-btn--secondary sm cv-push" onClick="{{cvUpload}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-upload"></use></svg>Replace</button><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{cvRemove}}">Remove</button></sc-if><sc-if value="{{cvRepo}}" hint-placeholder-val="{{false}}"><button type="button" class="vz-btn vz-btn--ghost sm cv-push" onClick="{{cvCancel}}">Cancel</button><button type="button" class="vz-btn sm pe-solid" onClick="{{cvSave}}">Save position</button></sc-if></div></sc-if></div><sc-if value="{{cvHas}}" hint-placeholder-val="{{true}}"><div class="{{cvStageCls}}"><div class="{{cvFrameCls}}" tabIndex="0" role="{{cvRole}}" aria-label="{{cvAria}}" aria-roledescription="{{cvRd}}" onPointerDown="{{cvDown}}" onKeyDown="{{cvKey}}"><img class="cv-img" src="assets/img/sahara-main-stage.jpg" alt="" draggable="false" style="object-position: {{cvPos}}"><div class="cv-grid" aria-hidden="true"><i></i><i></i></div><div class="cv-ov" aria-hidden="true"><div class="cv-ttl"><span class="zl">Title area</span><span class="by"><i>SS</i>by Sahara Sound Collective</span><b>{{f.name}}</b><span class="tg">{{f.tag}}</span></div><div class="cv-card"><span class="zl">Sponsorship card</span><span class="k">Sponsorship</span><b>From $50,000</b><span class="ln"></span><span class="bt"></span></div></div><sc-if value="{{cvRepo}}" hint-placeholder-val="{{false}}"><span class="cv-hint"><svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-up-down"></use></svg>Drag to reposition</span></sc-if></div><div class="cv-mk"><b>{{f.name}}</b><span>{{f.tag}}</span><span class="m">Music · Indio, CA · From $50,000</span></div></div><div class="cv-foot"><p>{{cvNote}}</p><span class="cv-meta">{{cvMeta}}</span></div><sc-if value="{{cvLow}}" hint-placeholder-val="{{false}}"><div class="cv-warn" role="status"><svg class="vz-icon" aria-hidden="true"><use href="#i-alert-triangle"></use></svg><span><b>This image may look soft on large screens.</b> It’s 1200px wide; covers are shown up to 2400px wide. <button type="button" class="cv-lnk" onClick="{{cvUpload}}">Replace image</button></span></div></sc-if></sc-if><sc-if value="{{cvEmpty}}" hint-placeholder-val="{{false}}"><div class="cv-drop"><svg class="vz-icon" aria-hidden="true"><use href="#i-image"></use></svg><b>Add a cover image</b><p>It’s the first thing sponsors see: full width at the top of your project and on your marketplace card. Use a landscape photo at least 2400px wide.</p><div class="cv-drop-a"><button type="button" class="vz-btn sm pe-solid" onClick="{{cvUpload}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-upload"></use></svg>Upload image</button><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{cvUpload}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-images"></use></svg>Choose from gallery</button></div><span class="cv-meta">JPG or PNG · up to 20 MB · or drop a file here</span></div></sc-if></section></sc-if>
+<div class="pe-split"><div class="pe-card"><div class="pe-form">
+<div class="pe-f"><label for="b-name">Project name <small>{{f.nameN}}/60</small></label><input id="b-name" class="pe-in" maxlength="60" value="{{f.name}}" data-k="name" onChange="{{field}}" onInput="{{field}}"></div>
+<div class="pe-f"><label for="b-tag">Tagline <small>{{f.tagN}}/90</small></label><input id="b-tag" class="pe-in" maxlength="90" value="{{f.tag}}" data-k="tag" onChange="{{field}}" onInput="{{field}}"></div>
+<div class="pe-2"><div class="pe-f"><label for="b-cat">Category</label><select id="b-cat" class="pe-in" value="{{f.cat}}" data-k="cat" onChange="{{field}}"><option>Music</option><option>Live events</option><option>Art &amp; culture</option><option>Film &amp; series</option><option>Sports</option><option>Food &amp; drink</option><option>Technology</option><option>Gaming</option><option>Fashion &amp; beauty</option><option>Travel &amp; outdoors</option></select></div><div class="pe-f"><label for="b-loc">Location</label><input id="b-loc" class="pe-in" value="{{f.loc}}" data-k="loc" onChange="{{field}}" onInput="{{field}}"></div></div>
+<div class="pe-f"><label for="b-org">Organizer</label><input id="b-org" class="pe-in" value="{{f.org}}" data-k="org" onChange="{{field}}" onInput="{{field}}"></div>
+<div class="pe-f"><label for="b-desc">Description <small>{{f.descN}}/1,200</small></label><textarea id="b-desc" class="pe-in" rows="5" maxlength="1200" value="{{f.desc}}" data-k="desc" onChange="{{field}}" onInput="{{field}}"></textarea></div>
+<sc-if value="{{cvThumb}}" hint-placeholder-val="{{false}}"><div class="pe-f"><div class="lb">Cover image</div><div class="pe-cover"><img class="img" src="assets/img/sahara-main-stage.jpg" alt="Festival crowd at sunset" style="object-fit:cover"><div><button type="button" class="vz-btn vz-btn--secondary sm"><svg class="vz-icon" aria-hidden="true"><use href="#i-upload"></use></svg>Replace</button><p class="hint">16:9, at least 1600px wide. Shown at the top of your project and in the marketplace.</p></div></div></div></sc-if>
+</div></div>
+<div class="pe-aside"><div class="pe-tip"><b><svg class="vz-icon" aria-hidden="true"><use href="#i-sparkle"></use></svg>What works</b>Lead with the audience, not the event: “120,000 music fans over two weekends” beats “Our annual festival”.</div><div class="pe-tip"><b><svg class="vz-icon" aria-hidden="true"><use href="#i-eye"></use></svg>Sponsors see</b>Name, tagline and cover on every marketplace card. The description appears on your project page.</div></div>
+</div>
+</sc-if>
+
+<sc-if value="{{s.mood}}" hint-placeholder-val="{{false}}">
+<div class="pe-head"><div><h1>Mood</h1><p>How your project feels. Sponsors match on your main mood and can filter the marketplace by it.</p></div></div>
+<div class="pe-split"><div class="pe-card"><div class="pe-form">
+<div class="pe-f"><div class="lb">Main mood <small>{{mdMainHint}}</small></div><div class="pe-togs" role="radiogroup" aria-label="Main mood"><sc-for list="{{mdP}}" as="m" hint-placeholder-count="12"><button type="button" class="pe-tog mdp" role="radio" aria-checked="{{m.on}}" aria-pressed="{{m.on}}" data-v="{{m.id}}" onClick="{{mdPick}}" style="--c1: {{m.c1}}"><i class="mdp-dot" aria-hidden="true"></i>{{m.n}}</button></sc-for></div></div>
+<div class="pe-f"><div class="lb">Supporting moods <small>{{mdSupN}} of 3 · optional</small></div><div class="pe-togs" role="group" aria-label="Supporting moods"><sc-for list="{{mdS}}" as="m" hint-placeholder-count="11"><button type="button" class="{{m.cls}}" aria-pressed="{{m.on}}" aria-disabled="{{m.full}}" data-v="{{m.id}}" onClick="{{mdSupT}}" style="--c1: {{m.c1}}"><i class="mdp-dot" aria-hidden="true"></i>{{m.n}}</button></sc-for></div><sc-if value="{{mdHintOn}}" hint-placeholder-val="{{false}}"><p class="mdp-hint" role="status">Up to 3 supporting moods. Remove one to add another.</p></sc-if></div>
+<div class="mdp-open"><span>Prefer the visual picker from setup?</span><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{mdOpenFn}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-sparkle"></use></svg>Open mood picker</button></div>
+</div></div>
+<div class="pe-aside"><div class="pe-tip"><b><svg class="vz-icon" aria-hidden="true"><use href="#i-eye"></use></svg>Where it shows</b>Your main mood appears as a small chip on your marketplace card and gives the top of your project page a faint tint. Supporting moods help matching but don’t add colour.</div></div>
+</div>
+</sc-if>
+
+<sc-if value="{{s.dates}}" hint-placeholder-val="{{false}}">
+<div class="pe-head"><div><h1>Important dates</h1><p>When it happens, and the deadlines sponsors need to plan around.</p></div></div>
+<div class="pe-card" style="margin-bottom:16px"><div class="pe-2"><div class="pe-f"><label for="d-s">Starts</label><input id="d-s" class="pe-in" value="{{f.start}}" data-k="start" onChange="{{field}}" onInput="{{field}}"></div><div class="pe-f"><label for="d-e">Ends</label><input id="d-e" class="pe-in" value="{{f.end}}" data-k="end" onChange="{{field}}" onInput="{{field}}"></div></div></div>
+<div class="pe-list pe-dates">
+<div class="pe-date"><b>Nov 15, 2026</b><span>Sponsorship applications open</span><button type="button" class="pe-ibtn bare" aria-label="Edit date"><svg class="vz-icon" aria-hidden="true"><use href="#i-pencil"></use></svg></button></div>
+<div class="pe-date"><b>Jan 31, 2027</b><span>Last day to secure a package</span><button type="button" class="pe-ibtn bare" aria-label="Edit date"><svg class="vz-icon" aria-hidden="true"><use href="#i-pencil"></use></svg></button></div>
+<div class="pe-date"><b>Mar 1, 2027</b><span>Brand assets due for stage screens</span><button type="button" class="pe-ibtn bare" aria-label="Edit date"><svg class="vz-icon" aria-hidden="true"><use href="#i-pencil"></use></svg></button></div>
+<button type="button" class="pe-add"><svg class="vz-icon" aria-hidden="true"><use href="#i-plus"></use></svg>Add a key date</button>
+</div>
+</sc-if>
+
+<sc-if value="{{s.highlights}}" hint-placeholder-val="{{false}}">
+<div class="pe-head"><div><h1>Highlights &amp; differentials</h1><p>Three to five reasons a sponsor should pick you. Drag to set the order sponsors see them in.</p></div><div class="pe-head-end"><span class="pe-chip">{{hlCount}} of 5</span></div></div>
+<div class="pe-list">
+<sc-for list="{{hls}}" as="h" hint-placeholder-count="4"><div class="{{h.cls}}"><svg class="vz-icon grip" aria-hidden="true"><use href="#i-grip-vertical"></use></svg>
+<sc-if value="{{h.view}}" hint-placeholder-val="{{true}}"><span class="t"><b>{{h.title}}</b><span>{{h.text}}</span></span><span class="acts"><button type="button" class="pe-ibtn bare" aria-label="Move up" data-i="{{h.i}}" data-k="-1" disabled="{{h.first}}" onClick="{{hlMove}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-up"></use></svg></button><button type="button" class="pe-ibtn bare" aria-label="Move down" data-i="{{h.i}}" data-k="1" disabled="{{h.last}}" onClick="{{hlMove}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-down"></use></svg></button><button type="button" class="pe-ibtn bare" aria-label="{{h.editLbl}}" data-i="{{h.i}}" onClick="{{hlEdit}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-pencil"></use></svg></button></span></sc-if>
+<sc-if value="{{h.edit}}" hint-placeholder-val="{{false}}"><span class="t"><input class="pe-in" aria-label="Highlight title" value="{{h.title}}" data-i="{{h.i}}" data-k="title" onChange="{{hlField}}" onInput="{{hlField}}"><textarea class="pe-in" rows="2" aria-label="Highlight detail" value="{{h.text}}" data-i="{{h.i}}" data-k="text" onChange="{{hlField}}" onInput="{{hlField}}"></textarea><span style="display:flex;gap:8px"><button type="button" class="vz-btn pe-solid sm" onClick="{{hlDone}}">Done</button><button type="button" class="vz-btn vz-btn--ghost sm pe-danger-ghost" data-i="{{h.i}}" onClick="{{hlDel}}">Remove</button></span></span></sc-if>
+</div></sc-for>
+<sc-if value="{{hlCanAdd}}" hint-placeholder-val="{{true}}"><button type="button" class="pe-add" onClick="{{hlAdd}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-plus"></use></svg>Add a highlight</button></sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{s.press}}" hint-placeholder-val="{{false}}">
+<div class="pe-head"><div><h1>Press quote</h1><p>One line from a credible outside voice. It sits under your description on the project page.</p></div></div>
+<div class="pe-split"><div class="pe-card"><div class="pe-form">
+<div class="pe-f"><label for="q-t">Quote <small>{{f.quoteN}}/240</small></label><textarea id="q-t" class="pe-in" rows="3" maxlength="240" value="{{f.quote}}" data-k="quote" onChange="{{field}}" onInput="{{field}}"></textarea></div>
+<div class="pe-2"><div class="pe-f"><label for="q-a">Who said it</label><input id="q-a" class="pe-in" value="{{f.quoteBy}}" data-k="quoteBy" onChange="{{field}}" onInput="{{field}}"></div><div class="pe-f"><label for="q-p">Publication</label><input id="q-p" class="pe-in" value="{{f.quotePub}}" data-k="quotePub" onChange="{{field}}" onInput="{{field}}"></div></div>
+</div></div>
+<div class="pe-aside"><div class="pe-eyebrow">Preview</div><div class="pe-quote"><svg class="vz-icon" aria-hidden="true"><use href="#i-quote"></use></svg><p>{{f.quote}}</p><span>{{f.quoteBy}}, {{f.quotePub}}</span></div></div></div>
+</sc-if>
+
+<sc-if value="{{s.reach}}" hint-placeholder-val="{{false}}">
+<div class="pe-head"><div><h1>Reach</h1><p>Where your audience follows you. Sponsors compare these numbers across projects, so keep them current.</p></div><div class="pe-head-end"><button type="button" class="vz-btn vz-btn--secondary sm"><svg class="vz-icon" aria-hidden="true"><use href="#i-plus"></use></svg>Add channel</button></div></div>
+<div class="pe-stats" style="margin-bottom:16px"><div><b>642K</b><span>Total followers</span></div><div><b>2.1M</b><span>Monthly impressions</span></div><div><b>5.6%</b><span>Avg. engagement</span></div><div><b>120K</b><span>On-site attendance</span></div></div>
+<div class="pe-list">
+<div class="pe-ch h"><span></span><span>Channel</span><span>Followers</span><span>Impressions / mo</span><span>Engagement</span><span></span></div>
+<div class="pe-ch"><span class="av"><svg class="vz-icon" aria-hidden="true"><use href="#i-camera"></use></svg></span><span><b>Instagram</b><small>@saharasound</small></span><span class="num">480K</span><span class="num">1.2M</span><span class="num">6.2%</span><button type="button" class="pe-ibtn bare" aria-label="Edit Instagram"><svg class="vz-icon" aria-hidden="true"><use href="#i-pencil"></use></svg></button></div>
+<div class="pe-ch"><span class="av"><svg class="vz-icon" aria-hidden="true"><use href="#i-video"></use></svg></span><span><b>YouTube</b><small>Sahara Sound</small></span><span class="num">120K</span><span class="num">860K</span><span class="num">4.1%</span><button type="button" class="pe-ibtn bare" aria-label="Edit YouTube"><svg class="vz-icon" aria-hidden="true"><use href="#i-pencil"></use></svg></button></div>
+<div class="pe-ch"><span class="av"><svg class="vz-icon" aria-hidden="true"><use href="#i-mail"></use></svg></span><span><b>Newsletter</b><small>Weekly, 42% open rate</small></span><span class="num">42K</span><span class="num">—</span><span class="num">42%</span><button type="button" class="pe-ibtn bare" aria-label="Edit newsletter"><svg class="vz-icon" aria-hidden="true"><use href="#i-pencil"></use></svg></button></div>
+</div>
+</sc-if>
+
+<sc-if value="{{s.audience}}" hint-placeholder-val="{{false}}">
+<div class="pe-head"><div><h1>Audience</h1><p>Who shows up. Sponsors use this to match your project with their campaigns.</p></div></div>
+<div class="pe-card"><div class="pe-form">
+<div class="pe-f"><div class="lb">Age groups <small>Pick all that apply</small></div><div class="pe-togs"><sc-for list="{{ages}}" as="a" hint-placeholder-count="5"><button type="button" class="pe-tog" aria-pressed="{{a.on}}" data-g="ages" data-v="{{a.v}}" onClick="{{chip}}">{{a.v}}</button></sc-for></div></div>
+<div class="pe-f"><div class="lb">Interests</div><div class="pe-togs"><sc-for list="{{ints}}" as="a" hint-placeholder-count="8"><button type="button" class="pe-tog" aria-pressed="{{a.on}}" data-g="ints" data-v="{{a.v}}" onClick="{{chip}}">{{a.v}}</button></sc-for></div></div>
+<div class="pe-f"><div class="lb">Top locations</div><div class="pe-togs"><button type="button" class="pe-tog sel" aria-label="Remove Los Angeles, CA">Los Angeles, CA<svg class="vz-icon" aria-hidden="true"><use href="#i-x"></use></svg></button><button type="button" class="pe-tog sel" aria-label="Remove Phoenix, AZ">Phoenix, AZ<svg class="vz-icon" aria-hidden="true"><use href="#i-x"></use></svg></button><button type="button" class="pe-tog sel" aria-label="Remove San Diego, CA">San Diego, CA<svg class="vz-icon" aria-hidden="true"><use href="#i-x"></use></svg></button><button type="button" class="pe-tog"><svg class="vz-icon" aria-hidden="true"><use href="#i-plus"></use></svg>Add location</button></div></div>
+</div></div>
+</sc-if>
+
+<sc-if value="{{s.packages}}" hint-placeholder-val="{{true}}">
+<dc-import name="PE-Packages" view="{{pkgView}}" scenario="{{pkgScenario}}" editor="{{pkgEditor}}" edit-id="{{pkgEditId}}" library="{{pkgLibrary}}" editor-style="{{pkgEditorStyle}}" cell="{{pkgCell}}" hint-size="100%,1000px"></dc-import>
+</sc-if>
+
+<sc-if value="{{s.gallery}}" hint-placeholder-val="{{false}}">
+<div class="pe-head"><div><h1>Creator gallery</h1><p>Photos and video from past editions. Sponsors want to picture their brand here.</p></div><sc-if value="{{galleryFull}}" hint-placeholder-val="{{false}}"><div class="pe-head-end"><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{addPhotos}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-upload"></use></svg>Upload</button></div></sc-if></div>
+<sc-if value="{{galleryEmpty}}" hint-placeholder-val="{{true}}"><div class="pe-drop"><span class="ic"><svg class="vz-icon" aria-hidden="true"><use href="#i-images"></use></svg></span><h3>Show sponsors what it looks like</h3><p>Drop photos or short videos here. Projects with a gallery get about 3× more sponsor requests. Six to twelve images is plenty.</p><button type="button" class="vz-btn pe-solid sm" onClick="{{addPhotos}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-upload"></use></svg>Upload images</button><span class="hint" style="font-size:12px;color:var(--text-tertiary)">JPG, PNG or MP4 · up to 50 MB each</span></div></sc-if>
+<sc-if value="{{galleryFull}}" hint-placeholder-val="{{false}}"><div class="pe-gal"><sc-for list="{{gal}}" as="g" hint-placeholder-count="3"><figure><img class="img" src="{{g.src}}" alt="{{g.alt}}" loading="lazy" style="width:100%;object-fit:cover;display:block"><sc-if value="{{g.cover}}" hint-placeholder-val="{{false}}"><span class="pe-chip badge">Cover</span></sc-if><figcaption>{{g.cap}}</figcaption></figure></sc-for><button type="button" class="add" onClick="{{addPhotos}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-plus"></use></svg>Add more</button></div></sc-if>
+</sc-if>
+
+<sc-if value="{{s.contact}}" hint-placeholder-val="{{false}}">
+<div class="pe-head"><div><h1>Contact</h1><p>How sponsors reach you about this project. Leave blank to use your company contact.</p></div></div>
+<div class="pe-card"><div class="pe-form">
+<div class="pe-swrow"><div><b>Show contact details to sponsors</b><span>{{contactHelp}}</span></div><label class="pe-sw"><input type="checkbox" aria-label="Show contact details to sponsors" checked="{{f.contactPub}}" data-k="contactPub" onChange="{{field}}"><i></i></label></div>
+<div class="pe-2"><div class="pe-f"><label for="c-e">Email</label><input id="c-e" class="pe-in" value="{{f.email}}" data-k="email" onChange="{{field}}" onInput="{{field}}"></div><div class="pe-f"><label for="c-p">Phone</label><input id="c-p" class="pe-in" value="{{f.phone}}" data-k="phone" onChange="{{field}}" onInput="{{field}}"></div></div>
+</div></div>
+</sc-if>
+</div>
+</main>
+</div>
+<sc-if value="{{mdModal}}" hint-placeholder-val="{{false}}"><div class="cf-scrim" onClick="{{mdCloseFn}}"></div><section class="cf mdm" role="dialog" aria-modal="true" aria-labelledby="mdm-h"><header class="rv-hd"><div class="rv-ht"><span class="rv-crumb">{{mdCrumb}}</span><h2 id="mdm-h">{{mdTitle}}</h2></div><button type="button" class="vz-btn pe-solid sm" onClick="{{mdCloseFn}}">Done</button></header><div class="mdm-body"><dc-import name="MD-Moods" embed="true" primary="{{mdPri}}" sup="{{mdSupCsv}}" suggest="{{mdSuggest}}" hint-size="100%,620px"></dc-import></div></section></sc-if>
+<sc-if value="{{hasToast}}" hint-placeholder-val="{{false}}"><div class="pe-toast" role="status"><svg class="vz-icon" aria-hidden="true"><use href="#i-check-circle"></use></svg>{{toast}}</div></sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"section":{"editor":"enum","options":["overview","basics","mood","dates","highlights","press","reach","audience","packages","gallery","contact"],"default":"packages","section":"State"},"moodPicker":{"editor":"boolean","default":false,"section":"State"},"compact":{"editor":"boolean","default":false,"section":"State"},"colorMode":{"editor":"enum","options":["auto","subtle","mono"],"default":"auto","section":"Prototype"},"newDraft":{"editor":"boolean","default":false,"section":"State"},"coverStyle":{"editor":"enum","options":["hero","thumb"],"default":"hero","section":"Cover"},"coverView":{"editor":"enum","options":["page","mobile","card"],"default":"page","section":"Cover"},"coverReposition":{"editor":"boolean","default":false,"section":"Cover"},"coverState":{"editor":"enum","options":["filled","empty","lowres"],"default":"filled","section":"Cover"},"headerWidth":{"editor":"enum","options":["default","app"],"default":"app","section":"Layout"},"headerDivider":{"editor":"boolean","default":false,"section":"Layout"},"railTone":{"editor":"enum","options":["same","darker"],"default":"same","section":"Layout"},"headerTone":{"editor":"enum","options":["flat","raised"],"default":"raised","section":"Layout"},"saveState":{"editor":"enum","options":["saved","saving","unsaved"],"default":"saved","section":"State"},"unpublished":{"editor":"int","default":3,"min":0,"max":20,"section":"State"},"galleryFilled":{"editor":"boolean","default":true,"section":"State"},"pkgView":{"editor":"enum","options":["cards","compare"],"default":"cards","section":"Packages"},"pkgScenario":{"editor":"enum","options":["ready","issues","empty"],"default":"ready","section":"Packages"},"pkgEditor":{"editor":"enum","options":["none","edit","create"],"default":"none","section":"Packages"},"pkgEditId":{"editor":"enum","options":["p1","p2","p3"],"default":"p2","section":"Packages"},"pkgLibrary":{"editor":"boolean","default":false,"section":"Packages"},"pkgEditorStyle":{"editor":"enum","options":["panel","fullscreen"],"default":"fullscreen","section":"Packages"},"pkgCell":{"editor":"string","default":"","section":"Packages"},"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    this.applyColor(this.colorMode());
+    if (window.Venzza) window.Venzza.mountIcons();
+    if (this.props.newDraft === true || this.props.newDraft === 'true') { this.setState({ toast: 'Project created as a draft. Only you can see it until you publish.', changes: 0 }); this.tt = setTimeout(() => this.setState({ toast: '' }), 6000); }
+    this.onChg = (e) => { const d = (e && e.detail) || {}; const s = this.state || {}; this.setState({ save: 'saving', changes: this.changes() + 1, pkgCount: d.count, pkgWarn: d.warn }); clearTimeout(this.st); this.st = setTimeout(() => this.setState({ save: 'saved' }), 700); };
+    this.onStats = (e) => { const d = (e && e.detail) || {}; this.setState({ pkgCount: d.count, pkgWarn: d.warn }); };
+    this.onMd = (e) => { const x = (e && e.detail) || {}; if (!(this.state || {}).mdOpen) return; this.setState({ md: { p: x.p || '', sup: x.sup || [] } }); this.changed(); }; window.addEventListener('md-change', this.onMd); this.onMdKey = (e) => { if (e.key === 'Escape' && (this.state || {}).mdOpen) this.setState({ mdOpen: false }); }; document.addEventListener('keydown', this.onMdKey); if (this.props.moodPicker === true || this.props.moodPicker === 'true') this.setState({ mdOpen: true });
+    window.addEventListener('pe-change', this.onChg); window.addEventListener('pe-stats', this.onStats);
+    if (window.__pePk) this.setState({ pkgCount: window.__pePk.count, pkgWarn: window.__pePk.warn });
+  }
+  colorMode() { return this.props.colorMode === 'mono' ? 'mono' : 'subtle'; }
+  applyColor(m) { document.documentElement.classList.toggle('vz-color', m === 'subtle'); }
+  componentWillUnmount() { window.removeEventListener('md-change', this.onMd); document.removeEventListener('keydown', this.onMdKey); window.removeEventListener('pe-change', this.onChg); window.removeEventListener('pe-stats', this.onStats); }
+  componentDidUpdate(prev) { const P = this.props; if (prev.section !== P.section || prev.compact !== P.compact || prev.saveState !== P.saveState || prev.galleryFilled !== P.galleryFilled || prev.unpublished !== P.unpublished || prev.coverView !== P.coverView || prev.coverReposition !== P.coverReposition || prev.coverState !== P.coverState) this.setState({ cvTab: undefined, cvRepo: undefined, cvState: undefined, cv: undefined, sec: undefined, compact: undefined, save: undefined, gallery: undefined, changes: undefined }); }
+  changes() { const s = this.state || {}; return s.changes !== undefined ? s.changes : Number(this.props.unpublished ?? 3); }
+  changed() { this.setState({ save: 'saving', changes: this.changes() + 1 }); clearTimeout(this.st); this.st = setTimeout(() => this.setState({ save: 'saved' }), 700); }
+  renderVals() {
+    const P = this.props, s = this.state || {};
+    const sec = s.sec || P.section || 'packages';
+    const compact = s.compact !== undefined ? s.compact : !!P.compact;
+    const save = s.save || P.saveState || 'saved';
+    const changes = this.changes();
+    const gallery = s.gallery !== undefined ? s.gallery : (P.newDraft === true || P.newDraft === 'true') ? false : !(P.galleryFilled === false || P.galleryFilled === 'false');
+    const ND = P.newDraft === true || P.newDraft === 'true';
+    const pkScenario = ND ? 'empty' : (P.pkgScenario || 'ready');
+    const pkgCount = s.pkgCount !== undefined ? s.pkgCount : pkScenario === 'empty' ? 0 : pkScenario === 'issues' ? 4 : 3;
+    const pkgWarn = s.pkgWarn !== undefined ? s.pkgWarn : pkScenario === 'issues' ? 3 : 0;
+    const f = Object.assign({ name: 'Sahara Sound Festival 2027', tag: 'Two weekends of music, art and desert sunsets for 120,000 fans', cat: 'Music', loc: 'Indio, CA', org: 'Sahara Sound Collective', desc: 'Sahara Sound brings 120,000 music fans to the desert across two April weekends. Six stages, large-scale art and a food program built with local chefs. Our audience is young, creative and highly social: last year’s edition reached 2.1M people online.', start: 'Apr 9, 2027', end: 'Apr 18, 2027', quote: 'The most forward-looking festival in the desert, and the one brands are quietly lining up for.', quoteBy: 'Maya Torres', quotePub: 'Festival Weekly', contactPub: true, email: 'partnerships@saharasound.example', phone: '+1 760 555 2025' }, ND ? { name: 'Coastline Cup 2027', tag: 'Pro surf competition with a global livestream', cat: 'Sports', loc: 'Ericeira, Portugal', org: 'Coastline Sports', desc: 'A four-day pro surf competition on Portugal’s Atlantic coast, streamed live worldwide.', start: '', end: '', quote: '', quoteBy: '', quotePub: '', contactPub: false, email: 'team@coastlinecup.example', phone: '' } : {}, s.f || {});
+    const hls = s.hls || [
+      { title: '120,000 attendees across two weekends', text: 'Sold out for three straight years, with 38% of tickets bought by first-time visitors.' },
+      { title: 'Audience that posts', text: '2.1M social impressions during last year’s festival, 6.2% average engagement on Instagram.' },
+      { title: 'Built-in content', text: 'Our in-house crew films every stage, so partners get edited content within 48 hours.' }
+    ];
+    const pkgOk = pkgCount > 0 && !pkgWarn;
+    const MOODS = [{ id: 'energetic', n: 'Energetic', c1: '#FF6A3D' }, { id: 'euphoric', n: 'Euphoric', c1: '#FF4FB0' }, { id: 'chill', n: 'Chill', c1: '#46C7F0' }, { id: 'dreamy', n: 'Dreamy', c1: '#C8A8F0' }, { id: 'bold', n: 'Bold', c1: '#FF3B5C' }, { id: 'underground', n: 'Underground', c1: '#8A8A96' }, { id: 'premium', n: 'Premium', c1: '#D9B77A' }, { id: 'playful', n: 'Playful', c1: '#FFC94A' }, { id: 'wholesome', n: 'Wholesome', c1: '#7FD48A' }, { id: 'artsy', n: 'Artsy', c1: '#8E8CF0' }, { id: 'adventurous', n: 'Adventurous', c1: '#2FB7A0' }, { id: 'nocturnal', n: 'Nocturnal', c1: '#5B6BFF' }];
+    const mdDef = (this.props.newDraft === true || this.props.newDraft === 'true') ? { p: '', sup: [] } : { p: 'euphoric', sup: ['energetic', 'dreamy'] };
+    const md = s.md || mdDef;
+    const mdName = (id) => (MOODS.find((x) => x.id === id) || {}).n || '';
+    const mdSumTxt = md.p ? mdName(md.p) + (md.sup.length ? ' · with ' + md.sup.map(mdName).join(', ') : '') : '';
+    const SECS = [
+      { k: 'overview', l: 'Overview', i: 'i-layout-dashboard', st: '' },
+      { g: 'About', k: 'basics', l: 'Project basics', i: 'i-file-text', st: 'ok', sum: f.cat + ' · ' + f.loc },
+      { k: 'mood', l: 'Mood', i: 'i-sparkle', st: md.p ? 'ok' : 'empty', sum: md.p ? mdSumTxt : 'Not set · helps sponsors find you' },
+      { k: 'dates', l: 'Important dates', i: 'i-calendar', st: ND ? 'empty' : 'ok', sum: ND ? 'Not started' : f.start + ' – ' + f.end + ' · 3 key dates' },
+      { k: 'highlights', l: 'Highlights', i: 'i-star', st: ND ? 'empty' : 'ok', sum: ND ? 'Not started' : hls.length + ' highlights' },
+      { k: 'press', l: 'Press quote', i: 'i-quote', st: ND ? 'empty' : 'ok', sum: ND ? 'Optional' : f.quoteBy + ', ' + f.quotePub },
+      { g: 'Audience', k: 'reach', l: 'Reach', i: 'i-satellite-dish', st: ND ? 'empty' : 'ok', sum: ND ? 'Not started' : '642K followers · 3 channels' },
+      { k: 'audience', l: 'Audience', i: 'i-users', st: ND ? 'empty' : 'ok', sum: ND ? 'Not started' : '18–34 · Music, Art, Fashion' },
+      { g: 'Offer', k: 'packages', l: 'Sponsorship packages', i: 'i-package', st: pkgCount ? (pkgWarn ? 'warn' : 'ok') : 'empty', sum: pkgCount ? pkgCount + ' packages' + (pkgWarn ? ' · ' + pkgWarn + ' to fix' : ' · $50k – $250k') : 'No packages yet' },
+      { g: 'Media & contact', k: 'gallery', l: 'Creator gallery', i: 'i-images', st: gallery ? 'ok' : 'empty', sum: gallery ? '4 images' : 'Empty · adds about 12% strength' },
+      { k: 'contact', l: 'Contact', i: 'i-user', st: ND ? 'empty' : 'ok', sum: ND ? 'Not started' : f.contactPub ? 'Visible to sponsors' : 'Hidden' }
+    ];
+    const countable = SECS.filter((x) => x.st);
+    const done = countable.filter((x) => x.st === 'ok').length;
+    const strength = Math.round((done / countable.length) * 100);
+    const cur = SECS.find((x) => x.k === sec) || SECS[0];
+    const S = {}; SECS.forEach((x) => { S[x.k] = x.k === sec; });
+    const stCls = (st) => 'pe-st' + (st ? ' ' + st : '');
+    const stLbl = (st) => (st === 'ok' ? 'Complete' : st === 'warn' ? 'Needs attention' : st === 'empty' ? 'Not started' : '');
+    const todo = [];
+    if (ND) todo.push({ ic: 'i-alert-circle', icCls: 'vz-icon ic-warn', title: 'Add your first sponsorship package', sub: 'Sponsors need at least one package before you can publish.', s: 'packages', act: 'Create a package', hasGo: true });
+    if (ND) todo.push({ ic: 'i-info', icCls: 'vz-icon ic-info', title: 'Fill in the other sections when you’re ready', sub: 'Dates, reach and audience help sponsors decide. Each one adds to project strength.', s: 'dates', act: 'Start with dates', hasGo: true });
+    if (!gallery && !ND) todo.push({ ic: 'i-alert-circle', icCls: 'vz-icon ic-warn', title: 'Creator gallery is empty', sub: 'The only section left. Adds about 12% to project strength.', s: 'gallery', act: 'Add images', hasGo: true });
+    if (pkgWarn) todo.push({ ic: 'i-alert-circle', icCls: 'vz-icon ic-warn', title: pkgWarn + (pkgWarn === 1 ? ' package issue' : ' package issues'), sub: 'Sponsors can’t buy a package without a price and contents.', s: 'packages', act: 'Fix packages', hasGo: true });
+    if (!pkgCount && !ND) todo.push({ ic: 'i-alert-circle', icCls: 'vz-icon ic-warn', title: 'No sponsorship packages yet', sub: 'Sponsors need at least one package to buy.', s: 'packages', act: 'Create one', hasGo: true });
+    if (!ND) todo.push({ ic: 'i-info', icCls: 'vz-icon ic-info', title: 'VIP passes are only in one package', sub: 'Fine for a premium perk. Consider a smaller allocation in Sahara Tent.', s: 'packages', act: 'Review', hasGo: true });
+    if (!ND) todo.push({ ic: 'i-check-circle', icCls: 'vz-icon ic-ok', title: 'Contact details are visible', sub: f.email, s: 'contact', act: '', hasGo: false });
+    const AGES = ['18–24', '25–34', '35–44', '45–54', '55+'], INTS = ['Music', 'Art & culture', 'Fashion', 'Beauty', 'Food & drink', 'Travel', 'Sports', 'Fitness', 'Wellness', 'Gaming', 'Technology', 'Outdoors'];
+    const ages = s.ages || ['18–24', '25–34'], ints = s.ints || ['Music', 'Art & culture', 'Fashion', 'Food & drink'];
+    const editing = s.hlEdit === undefined ? -1 : s.hlEdit;
+    const go = (e) => { const k = e.currentTarget.getAttribute('data-s'); this.setState({ sec: k }); try { window.scrollTo(0, 0); } catch (x) {} };
+    const cvView = s.cvTab || P.coverView || 'page';
+    const cvRepoOn = s.cvRepo !== undefined ? s.cvRepo : !!P.coverReposition;
+    const cvSt = s.cvState || P.coverState || 'filled';
+    const cvP = s.cv || { x: 50, y: 42 };
+    const clamp = (n) => Math.max(0, Math.min(100, Math.round(n * 10) / 10));
+    const cvNotes = { page: 'How it looks at the top of your project page. Keep faces and logos clear of the title and the sponsorship card.', mobile: 'On phones the cover is cropped narrower, and the sponsorship card moves below it.', card: 'How it looks on your marketplace card.' };
+    const cvSaveFn = () => { this.setState({ cvRepo: false }); this.changed(); };
+    const cvCancelFn = () => { this.setState({ cvRepo: false, cv: s.cvPrev || cvP }); };
+    const cvVals = {
+      cvHero: P.coverStyle !== 'thumb', cvThumb: P.coverStyle === 'thumb',
+      cvHas: cvSt !== 'empty', cvEmpty: cvSt === 'empty', cvLow: cvSt === 'lowres', cvIdle: !cvRepoOn, cvRepo: cvRepoOn,
+      cvTabs: [['page', 'Project page', 'i-app-window'], ['mobile', 'Mobile', 'i-phone'], ['card', 'Marketplace card', 'i-store']].map(([k, l, i]) => ({ k, l, i, on: cvView === k ? 'true' : 'false' })),
+      cvStageCls: 'cv-stage ' + cvView, cvFrameCls: 'cv-frame ' + cvView + (cvRepoOn ? ' repo' : '') + (s.cvDrag ? ' drag' : ''),
+      cvRole: cvRepoOn ? 'slider' : 'img', cvRd: cvRepoOn ? 'position control' : 'image', cvAria: cvRepoOn ? 'Cover position. Use arrow keys to move the image, Enter to save, Escape to cancel.' : 'Cover image preview: festival crowd at sunset',
+      cvPos: cvP.x + '% ' + cvP.y + '%',
+      cvNote: cvRepoOn ? 'Drag to choose what stays in view, or use the arrow keys. One position works for every size, so check each view.' : cvNotes[cvView],
+      cvMeta: cvSt === 'lowres' ? '1200 × 675 px' : '3200 × 1800 px · JPG',
+      cvTab: (e) => this.setState({ cvTab: e.currentTarget.getAttribute('data-v') }),
+      cvRepoStart: () => { this.setState({ cvRepo: true, cvPrev: cvP }); setTimeout(() => { const el = document.querySelector('.cv-frame'); if (el) el.focus(); }, 40); },
+      cvSave: cvSaveFn, cvCancel: cvCancelFn,
+      cvRemove: () => { this.setState({ cvState: 'empty', cvRepo: false }); this.changed(); },
+      cvUpload: () => { this.setState({ cvState: 'filled', cv: { x: 50, y: 50 } }); this.changed(); },
+      cvKey: (e) => {
+        if (!cvRepoOn) return;
+        const st = e.shiftKey ? 10 : 2; const d = { ArrowUp: [0, -st], ArrowDown: [0, st], ArrowLeft: [-st, 0], ArrowRight: [st, 0] }[e.key];
+        if (d) { e.preventDefault(); this.setState({ cv: { x: clamp(cvP.x + d[0]), y: clamp(cvP.y + d[1]) } }); }
+        else if (e.key === 'Enter') { e.preventDefault(); cvSaveFn(); }
+        else if (e.key === 'Escape') { e.preventDefault(); cvCancelFn(); }
+      },
+      cvDown: (e) => {
+        if (!cvRepoOn || e.button > 0) return;
+        const fr = e.currentTarget; const img = fr.querySelector('img'); const r = fr.getBoundingClientRect();
+        const nw = (img && img.naturalWidth) || 1600, nh = (img && img.naturalHeight) || 900; const sc = Math.max(r.width / nw, r.height / nh);
+        const ox = nw * sc - r.width, oy = nh * sc - r.height; const x0 = e.clientX, y0 = e.clientY, p0 = Object.assign({}, cvP);
+        e.preventDefault(); fr.focus();
+        const mv = (ev) => this.setState({ cv: { x: ox > 1 ? clamp(p0.x - (ev.clientX - x0) / ox * 100) : p0.x, y: oy > 1 ? clamp(p0.y - (ev.clientY - y0) / oy * 100) : p0.y } });
+        const up = () => { window.removeEventListener('pointermove', mv); window.removeEventListener('pointerup', up); this.setState({ cvDrag: false }); };
+        window.addEventListener('pointermove', mv); window.addEventListener('pointerup', up); this.setState({ cvDrag: true });
+      }
+    };
+    return Object.assign(cvVals, {
+      mdP: MOODS.map((m) => ({ id: m.id, n: m.n, c1: m.c1, on: md.p === m.id ? 'true' : 'false' })),
+      mdS: MOODS.filter((m) => m.id !== md.p).map((m) => { const on = md.sup.indexOf(m.id) > -1; const full = !on && md.sup.length >= 3; return { id: m.id, n: m.n, c1: m.c1, on: on ? 'true' : 'false', full: full ? 'true' : 'false', cls: 'pe-tog mdp' + (full ? ' off' : '') }; }),
+      mdSupN: String(md.sup.length), mdMainHint: md.p ? 'Sponsors match on this' : 'Pick one · sponsors match on this', mdHintOn: !!s.mdHint,
+      mdModal: !!s.mdOpen, mdPri: md.p, mdSupCsv: md.sup.join(','), mdSuggest: 'euphoric,energetic,dreamy', mdCrumb: 'Edit project · Mood', mdTitle: 'What’s the feeling?',
+      mdPick: (e) => { const v = e.currentTarget.getAttribute('data-v'); this.setState({ md: { p: md.p === v ? '' : v, sup: md.sup.filter((x) => x !== v) } }); this.changed(); },
+      mdSupT: (e) => { const v = e.currentTarget.getAttribute('data-v'); if (md.sup.indexOf(v) > -1) { this.setState({ md: { p: md.p, sup: md.sup.filter((x) => x !== v) }, mdHint: false }); this.changed(); return; } if (md.sup.length >= 3) { this.setState({ mdHint: true }); clearTimeout(this.mdT); this.mdT = setTimeout(() => this.setState({ mdHint: false }), 2600); return; } this.setState({ md: { p: md.p, sup: md.sup.concat([v]) } }); this.changed(); },
+      mdOpenFn: () => this.setState({ mdOpen: true }), mdCloseFn: () => this.setState({ mdOpen: false }),
+
+      backHref: ND ? 'PN-Projects.dc.html' : 'PN-Project-Owner.dc.html', backLbl: ND ? 'Back to projects' : 'Back to project',
+      pubLbl: ND ? 'Publish project' : 'Published', pubTip: ND ? 'Add a package to publish' : '',
+      pubNote: ND ? 'This project is a draft. Only you can see it until you publish.' : this.changes() + ' unpublished changes. Sponsors keep seeing the live version until you review and publish the whole page.',
+      ringGo: ND ? 'packages' : 'gallery', ringIc: ND ? 'i-package' : 'i-images', ringLbl: ND ? 'Add a package' : 'Add a gallery',
+      projCls: 'pe-proj' + (ND ? ' draft' : ''), projSt: (ND ? 'Draft · ' : 'Published · ') + f.loc,
+      ringCls: 'pe-ring-v' + (strength === 100 ? ' full' : ''),
+      peCls: 'pe' + (compact ? ' compact' : '') + (P.railTone === 'darker' ? ' rail-dark' : '') + ((P.headerWidth || 'app') === 'app' ? ' hdr-app' : ''), hw: P.headerWidth || 'app', htone: P.headerTone || 'raised', hdiv: P.headerDivider === true || P.headerDivider === 'true',
+      strength: String(strength), ringDash: (2 * Math.PI * 40 * strength / 100).toFixed(1) + ' 999', strengthTxt: done + ' of ' + countable.length + ' sections complete',
+      nav: SECS.map((x) => ({ g: x.g || '', k: x.k, l: x.l, i: x.i, cur: x.k === sec ? 'page' : undefined, stCls: stCls(x.st), stLbl: stLbl(x.st), ok: x.st === 'ok' })),
+      secCards: SECS.filter((x) => x.k !== 'overview').map((x) => ({ k: x.k, l: x.l, i: x.i, sum: x.sum, stCls: stCls(x.st), ok: x.st === 'ok' })),
+      todo, s: S, secLabel: cur.l,
+      collapseLbl: compact ? 'Expand sidebar' : 'Collapse sidebar', collapseIcon: compact ? 'i-chevron-right' : 'i-chevrons-left',
+      saveCls: 'pe-save' + (save === 'saving' ? ' saving' : ''), isSaved: save === 'saved', notSaved: save !== 'saved', saveTxt: save === 'saving' ? 'Saving…' : save === 'unsaved' ? 'Unsaved changes' : 'All changes saved',
+      changes: String(changes), hasChanges: changes > 0, noChanges: changes === 0, previewHref: sec === 'packages' ? 'PN-Project-Preview-Packages.dc.html' : 'PN-Project-Preview.dc.html',
+      galleryEmpty: !gallery, galleryFull: gallery,
+      gal: [{ src: 'assets/img/sahara-main-stage.jpg', alt: 'Crowd at the main stage at sunset', cap: 'Main stage, Saturday sunset', cover: true }, { src: 'assets/img/robed-figure-desert.jpg', alt: 'Performer in a red sash in the desert', cap: 'Desert art walk', cover: false }, { src: 'assets/img/robot-glowing-eye.jpg', alt: 'Robotic sculpture with a glowing eye', cap: 'Installation by Studio Nordlys', cover: false }, { src: 'assets/img/figure-above-lake.jpg', alt: 'Figure in a flowing coat above a lake', cap: 'Opening film, 2026 edition', cover: false }],
+      f: Object.assign({}, f, { nameN: f.name.length, tagN: f.tag.length, descN: f.desc.length.toLocaleString('en-US'), quoteN: f.quote.length }),
+      contactHelp: f.contactPub ? 'Sponsors see your email and phone on the project page.' : 'Sponsors message you through Venzza instead.',
+      hls: hls.map((h, i) => ({ i: String(i), title: h.title, text: h.text, view: editing !== i, edit: editing === i, cls: 'pe-li' + (editing === i ? ' editing' : ''), first: i === 0, last: i === hls.length - 1, editLbl: 'Edit ' + h.title })),
+      hlCount: String(hls.length), hlCanAdd: hls.length < 5,
+      ages: AGES.map((v) => ({ v, on: ages.indexOf(v) > -1 ? 'true' : 'false' })), ints: INTS.map((v) => ({ v, on: ints.indexOf(v) > -1 ? 'true' : 'false' })),
+      pkgView: P.pkgView || 'cards', pkgScenario: pkScenario, pkgEditor: P.pkgEditor || 'none', pkgEditId: P.pkgEditId || 'p2', pkgLibrary: !!P.pkgLibrary, pkgEditorStyle: P.pkgEditorStyle || 'fullscreen', pkgCell: P.pkgCell || '',
+      hasToast: !!s.toast, toast: s.toast || '',
+      go,
+      toggleRail: () => this.setState({ compact: !compact }),
+      importDoc: () => { this.setState({ toast: 'Import reads a deck or PDF and fills in sections for you to review' }); clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({ toast: '' }), 3500); },
+      publish: () => { this.setState({ changes: 0, toast: 'Published. Sponsors now see your latest changes.' }); clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({ toast: '' }), 3500); },
+      field: (e) => { const k = e.currentTarget.getAttribute('data-k'); const v = e.target.type === 'checkbox' ? e.target.checked : e.target.value; this.setState({ f: Object.assign({}, s.f || {}, { [k]: v }) }); this.changed(); },
+      chip: (e) => { const g = e.currentTarget.getAttribute('data-g'), v = e.currentTarget.getAttribute('data-v'); const cur2 = g === 'ages' ? ages : ints; const n = cur2.indexOf(v) > -1 ? cur2.filter((x) => x !== v) : cur2.concat([v]); this.setState({ [g]: n }); this.changed(); },
+      hlMove: (e) => { const i = Number(e.currentTarget.getAttribute('data-i')), k = Number(e.currentTarget.getAttribute('data-k')); const a = hls.slice(); const j = i + k; if (j < 0 || j >= a.length) return; const t = a[i]; a[i] = a[j]; a[j] = t; this.setState({ hls: a }); this.changed(); },
+      hlEdit: (e) => this.setState({ hlEdit: Number(e.currentTarget.getAttribute('data-i')) }),
+      hlDone: () => this.setState({ hlEdit: -1 }),
+      hlField: (e) => { const i = Number(e.currentTarget.getAttribute('data-i')), k = e.currentTarget.getAttribute('data-k'); const a = hls.map((h, j) => (j === i ? Object.assign({}, h, { [k]: e.target.value }) : h)); this.setState({ hls: a }); this.changed(); },
+      hlDel: (e) => { const i = Number(e.currentTarget.getAttribute('data-i')); this.setState({ hls: hls.filter((h, j) => j !== i), hlEdit: -1 }); this.changed(); },
+      hlAdd: () => { this.setState({ hls: hls.concat([{ title: '', text: '' }]), hlEdit: hls.length }); },
+      addPhotos: () => { this.setState({ gallery: true }); this.changed(); }
+    });
+  }
+}
+</script>
+<script src="assets/components.js"></script><script>(function(m){var o={};for(var k in m)o["./"+k]=new Blob([m[k]],{type:"text/html"});window.__resourceBlobs=o;window.__resources={};})(window.__VZ_SRC||{});</script><script src="assets/vendor/react.production.min.js"></script><script src="assets/vendor/react-dom.production.min.js"></script><script src="assets/vendor/dc-runtime.js"></script><script src="assets/prototype-map.js"></script><script src="assets/proto-bar.js"></script>
+</body>
+</html>

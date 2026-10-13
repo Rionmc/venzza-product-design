@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Find projects for a campaign</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="ds/venzza/components/bundle.css">
+<link rel="stylesheet" href="shared/venzza-dark.css">
+<link rel="stylesheet" href="shared/venzza-app.css">
+<script src="ds/venzza/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="cf-scrim" onClick="{{close}}"></div>
+<section class="cf" role="dialog" aria-modal="true" aria-labelledby="cf-h" onKeyDown="{{onKey}}">
+<header class="cf-hd">
+<div class="cf-ht"><h2 id="cf-h">Find projects for {{c.name}}</h2><p>{{c.sub}}</p></div>
+<a class="vz-btn vz-btn--ghost sm" href="{{marketHref}}">Browse the full marketplace<svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-up-right"></use></svg></a>
+<button type="button" class="pe-ibtn" aria-label="Close" onClick="{{close}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-x"></use></svg></button>
+</header>
+<div class="cf-tools">
+<span class="cf-q"><svg class="vz-icon" aria-hidden="true"><use href="#i-search"></use></svg><input id="cf-q" type="search" placeholder="Search projects, creators or places" aria-label="Search projects" value="{{q}}" onInput="{{onQ}}" onChange="{{onQ}}"><sc-if value="{{hasQ}}" hint-placeholder-val="{{false}}"><button type="button" class="cf-qx" aria-label="Clear search" onClick="{{clearQ}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-x"></use></svg></button></sc-if></span>
+<div class="vzchips cf-cats" role="group" aria-label="Category"><sc-for list="{{cats}}" as="k" hint-placeholder-count="5"><button type="button" class="vzchip" aria-pressed="{{k.on}}" data-v="{{k.v}}" onClick="{{setCat}}">{{k.l}}</button></sc-for></div>
+<label class="cf-bud"><span class="pe-sw sm"><input type="checkbox" checked="{{within}}" onChange="{{toggleWithin}}"><i></i></span>Within budget</label>
+<label class="cf-sort"><span>Sort</span><select class="pe-in" aria-label="Sort by" value="{{sort}}" onChange="{{setSort}}"><option value="fit">Best fit</option><option value="price">Lowest price</option><option value="reach">Biggest reach</option></select></label>
+</div>
+
+<div class="cf-body">
+<div class="cf-res">
+<div class="cf-meta" role="status">{{countTxt}}</div>
+<sc-if value="{{loading}}" hint-placeholder-val="{{false}}"><div class="cf-grid"><sc-for list="{{skel}}" as="x" hint-placeholder-count="6"><div class="cf-card skel" aria-hidden="true"><span class="cf-cv"></span><span class="l"></span><span class="l s"></span></div></sc-for></div></sc-if>
+<sc-if value="{{hasRows}}" hint-placeholder-val="{{true}}"><div class="cf-grid">
+<sc-for list="{{rows}}" as="p" hint-placeholder-count="6"><article class="{{p.cls}}">
+<div class="cf-cv" style="background: {{p.bg}}"><span class="vzfit"><span class="dot"></span>Fit {{p.fit}}</span><sc-if value="{{p.over}}" hint-placeholder-val="{{false}}"><span class="cg-over">Above budget</span></sc-if></div>
+<div class="cf-in">
+<div class="cf-nm"><a href="{{p.href}}">{{p.name}}</a><span>{{p.by}}</span></div>
+<p class="cf-why"><svg class="vz-icon" aria-hidden="true"><use href="#i-sparkle"></use></svg>{{p.why}}</p>
+<sc-if value="{{p.hasMood}}" hint-placeholder-val="{{true}}"><span class="vz-moodline" aria-label="{{p.moodAria}}"><span class="d" aria-hidden="true"><sc-for list="{{p.moods}}" as="m" hint-placeholder-count="3"><i style="--dot: {{m.c}}"></i></sc-for></span><span aria-hidden="true"><b>{{p.moodMain}}</b>{{p.moodRest}}</span></span></sc-if>
+<div class="cf-row"><span class="cg-price">{{p.fromTxt}}</span><span class="cg-pks"><sc-for list="{{p.tones}}" as="t" hint-placeholder-count="3"><i style="--pk: {{t}}"></i></sc-for>{{p.pkTxt}}</span><span class="cf-reach"><svg class="vz-icon" aria-hidden="true"><use href="#i-users"></use></svg>{{p.reach}}</span></div>
+<sc-if value="{{p.canAdd}}" hint-placeholder-val="{{true}}"><button type="button" class="{{p.btnCls}}" aria-pressed="{{p.inW}}" aria-label="{{p.aria}}" data-id="{{p.id}}" onClick="{{toggle}}"><svg class="vz-icon" aria-hidden="true"><use href="#{{p.ic}}"></use></svg><span class="a">{{p.btn}}</span><span class="b">Remove</span></button></sc-if>
+<sc-if value="{{p.locked}}" hint-placeholder-val="{{false}}"><span class="cf-lock"><i class="{{p.lockCls}}"></i>{{p.lockTxt}}</span></sc-if>
+</div></article></sc-for>
+</div></sc-if>
+<sc-if value="{{noRows}}" hint-placeholder-val="{{false}}"><div class="cg-empty cf-none"><svg class="vz-icon" aria-hidden="true"><use href="#i-search"></use></svg><b>{{noneTitle}}</b><span>{{noneTxt}}</span><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{clearAll}}">Clear search and filters</button></div></sc-if>
+<sc-if value="{{hasLow}}" hint-placeholder-val="{{false}}"><button type="button" class="cf-more" onClick="{{toggleLow}}">{{lowTxt}}</button></sc-if>
+</div>
+
+<aside class="cf-side" aria-label="Wishlist">
+<div class="cf-side-h"><b>Wishlist</b><span class="cg-n">{{wishN}}</span><sc-if value="{{hasAdded}}" hint-placeholder-val="{{false}}"><span class="cf-addn">+{{addedN}} now</span></sc-if></div>
+<sc-if value="{{hasWish}}" hint-placeholder-val="{{true}}"><ul class="cf-wl"><sc-for list="{{wish}}" as="w" hint-placeholder-count="3"><li class="{{w.cls}}"><span class="cg-th" style="background: {{w.bg}}"></span><span class="t"><b>{{w.name}}</b><small>{{w.meta}}</small></span><sc-if value="{{w.isNew}}" hint-placeholder-val="{{false}}"><em class="cf-newt">New</em></sc-if><button type="button" class="pe-ibtn bare" aria-label="{{w.rm}}" data-id="{{w.id}}" onClick="{{toggle}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-x"></use></svg></button></li></sc-for></ul></sc-if>
+<sc-if value="{{noWish}}" hint-placeholder-val="{{false}}"><p class="cf-side-e">Nothing saved yet. Add projects and they’ll show up here and in the campaign’s Wishlist column.</p></sc-if>
+<div class="cf-side-f">{{pipeTxt}}</div>
+</aside>
+</div>
+
+<footer class="cf-ft"><span>{{footTxt}}</span><button type="button" class="vz-btn pe-solid" onClick="{{close}}">Done</button></footer>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"campaign":{"editor":"enum","options":["dv","sr"],"default":"dv","section":"State"},"inWish":{"editor":"string","default":"sahara,neon,nordlys","section":"State"},"added":{"editor":"string","default":"","section":"State"},"state":{"editor":"enum","options":["results","loading"],"default":"results","section":"State"},"query":{"editor":"string","default":"","section":"State"},"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    if (window.Venzza) window.Venzza.mountIcons();
+    document.documentElement.style.overflow = 'hidden';
+    this.ft = setTimeout(() => { const i = document.getElementById('cf-q'); if (i && !this.props.query) i.focus(); }, 60);
+    if (this.props.state === 'loading') { this.lt = setTimeout(() => this.setState({ ready: true }), 1400); }
+  }
+  componentWillUnmount() { document.documentElement.style.overflow = ''; clearTimeout(this.ft); clearTimeout(this.lt); }
+  renderVals() {
+    const P = this.props, s = this.state || {};
+    const SR = P.campaign === 'sr';
+    const C = SR ? { name: 'Summer Road Trip', sub: 'Ranked by fit with your brief: Travel, Music, Outdoors · ages 18–34 · budget $45,000', budget: 45000, pipe: 'No other projects in this campaign yet' }
+      : { name: 'Desert Vibes Festival 2026', sub: 'Ranked by fit with your brief: Music, Festivals, Art & culture · ages 18–34 · LA and Palm Springs · budget $40,000', budget: 40000, pipe: 'Also in this campaign: 1 negotiating, 1 sponsored' };
+    const L = [
+      { id: 'sahara', name: 'Sahara Sound Festival 2027', by: 'Sahara Sound Collective · Indio, CA', cat: 'music', price: 50000, reachN: 642, tones: ['#D9A66B', '#6EA8DE', '#A18FE6'], bg: 'url(assets/img/sahara-main-stage.jpg) center 42% / cover', fit: [96, 70], why: ['Music festival 30 min from Palm Springs · 82% aged 18–34', 'Desert road-trip stop · music crowd'], href: 'PN-Project-Live.dc.html' },
+      { id: 'lowend', name: 'Low End Society', by: 'Low End Society · Los Angeles', cat: 'music', price: 12000, reachN: 480, tones: ['#D9A66B', '#6EA8DE'], bg: 'linear-gradient(140deg,#1e1e2e,#4a3f8c)', fit: [91, 60], why: ['Music nights in LA · audience 21–34', 'Music audience in LA'] },
+      { id: 'aurora', name: 'Aurora Field Sessions', by: 'Meridian Hall · Reykjavík', cat: 'music', price: 15000, reachN: 3400, tones: ['#D9A66B', '#6EA8DE'], bg: 'linear-gradient(140deg,#0f4c81,#2a9d8f)', fit: [93, 86], why: ['Music · Art & culture · strong on YouTube', 'Filmed journeys through remote landscapes'] },
+      { id: 'pulse', name: 'Pulse Weekender', by: 'Pulse Collective · Berlin', cat: 'events', price: 25000, reachN: 910, tones: ['#D9A66B', '#6EA8DE'], bg: 'linear-gradient(140deg,#41295a,#2f0743)', fit: [90, 55], why: ['Festival · 82% aged 21–34, highly social', 'Music weekend, not a travel story'] },
+      { id: 'palm', name: 'Palm Springs Modernism Week', by: 'Modernism Week · Palm Springs', cat: 'art', price: 22000, reachN: 260, tones: ['#D9A66B', '#6EA8DE', '#A18FE6'], bg: 'linear-gradient(140deg,#c0455e,#e8a87c)', fit: [89, 50], why: ['Art & culture in Palm Springs · design-loving 25–34s', 'Design week, light on travel'] },
+      { id: 'neon', name: 'Neon Lotus Biennale', by: 'Neon Lotus · São Paulo', cat: 'art', price: 35000, reachN: 310, tones: ['#D9A66B', '#6EA8DE', '#A18FE6', '#E58E9F'], bg: 'linear-gradient(140deg,#0f4c81,#2a9d8f)', fit: [88, 40], why: ['Art & culture · immersive, very shareable', 'Art audience, few travellers'] },
+      { id: 'golden', name: 'Golden Hour Sessions', by: 'Golden Hour · Los Angeles', cat: 'music', price: 8000, reachN: 150, tones: ['#D9A66B', '#6EA8DE'], bg: 'linear-gradient(140deg,#e8a87c,#c0455e)', fit: [87, 72], why: ['Rooftop music in LA · 18–30 · sells out weekly', 'Music at sunset · summer series'] },
+      { id: 'nordlys', name: 'Studio Nordlys', by: 'Studio Nordlys · Oslo', cat: 'art', price: 45000, reachN: 190, tones: ['#D9A66B', '#6EA8DE'], bg: 'linear-gradient(140deg,#4a3f8c,#1e6b5c)', fit: [84, 35], why: ['Art & culture · press in 40+ outlets', 'Public art, not travel'] },
+      { id: 'overland', name: 'Overland: The Long Road', by: 'The Overland Two · 12 countries', cat: 'film', price: 80000, reachN: 9400, tones: ['#D9A66B', '#6EA8DE', '#A18FE6'], bg: 'linear-gradient(140deg,#6a2c70,#c0455e)', fit: [62, 94], why: ['Travel series, little music', 'Travel series · 9.4M viewers · 18–34 core'] },
+      { id: 'basecamp', name: 'Basecamp Kitchen Tour', by: 'Basecamp Kitchen · 6 US cities', cat: 'events', price: 20000, reachN: 220, tones: ['#D9A66B', '#6EA8DE', '#A18FE6'], bg: 'linear-gradient(140deg,#b4705a,#7a4a3a)', fit: [61, 78], why: ['Food tour, light on music', 'Road tour through six US cities'] },
+      { id: 'coast', name: 'Coastline Cup', by: 'Coastline Sports · Ericeira, Portugal', cat: 'sports', price: 60000, reachN: 1100, tones: ['#D9A66B', '#6EA8DE', '#A18FE6'], bg: 'linear-gradient(140deg,#136a8a,#267871)', fit: [58, 80], why: ['Sports audience', 'Surf trip · global livestream'] },
+      { id: 'summit', name: 'Summit Trail Series', by: 'Summit Collective · Chamonix', cat: 'sports', price: 18000, reachN: 540, tones: ['#D9A66B', '#6EA8DE', '#A18FE6'], bg: 'linear-gradient(140deg,#1e6b5c,#2a9d8f)', fit: [52, 82], why: ['Running audience', 'Outdoors · filmed for YouTube'] }
+    ];
+    const fi = SR ? 1 : 0;
+    const csv = (v) => String(v || '').split(',').map((x) => x.trim()).filter(Boolean);
+    const inWish = csv(P.inWish), added = csv(P.added);
+    const wishSet = inWish.concat(added.filter((x) => inWish.indexOf(x) < 0));
+    const LOCK = SR ? {} : { pulse: ['Negotiating', 'neg'], aurora: ['Sponsored', 'spon'] };
+    const q = (s.q !== undefined ? s.q : P.query || '').trim(), ql = q.toLowerCase();
+    const cat = s.cat || 'all', sort = s.sort || 'fit', within = !!s.within, showLow = !!s.showLow;
+    const loading = P.state === 'loading' && !s.ready;
+    const money = (n) => '$' + n.toLocaleString('en-US');
+    const reachTxt = (n) => (n >= 1000 ? (n / 1000).toFixed(1).replace('.0', '') + 'M' : n + 'K') + ' reach';
+    let list = L.map((p) => Object.assign({}, p, { f: p.fit[fi], over: p.price > C.budget }));
+    list = list.filter((p) => (cat === 'all' || p.cat === cat) && (!ql || (p.name + ' ' + p.by + ' ' + p.cat).toLowerCase().indexOf(ql) > -1) && (!within || !p.over));
+    const strong = list.filter((p) => p.f >= 70), low = list.filter((p) => p.f < 70);
+    const shown = (showLow || ql ? list : strong).slice();
+    const key = { fit: (p) => -p.f, price: (p) => p.price, reach: (p) => -p.reachN }[sort];
+    shown.sort((a, b) => (a.over !== b.over ? (a.over ? 1 : -1) : key(a) - key(b)));
+    const MOODL = { energetic: 'Energetic', euphoric: 'Euphoric', chill: 'Chill', dreamy: 'Dreamy', bold: 'Bold', underground: 'Underground', premium: 'Premium', playful: 'Playful', wholesome: 'Wholesome', artsy: 'Artsy', adventurous: 'Adventurous', nocturnal: 'Nocturnal' };
+    const MOODS = {"sahara": ["euphoric", "energetic", "dreamy"], "aurora": ["dreamy", "chill", "artsy"], "basecamp": ["wholesome", "playful"], "pulse": ["underground", "nocturnal", "energetic"], "neon": ["artsy", "dreamy", "nocturnal"], "nordlys": ["artsy", "premium"], "summit": ["adventurous", "energetic"], "overland": ["adventurous", "chill", "dreamy"], "coast": ["energetic", "adventurous", "bold"], "lowend": ["underground", "energetic"], "palm": ["premium", "artsy"], "golden": ["chill", "dreamy", "euphoric"]};
+    const moodOf = (id, campMain) => { const ms = MOODS[id] || []; const same = !!campMain && ms[0] === campMain; return { moods: ms.map((x) => ({ c: 'var(--mood-' + x + '-1)' })), hasMood: ms.length > 0, moodMain: ms.length ? MOODL[ms[0]] : '', moodRest: same ? ' · same main mood as your campaign' : (ms.length > 1 ? ' with ' + ms.slice(1).map((x) => MOODL[x].toLowerCase()).join(', ') : ''), moodAria: ms.length ? 'Mood: ' + ms.map((x) => MOODL[x]).join(', ') : '' }; };
+    const rows = shown.map((p) => {
+      const inW = wishSet.indexOf(p.id) > -1, lk = LOCK[p.id];
+      return { id: p.id, name: p.name, by: p.by, bg: p.bg, fit: String(p.f), href: p.href || 'PN-Market-Match.dc.html', over: p.over, why: p.why[fi], fromTxt: 'From ' + money(p.price), tones: p.tones, pkTxt: p.tones.length + ' packages', reach: reachTxt(p.reachN),
+        cls: 'cf-card' + (inW ? ' in' : '') + (added.indexOf(p.id) > -1 ? ' new' : ''), inW: inW ? 'true' : 'false', canAdd: !lk, locked: !!lk, lockTxt: lk ? lk[0] + ' in this campaign' : '', lockCls: lk ? 'cf-ld ' + lk[1] : '',
+        btnCls: 'cf-add' + (inW ? ' on' : ''), ic: inW ? 'i-check' : 'i-plus', btn: inW ? 'In wishlist' : 'Add to wishlist', aria: (inW ? 'Remove ' : 'Add ') + p.name + (inW ? ' from wishlist' : ' to wishlist'), ...moodOf(p.id, SR ? 'adventurous' : 'euphoric') };
+    });
+    const W = wishSet.map((id) => L.find((p) => p.id === id)).filter(Boolean);
+    const emit = (name, detail) => window.dispatchEvent(new CustomEvent(name, { detail }));
+    const CATS = [['all', 'All'], ['music', 'Music'], ['events', 'Live events'], ['art', 'Art & culture'], ['film', 'Film & series'], ['sports', 'Sports']];
+    return {
+      c: C, marketHref: 'PN-Market-Match.dc.html', q, hasQ: !!q,
+      cats: CATS.map(([v, l]) => ({ v, l, on: cat === v ? 'true' : 'false' })), within, sort,
+      loading, skel: [1, 2, 3, 4, 5, 6], hasRows: !loading && rows.length > 0, noRows: !loading && rows.length === 0, rows,
+      countTxt: loading ? 'Finding the best matches…' : rows.length + (rows.length === 1 ? ' project' : ' projects') + (ql ? ' for “' + q + '”' : showLow ? ' · all fits' : ' with 70%+ fit') + (sort === 'fit' ? ' · best fit first' : sort === 'price' ? ' · lowest price first' : ' · biggest reach first') + (within ? '' : ' · above budget listed last'),
+      noneTitle: ql ? 'No projects match “' + q + '”' : 'No projects match these filters', noneTxt: within ? 'Some matches are above your budget. Turn off “Within budget” to see them.' : 'Try another category or a broader search.',
+      hasLow: !loading && !ql && low.length > 0, lowTxt: showLow ? 'Hide projects under 70% fit' : 'Show ' + low.length + ' more under 70% fit',
+      wish: W.slice().reverse().map((p) => ({ id: p.id, name: p.name, bg: p.bg, fit: String(p.fit[fi]), meta: 'Fit ' + p.fit[fi] + ' · from ' + money(p.price), isNew: added.indexOf(p.id) > -1, cls: 'cf-wi' + (added.indexOf(p.id) > -1 ? ' new' : ''), rm: 'Remove ' + p.name + ' from wishlist' })),
+      wishN: String(W.length), hasWish: W.length > 0, noWish: W.length === 0, addedN: String(added.length), hasAdded: added.length > 0, pipeTxt: C.pipe,
+      footTxt: added.length ? added.length + (added.length === 1 ? ' project' : ' projects') + ' added to the wishlist. Changes save as you go.' : 'Projects you add go straight into this campaign’s wishlist.',
+      onQ: (e) => this.setState({ q: e.target.value }), clearQ: () => { this.setState({ q: '' }); const i = document.getElementById('cf-q'); if (i) i.focus(); },
+      setCat: (e) => this.setState({ cat: e.currentTarget.getAttribute('data-v') }), setSort: (e) => this.setState({ sort: e.target.value }),
+      toggleWithin: () => this.setState({ within: !within }), toggleLow: () => this.setState({ showLow: !showLow }),
+      clearAll: () => this.setState({ q: '', cat: 'all', within: false }),
+      toggle: (e) => { const id = e.currentTarget.getAttribute('data-id'); emit('cg-wish', { id, on: wishSet.indexOf(id) < 0 }); },
+      close: () => emit('cg-find-close', {}),
+      onKey: (e) => { if (e.key === 'Escape') { e.preventDefault(); emit('cg-find-close', {}); } }
+    };
+  }
+}
+</script>
+<script src="assets/components.js"></script><script>(function(m){var o={};for(var k in m)o["./"+k]=new Blob([m[k]],{type:"text/html"});window.__resourceBlobs=o;window.__resources={};})(window.__VZ_SRC||{});</script><script src="assets/vendor/react.production.min.js"></script><script src="assets/vendor/react-dom.production.min.js"></script><script src="assets/vendor/dc-runtime.js"></script><script src="assets/prototype-map.js"></script><script src="assets/proto-bar.js"></script>
+</body>
+</html>

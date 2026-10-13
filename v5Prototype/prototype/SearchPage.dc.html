@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Search</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="ds/venzza/components/bundle.css">
+<link rel="stylesheet" href="shared/venzza-dark.css">
+<link rel="stylesheet" href="shared/venzza-app.css">
+<script src="ds/venzza/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:inherit}
+</style>
+</helmet>
+<div class="app">
+<dc-import name="TopNav" active="none" bell="rest" hint-size="100%,59px"></dc-import>
+<main class="canvas">
+<div class="vzsp" role="search">
+<h1 class="vzsp-sr">Search</h1>
+<label class="{{fieldCls}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-search"></use></svg><input class="vzsp-input" type="search" aria-label="Search Venzza" placeholder="Search campaigns, projects and creators" value="{{q}}" onChange="{{onQ}}" onInput="{{onQ}}" onKeyDown="{{onKey}}"><sc-if value="{{qFull}}" hint-placeholder-val="{{true}}"><button type="button" class="iconbtn" aria-label="Clear search" onClick="{{clear}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-x"></use></svg></button></sc-if></label>
+
+<sc-if value="{{showStart}}" hint-placeholder-val="{{false}}">
+<p class="vzsp-hint">Tip: press <span class="kbd">⌘K</span> from anywhere to jump here.</p>
+<sc-if value="{{hasRecent}}" hint-placeholder-val="{{true}}"><section class="vzsp-sec" aria-labelledby="vzsp-rec">
+<div class="vzsp-gh"><h2 id="vzsp-rec">Recent searches</h2><button type="button" class="vzsp-more" onClick="{{clearRecent}}">Clear all</button></div>
+<div class="vzsp-chips"><sc-for list="{{recent}}" as="r" hint-placeholder-count="4"><span class="vzsp-chip"><button type="button" data-q="{{r.t}}" onClick="{{pick}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-clock"></use></svg>{{r.t}}</button><button type="button" class="x" data-q="{{r.t}}" aria-label="{{r.rm}}" onClick="{{remove}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-x"></use></svg></button></span></sc-for></div>
+</section></sc-if>
+<section class="vzsp-sec" aria-labelledby="vzsp-viewed">
+<div class="vzsp-gh"><h2 id="vzsp-viewed">Recently viewed</h2></div>
+<div class="vzsp-list"><sc-for list="{{viewed}}" as="r" hint-placeholder-count="4"><a class="vzsp-row" href="{{r.href}}"><span class="{{r.thCls}}" style="background: {{r.bg}}" aria-hidden="true">{{r.ini}}</span><span class="vzs-t"><b>{{r.name}}</b><span>{{r.meta}}</span></span><sc-if value="{{r.hasSt}}" hint-placeholder-val="{{false}}"><span class="{{r.stCls}}"><i></i>{{r.stl}}</span></sc-if><svg class="vz-icon" aria-hidden="true"><use href="#i-chevron-right"></use></svg></a></sc-for></div>
+</section>
+</sc-if>
+
+<sc-if value="{{showResults}}" hint-placeholder-val="{{true}}">
+<div class="vzsp-bar"><div class="nt-tabs" role="tablist" aria-label="Filter results"><sc-for list="{{tabs}}" as="t" hint-placeholder-count="4"><button type="button" class="nt-tab" role="tab" aria-selected="{{t.sel}}" data-k="{{t.k}}" onClick="{{setTab}}">{{t.label}}<span class="c">{{t.count}}</span></button></sc-for></div><span class="vzsp-sum" aria-live="polite">{{summary}}</span></div>
+<sc-for list="{{groups}}" as="g" hint-placeholder-count="3"><section class="vzsp-sec">
+<div class="vzsp-gh"><h2>{{g.label}}<span class="n">{{g.count}}</span></h2><sc-if value="{{g.more}}" hint-placeholder-val="{{false}}"><button type="button" class="vzsp-more" data-k="{{g.k}}" onClick="{{setTab}}">{{g.moreLabel}}<svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></button></sc-if></div>
+<div class="vzsp-list"><sc-for list="{{g.rows}}" as="r" hint-placeholder-count="2"><a class="vzsp-row" href="{{r.href}}"><span class="{{r.thCls}}" style="background: {{r.bg}}" aria-hidden="true">{{r.ini}}</span><span class="vzs-t"><b>{{r.pre}}<mark>{{r.hit}}</mark>{{r.post}}</b><span>{{r.meta}}</span></span><sc-if value="{{r.hasSt}}" hint-placeholder-val="{{false}}"><span class="{{r.stCls}}"><i></i>{{r.stl}}</span></sc-if><svg class="vz-icon" aria-hidden="true"><use href="#i-chevron-right"></use></svg></a></sc-for></div>
+</section></sc-for>
+</sc-if>
+
+<sc-if value="{{showNone}}" hint-placeholder-val="{{false}}">
+<div class="vzsp-empty"><div class="ic"><svg class="vz-icon" aria-hidden="true"><use href="#i-search"></use></svg></div><h2>No results for “{{q}}”</h2><p>Check the spelling, or try a broader term like a category or city.</p><div class="acts"><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{clear}}">Clear search</button><a class="vz-btn vz-btn--secondary sm" href="PN-Marketplace.dc.html">Browse the marketplace</a></div></div>
+</sc-if>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"scenario":{"editor":"enum","options":["start","results","no-results"],"default":"results","section":"State"},"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  componentDidMount() { document.documentElement.setAttribute('data-theme', 'dark'); if (window.Venzza) window.Venzza.mountIcons(); }
+  componentDidUpdate(prev) { if (prev.scenario !== this.props.scenario) this.setState({ q: undefined, tab: 'all' }); }
+  // Concept C: search is its own page (like Notifications). The header icon links here; results are grouped and filterable.
+  renderVals() {
+    const D = [
+      { k: 'campaign', name: 'Desert Vibes Festival 2026', meta: 'Campaign · 3 projects in wishlist · Sep 1 – Dec 15', st: 'published', stl: 'Active', bg: 'linear-gradient(135deg,#6a2c70,#c0455e)', href: 'CG-Campaign.dc.html' },
+      { k: 'campaign', name: 'Trail Shoe Launch', meta: 'Campaign · Mar 1 – May 31 · Outdoors', st: 'published', stl: 'Active', bg: 'linear-gradient(135deg,#1e6b5c,#2a9d8f)', href: 'CP-Campaigns.dc.html' },
+      { k: 'campaign', name: 'Summer Launch 2027', meta: 'Campaign · Setup step 2 of 4 · edited yesterday', st: 'draft', stl: 'Draft', bg: 'linear-gradient(135deg,#0f4c81,#2a9d8f)', href: 'OB-Campaign-Returning.dc.html' },
+      { k: 'project', name: 'Aurora Field Sessions', meta: 'Project · Music · Portland, OR', st: 'published', stl: 'Published', bg: 'linear-gradient(135deg,#0b3d5c,#2a9d8f)', href: 'PN-Project-Owner.dc.html' },
+      { k: 'project', name: 'Summer Bass Series', meta: 'Project · Music · Ready to publish', st: 'working', stl: 'Working', bg: 'linear-gradient(135deg,#0f4c81,#2a9d8f)', href: 'PN-Overview.dc.html' },
+      { k: 'project', name: 'Summer Rooftop Cinema', meta: 'Project · Film · 2 of 5 sections done', st: 'draft', stl: 'Draft', bg: 'linear-gradient(135deg,#7a3e1d,#c0455e)', href: 'PN-New-Overview.dc.html' },
+      { k: 'project', name: 'Alpine Light Installation', meta: 'Project · Art · 3 of 5 sections done', st: 'draft', stl: 'Draft', bg: 'linear-gradient(135deg,#1e6b5c,#3a1c71)', href: 'PN-New-Overview.dc.html' },
+      { k: 'market', name: 'Summer Nights Collective', meta: 'Creator · Music · Austin, TX · 220K reach', bg: 'linear-gradient(135deg,#c0455e,#6a2c70)', href: 'PN-Marketplace.dc.html' },
+      { k: 'market', name: 'Summer Solstice Run', meta: 'Organizer · Outdoors · Boulder, CO · 85K reach', bg: 'linear-gradient(135deg,#2a9d8f,#0f4c81)', href: 'PN-Marketplace.dc.html' },
+      { k: 'market', name: 'Summerfield Studio', meta: 'Creator · Photography · Los Angeles, CA · 140K reach', bg: 'linear-gradient(135deg,#4a3f8c,#c0455e)', href: 'PN-Marketplace.dc.html' },
+      { k: 'market', name: 'Summer Sound Society', meta: 'Organizer · Music · Chicago, IL · 310K reach', bg: 'linear-gradient(135deg,#1e6b5c,#0b3d5c)', href: 'PN-Marketplace.dc.html' },
+      { k: 'market', name: 'Studio Nordlys', meta: 'Creator · Art · Oslo · 60K reach', bg: 'linear-gradient(135deg,#3a1c71,#4a3f8c)', href: 'PN-Marketplace.dc.html' },
+      { k: 'market', name: 'Low End Society', meta: 'Organizer · Music · 480K reach', bg: 'linear-gradient(135deg,#1e1e2e,#4a3f8c)', href: 'PN-Marketplace.dc.html' }
+    ];
+    const LBL = { campaign: 'Campaigns', project: 'Projects', market: 'Marketplace' };
+    const sc = this.props.scenario || 'results';
+    const s = this.state || {};
+    const q = s.q !== undefined ? s.q : sc === 'results' ? 'summer' : sc === 'no-results' ? 'zebra stripes' : '';
+    const tab = s.tab || 'all';
+    const recent = (s.recent || ['music festivals portland', 'low end society', 'outdoor creators', 'summer']).map((t) => ({ t, rm: 'Remove “' + t + '” from recent searches' }));
+    const ql = q.trim().toLowerCase();
+    const thumb = (d) => ({ thCls: 'vzs-th' + (d.k === 'market' ? ' av' : ''), bg: d.bg, ini: d.k === 'market' ? d.name.split(' ').map((w) => w[0]).slice(0, 2).join('') : '', hasSt: !!d.st, stCls: 'pst ' + (d.st || ''), stl: d.stl || '', href: d.href, meta: d.meta });
+    const row = (d) => { const i = d.name.toLowerCase().indexOf(ql); return Object.assign(thumb(d), { pre: i < 0 ? d.name : d.name.slice(0, i), hit: i < 0 ? '' : d.name.slice(i, i + ql.length), post: i < 0 ? '' : d.name.slice(i + ql.length) }); };
+    const hits = ql ? D.filter((d) => (d.name + ' ' + d.meta).toLowerCase().includes(ql)) : [];
+    const by = (k) => hits.filter((d) => d.k === k);
+    const keys = ['campaign', 'project', 'market'];
+    const tabs = [{ k: 'all', label: 'All', count: String(hits.length), sel: tab === 'all' ? 'true' : 'false' }].concat(keys.map((k) => ({ k, label: LBL[k], count: String(by(k).length), sel: tab === k ? 'true' : 'false' })));
+    const groups = keys.filter((k) => (tab === 'all' || tab === k) && by(k).length).map((k) => { const all = by(k); const lim = tab === 'all' ? 3 : 50;
+      return { k, label: LBL[k], count: String(all.length), rows: all.slice(0, lim).map(row), more: all.length > lim, moreLabel: 'See all ' + all.length }; });
+    const shown = groups.reduce((a, g) => a + g.rows.length, 0);
+    const setQ = (v) => this.setState({ q: v, tab: 'all' });
+    return {
+      q, qFull: !!q,
+      fieldCls: 'vzsp-field' + (sc === 'start' && s.q === undefined ? ' focus' : ''),
+      showStart: !ql, showResults: !!hits.length, showNone: !!ql && !hits.length,
+      hasRecent: recent.length > 0, recent,
+      viewed: [D[0], D[3], D[11], D[4]].map((d) => Object.assign(thumb(d), { name: d.name })),
+      tabs, groups,
+      summary: hits.length === 1 ? '1 result' : (tab === 'all' ? hits.length : shown) + ' results',
+      onQ: (e) => setQ(e.target.value),
+      onKey: (e) => { if (e.key === 'Escape' && e.target.value) { e.preventDefault(); setQ(''); } },
+      clear: () => { setQ(''); const i = document.querySelector('.vzsp-input'); if (i) i.focus(); },
+      pick: (e) => setQ(e.currentTarget.getAttribute('data-q')),
+      remove: (e) => { const t = e.currentTarget.getAttribute('data-q'); this.setState({ recent: recent.map((r) => r.t).filter((x) => x !== t) }); },
+      clearRecent: () => this.setState({ recent: [] }),
+      setTab: (e) => { this.setState({ tab: e.currentTarget.getAttribute('data-k') }); window.scrollTo(0, 0); }
+    };
+  }
+}
+</script>
+<script src="assets/components.js"></script><script>(function(m){var o={};for(var k in m)o["./"+k]=new Blob([m[k]],{type:"text/html"});window.__resourceBlobs=o;window.__resources={};})(window.__VZ_SRC||{});</script><script src="assets/vendor/react.production.min.js"></script><script src="assets/vendor/react-dom.production.min.js"></script><script src="assets/vendor/dc-runtime.js"></script><script src="assets/prototype-map.js"></script><script src="assets/proto-bar.js"></script>
+</body>
+</html>

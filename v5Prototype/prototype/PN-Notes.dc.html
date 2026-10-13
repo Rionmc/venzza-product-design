@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Project edit workspace · design rationale</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="ds/venzza/components/bundle.css">
+<link rel="stylesheet" href="shared/venzza-dark.css">
+<link rel="stylesheet" href="shared/venzza-app.css">
+<script src="ds/venzza/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--bg-canvas)}
+.rn{padding:56px 64px 72px;color:var(--text-primary);font-family:var(--font-product)}
+.rn h1{margin:8px 0 10px;font-family:var(--font-marketing);font-size:32px;font-weight:700;letter-spacing:-.02em}
+.rn-lead{margin:0;max-width:900px;font-size:15.5px;line-height:1.6;color:var(--text-secondary)}
+.rn h2{margin:44px 0 16px;font-size:18px;font-weight:700}
+.rn-pr{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.rn-pr div{padding:18px 20px;border-radius:var(--radius-xl);background:var(--bg-surface);border:var(--bw-hairline) solid var(--border-subtle)}
+.rn-pr b{display:block;margin-bottom:6px;font-size:14.5px}
+.rn-pr span{font-size:13px;line-height:1.55;color:var(--text-secondary)}
+.rn-t{width:100%;border-collapse:collapse;font-size:13.5px}
+.rn-t th{padding:0 16px 10px 0;text-align:left;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;color:var(--text-tertiary);border-bottom:var(--bw-hairline) solid var(--border-default)}
+.rn-t td{padding:12px 16px 12px 0;vertical-align:top;line-height:1.5;color:var(--text-secondary);border-bottom:var(--bw-hairline) solid var(--border-subtle)}
+.rn-t td:first-child{color:var(--text-tertiary);width:24%}
+.rn-t td:nth-child(2){color:var(--text-primary);font-weight:600;width:30%}
+.rn-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.rn-c{padding:20px 22px;border-radius:var(--radius-xl);background:var(--bg-surface);border:var(--bw-hairline) solid var(--border-subtle)}
+.rn-c h3{margin:0 0 10px;font-size:15px}
+.rn-c ul{margin:0;padding-left:18px;display:grid;gap:7px}
+.rn-c li{font-size:13.5px;line-height:1.55;color:var(--text-secondary)}
+.rn-c li b{color:var(--text-primary)}
+</style>
+</helmet>
+<div class="rn">
+<span class="pe-eyebrow">Projects · edit &amp; publish flow · design rationale</span>
+<h1>One workspace to edit the whole project</h1>
+<p class="rn-lead">Edit mode used to be one long page of ten collapsible sections, and a single sponsorship package was spread over four of them. This workspace gives each section its own focused screen, and turns packages into things you open, edit and close, with a comparison view that matches exactly what sponsors see.</p>
+
+<h2>Principles</h2>
+<div class="rn-pr">
+<div><b>One package, one place</b><span>Name, what’s included, price and availability live in one panel. You never hunt for the same package in another section.</span></div>
+<div><b>Two views of the same data</b><span>Cards for working on one package, Compare for balancing all of them. Both edit the same packages, so nothing gets out of sync.</span></div>
+<div><b>Edit what sponsors read</b><span>Compare uses the same rows and order as the sponsor’s comparison table, so the creator is shaping the buyer’s decision directly.</span></div>
+<div><b>Saves itself, publishes once</b><span>Every change saves automatically. “Review &amp; publish” opens the full project page with changed sections marked, and you publish from there.</span></div>
+</div>
+
+<h2>What changed from the Figma concept, and why</h2>
+<table class="rn-t"><thead><tr><th>Figma concept</th><th>This design</th><th>Why</th></tr></thead><tbody>
+<tr><td>Packages, Deliverables, Pricing and Preview as tabs</td><td>Cards / Compare views plus one package editor</td><td>Tabs split each package across three places again: the same problem as the long page, only shorter.</td></tr>
+<tr><td>Underline tabs under the header</td><td>Segmented control</td><td>A third row of underline tabs looked like more navigation. This switches the view, so it looks like a view switch.</td></tr>
+<tr><td>Separate Pricing tab</td><td>Price, payment, visibility and availability rows at the top of Compare, plus a pricing step in the editor</td><td>Price is part of the offer. Sponsors compare price first, so creators should too.</td></tr>
+<tr><td>Side panel mixing shared fields with one package’s quantity</td><td>Click a cell to change its quantity; click a row name to edit the deliverable everywhere</td><td>Each action affects one clear thing, so no explainer note is needed.</td></tr>
+<tr><td>Save changes, Save pricing, Publish packages</td><td>Autosave with “All changes saved”, and one Review &amp; publish button with a count</td><td>One way to save means no worry about lost work. Publishing happens after reviewing the whole page, not one section.</td></tr>
+<tr><td>Sponsor preview showed packages only</td><td>Preview and review open the full project page, scrolled to the section you were editing</td><td>Sponsors judge the whole project, not packages alone, and creators should check it the same way.</td></tr>
+<tr><td>Preview opened inside the marketplace</td><td>Preview and review are a focused full-screen mode: no product header, just Back to editing, the project’s status and Publish</td><td>The project may be a draft or have unpublished changes, so it isn’t on the marketplace yet. Requests are disabled in preview.</td></tr>
+<tr><td>Explainer cards (“One shared inventory”)</td><td>Readiness checks with a direct Fix link</td><td>Space goes to what needs doing: a missing price, a package with nothing in it, a price hidden from sponsors.</td></tr>
+<tr><td>“15 Social Media Coverage”</td><td>“Social media coverage · 15 posts”</td><td>Every deliverable has a unit, so quantities mean something to a sponsor.</td></tr>
+<tr><td>“Right” checkbox</td><td>“Track as a contract right”, with a one-line explanation</td><td>Says what it does: adds it to the campaign board’s rights checklist by default.</td></tr>
+<tr><td>Per-installment amount typed by hand</td><td>Calculated from the price; the last payment absorbs any rounding</td><td>Totals can’t drift from the price (production showed 5 × $26,000 against a $125,000 price).</td></tr>
+<tr><td>Lime on buttons, toggles, checks and banners; otherwise monochrome</td><td>Lime only for Publish and active states (the field you’re typing in, switches that are on); green for completed sections; white checkboxes; one colour per package, also shown to sponsors</td><td>Colour carries meaning, not decoration. Package colours help creators and sponsors tell packages apart across Cards, Compare, the editor and the project page.</td></tr>
+<tr><td>Cover as a small thumbnail</td><td>Full-width cover in Project basics with Project page, Mobile and Marketplace card views, and Reposition</td><td>The cover is the first thing sponsors see. Creators check the real crop and keep faces and logos clear of the title before publishing.</td></tr>
+<tr><td>Cover photo heavily darkened</td><td>Full-colour photo; the gradient starts behind the title</td><td>The photo keeps its colour at the top, and the title and tagline stay readable.</td></tr>
+</tbody></table>
+
+<h2>Campaigns: what changed from production, and why</h2><table class="rn-t"><thead><tr><th>Production</th><th>This design</th><th>Why</th></tr></thead><tbody><tr><td>Budget, spent and match quality as plain text in the details card</td><td>Four tiles: budget left (one bar for committed, offers, left), projects, match quality, deliverables</td><td>The numbers a sponsor checks every visit, readable in two seconds. “Spent $0” said nothing about money already promised in offers.</td></tr><tr><td>Four columns: Wishlist, Projects, Negotiating, Done</td><td>Three: Wishlist, Negotiating, Sponsored</td><td>“Projects” and “Done” were unclear states. Each column now names what you do next: choose a package, wait for a reply, track deliverables.</td></tr><tr><td>Cards show name and image only</td><td>Wishlist cards show fit, lowest price, package colours and an Above budget label; later cards show the offer or contract</td><td>The decision happens on the card, without opening every project.</td></tr><tr><td>Match quality as a percentage with no way to raise it</td><td>Each tile links to the section that raises it most (“Add a strategy for +15%”)</td><td>A score is only useful if it tells you what to do.</td></tr><tr><td>Edit as one long form with “Close section to save” and “Save and keep editing”</td><td>The project editor’s rail, one section at a time, autosave, and Done</td><td>Same pattern as projects, so nothing new to learn. Nothing to forget to save.</td></tr><tr><td>Age and gender as fixed percentages typed by hand</td><td>Sliders with a live chart, a running total and “Balance to 100%”</td><td>You can see the audience you’re describing, and it can’t add up to 110%.</td></tr><tr><td>Delete campaign as a page-level button</td><td>In the ⋯ menu; blocked with a reason and Archive while work is in progress</td><td>Deleting a campaign with a live contract would strand the creator.</td></tr><tr><td>Participant view: a near-copy of the owner page</td><td>Same page, filtered to their contract, with a “Limited view” line</td><td>Creators see exactly what’s theirs and know why the rest is missing.</td></tr></tbody></table>
+<h2>How it works for the whole project</h2>
+<div class="rn-2">
+<div class="rn-c"><h3>Workspace layout</h3><ul>
+<li><b>Top bar:</b> full width and raised, with centred navigation and an avatar-only account.</li>
+<li><b>Rail:</b> project name and status, project strength, and sections grouped as About, Audience, Offer and Media &amp; contact. Each shows complete, needs attention or not started. It collapses to icons at smaller widths.</li>
+<li><b>Action bar:</b> where you are, save status, Sponsor preview and Review &amp; publish, always in the same place.</li>
+<li><b>Overview:</b> the new landing page for edit mode, with strength, what’s left before publishing, and a card per section.</li>
+</ul></div>
+<div class="rn-c"><h3>Four section types</h3><ul>
+<li><b>Forms</b> (basics, dates, press quote, contact): short, with tips beside them and a live preview where it helps.</li>
+<li><b>Lists</b> (highlights, reach channels): add, edit in place, reorder; capped where quality matters (5 highlights).</li>
+<li><b>Media</b> (gallery): a drop zone that explains why it matters, then a grid with a cover image.</li>
+<li><b>Complex</b> (packages): Cards, Compare, the package editor and the deliverables library.</li>
+</ul></div>
+<div class="rn-c"><h3>Package editor</h3><ul>
+<li><b>Opens full screen</b> (56px margin) for both new and existing packages: one centred form with numbered sections, and the live sponsor card on the right.</li>
+<li>Three numbered steps (details, what’s included, price &amp; payment) that tick off as you complete them.</li>
+<li>Previous / next arrows move between packages without closing. Readiness fixes like “Add price” open straight on the right step.</li>
+<li>The <b>deliverables library</b> stays a side panel from Compare or “Manage”: the place to review the whole list, and the only place to delete a deliverable.</li>
+<li>A live card on the right shows what sponsors will see as you type.</li>
+<li><b>One deliverable form everywhere.</b> Add a new deliverable, or edit an existing one with the pencil on its row, using the same fields as the library. Edits note how many packages they affect and apply to all of them.</li>
+<li>Creating a package says what’s still missing; editing saves as you go. Delete has an Undo.</li>
+</ul></div>
+<div class="rn-c"><h3>Open questions</h3><ul>
+<li>Editing a package after it’s been sold: lock contents and price, or create a new version for future buyers?</li>
+<li>Currency per project or per package?</li>
+<li>Drag to reorder packages (the menu has Move earlier and later for now).</li>
+<li>Mobile: rail becomes a section picker; Compare scrolls with the first column pinned.</li>
+</ul></div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2000}}'>
+class Component extends DCLogic {
+  componentDidMount() { document.documentElement.setAttribute('data-theme', 'dark'); }
+  renderVals() { return {}; }
+}
+</script>
+<script src="assets/components.js"></script><script>(function(m){var o={};for(var k in m)o["./"+k]=new Blob([m[k]],{type:"text/html"});window.__resourceBlobs=o;window.__resources={};})(window.__VZ_SRC||{});</script><script src="assets/vendor/react.production.min.js"></script><script src="assets/vendor/react-dom.production.min.js"></script><script src="assets/vendor/dc-runtime.js"></script><script src="assets/prototype-map.js"></script><script src="assets/proto-bar.js"></script>
+</body>
+</html>

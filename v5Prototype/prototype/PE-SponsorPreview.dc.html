@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sponsor view · packages</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="ds/venzza/components/bundle.css">
+<link rel="stylesheet" href="shared/venzza-dark.css">
+<link rel="stylesheet" href="shared/venzza-app.css">
+<script src="ds/venzza/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--bg-canvas)}
+</style>
+</helmet>
+<dc-import name="TopNav" active="marketplace" bell="rest" brand="lockup" brand-tone="white" brand-size="24" nav-layout="centered" search-mode="takeover" hint-size="100%,60px"></dc-import>
+<sc-if value="{{preview}}" hint-placeholder-val="{{true}}"><div class="spv-banner"><svg class="vz-icon" aria-hidden="true"><use href="#i-eye"></use></svg><span><b>Sponsor preview.</b> This is exactly what sponsors see, including unpublished changes.</span><a href="PN-Pkg-Cards.dc.html"><svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-left"></use></svg>Back to editing</a></div></sc-if>
+<div class="spv">
+<div class="spv-hero"><div><span class="pe-eyebrow">Music · by Sahara Sound Collective</span><h1>Sahara Sound Festival 2027</h1><p>Two weekends of music, art and desert sunsets for 120,000 fans.</p><div class="spv-meta"><span><svg class="vz-icon" aria-hidden="true"><use href="#i-calendar"></use></svg>Apr 9 – 18, 2027</span><span><svg class="vz-icon" aria-hidden="true"><use href="#i-map-pin"></use></svg>Indio, CA</span><span><svg class="vz-icon" aria-hidden="true"><use href="#i-users"></use></svg>642K followers · 120K attendees</span></div></div><button type="button" class="vz-btn vz-btn--secondary sm"><svg class="vz-icon" aria-hidden="true"><use href="#i-bookmark"></use></svg>Save project</button></div>
+
+<div class="spv-h2"><h2>Sponsorship packages</h2><span>All prices in USD · installments carry no finance charge</span></div>
+<div class="spv-cards" role="radiogroup" aria-label="Choose a package">
+<sc-for list="{{cards}}" as="c" hint-placeholder-count="3"><div class="spv-card" role="radio" tabIndex="0" aria-checked="{{c.sel}}" data-id="{{c.id}}" onClick="{{pick}}" onKeyDown="{{pickKey}}">
+<span class="spv-radio" aria-hidden="true"></span>
+<span class="{{c.tagCls}}">{{c.tag}}</span>
+<h3 style="margin:14px 0 4px;font-size:18px;font-weight:700">{{c.name}}</h3>
+<span class="pq-desc">{{c.desc}}</span>
+<span class="pq-price"><b class="{{c.priceCls}}">{{c.price}}</b><span>{{c.terms}}</span></span>
+<ul class="pq-inc"><sc-for list="{{c.incs}}" as="i" hint-placeholder-count="3"><li><svg class="vz-icon" aria-hidden="true"><use href="#i-check"></use></svg><span class="nm">{{i.name}}</span><b>{{i.q}}</b></li></sc-for></ul>
+</div></sc-for>
+</div>
+
+<div class="spv-h2"><h2>Compare every inclusion</h2><span>Click a column to select that package</span></div>
+<div class="cq-wrap"><div class="cq spv-cmp" role="table" aria-label="Compare packages" style="grid-template-columns: minmax(220px, 300px) repeat(3, minmax(0, 1fr))">
+<div role="row"><div class="cell rh hd" role="columnheader"><span class="pe-eyebrow">Deliverable</span></div><sc-for list="{{cards}}" as="c" hint-placeholder-count="3"><div class="{{c.hdCls}}" role="columnheader" data-id="{{c.id}}" onClick="{{pick}}">{{c.name}}</div></sc-for></div>
+<div role="row"><div class="cell rh" role="rowheader"><b style="font-weight:650">Price</b><span class="cq-rd">Payment terms</span></div><sc-for list="{{cards}}" as="c" hint-placeholder-count="3"><div class="{{c.cellCls}}" role="cell"><span class="pr">{{c.price}}</span><small>{{c.short}}</small></div></sc-for></div>
+<div role="row"><div class="cell rh" role="rowheader"><b style="font-weight:650">Available</b></div><sc-for list="{{cards}}" as="c" hint-placeholder-count="3"><div class="{{c.cellCls}}" role="cell">{{c.avail}}</div></sc-for></div>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6">
+<sc-if value="{{r.grp}}" hint-placeholder-val="{{false}}"><div role="row" class="grp"><div class="cell rh" role="rowheader">{{r.label}}</div><div class="cell fill"></div></div></sc-if>
+<sc-if value="{{r.row}}" hint-placeholder-val="{{true}}"><div role="row"><div class="cell rh" role="rowheader"><b style="font-weight:650">{{r.label}}</b><span class="cq-rd">{{r.desc}}</span></div><sc-for list="{{r.cells}}" as="x" hint-placeholder-count="3"><div class="{{x.cls}}" role="cell"><span>{{x.v}}</span><sc-if value="{{x.on}}" hint-placeholder-val="{{true}}"><small>{{x.u}}</small></sc-if></div></sc-for></div></sc-if>
+</sc-for>
+</div></div>
+</div>
+<div class="spv-dock"><div><span class="t"><b>{{sel.name}}</b><span>{{sel.sub}}</span></span><button type="button" class="vz-btn vz-btn--secondary"><svg class="vz-icon" aria-hidden="true"><use href="#i-mail"></use></svg>Ask a question</button><button type="button" class="vz-btn vz-btn--primary">{{sel.cta}}<svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></button></div></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"selected":{"editor":"enum","options":["p1","p2","p3"],"default":"p2","section":"State"},"onRequest":{"editor":"boolean","default":false,"section":"State"},"preview":{"editor":"boolean","default":true,"section":"State"},"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  componentDidMount() { document.documentElement.setAttribute('data-theme', 'dark'); if (window.Venzza) window.Venzza.mountIcons(); }
+  componentDidUpdate(prev) { if (prev.selected !== this.props.selected) this.setState({ sel: undefined }); }
+  renderVals() {
+    const DL = [
+      { id: 'fga', name: 'Festival ground activation', desc: 'Branded booth or lounge on the festival grounds', cat: 'Experience & activation', one: 'activation', unit: 'activations' },
+      { id: 'smc', name: 'Social media coverage', desc: 'Instagram and TikTok festival content', cat: 'Digital media', one: 'post', unit: 'posts' },
+      { id: 'stb', name: 'Stage branding', desc: 'Logo placement on stage screens', cat: 'Physical placement', one: 'placement', unit: 'placements' },
+      { id: 'vip', name: 'VIP passes', desc: 'All-access passes for brand guests', cat: 'Tickets & hospitality', one: 'pass', unit: 'passes' }
+    ];
+    const PK = [
+      { id: 'p1', name: 'Desert Oasis', desc: 'Festival ground activation with a branded lounge', avail: 10, price: 50000, inst: 1, pub: true, inc: { fga: 1, smc: 3 } },
+      { id: 'p2', name: 'Sahara Tent', desc: 'Tent sponsorship with enhanced visibility across the weekend', avail: 5, price: 125000, inst: 5, pub: true, inc: { fga: 1, smc: 8, stb: 1 }, tag: 'Most requested' },
+      { id: 'p3', name: 'Main Stage Experience', desc: 'Premium main stage presence with VIP hospitality', avail: 2, price: 250000, inst: 10, pub: !this.props.onRequest, inc: { fga: 1, smc: 15, stb: 1, vip: 20 }, tag: 'Only 2 left' }
+    ];
+    const s = this.state || {};
+    const sel = s.sel || this.props.selected || 'p2';
+    const m = (n) => '$' + Math.round(n).toLocaleString('en-US');
+    const q = (d, n) => n + ' ' + (n === 1 ? d.one : d.unit);
+    const cards = PK.map((p) => ({ id: p.id, name: p.name, desc: p.desc, sel: p.id === sel ? 'true' : 'false', tag: p.tag || p.avail + ' available', tagCls: 'pe-chip spv-tag', price: p.pub ? m(p.price) : 'Price on request', priceCls: p.pub ? '' : 'none',
+      terms: p.pub ? (p.inst > 1 ? p.inst + ' payments of ' + m(p.price / p.inst) : 'One payment') : 'Ask the creator for pricing', short: p.pub ? (p.inst > 1 ? p.inst + ' × ' + m(p.price / p.inst) : 'One payment') : 'Ask for pricing',
+      avail: p.avail + ' left', incs: DL.filter((d) => p.inc[d.id]).map((d) => ({ name: d.name, q: q(d, p.inc[d.id]) })), hdCls: 'cell hd c' + (p.id === sel ? ' sel' : ''), cellCls: 'cell c' + (p.id === sel ? ' sel' : '') }));
+    const rows = [];
+    const cats = []; DL.forEach((d) => { if (cats.indexOf(d.cat) < 0) cats.push(d.cat); });
+    cats.forEach((c) => { rows.push({ grp: true, label: c }); DL.filter((d) => d.cat === c).forEach((d) => rows.push({ row: true, label: d.name, desc: d.desc, cells: PK.map((p) => { const n = p.inc[d.id] || 0; return { v: n ? String(n) : 'Not included', on: !!n, u: n === 1 ? d.one : d.unit, cls: 'cell c' + (n ? '' : ' no') + (p.id === sel ? ' sel' : '') }; }) })); });
+    const sp = PK.find((p) => p.id === sel);
+    return {
+      preview: this.props.preview !== false && this.props.preview !== 'false', cards, rows,
+      sel: { name: sp.name, sub: sp.avail + ' available · ' + (sp.pub ? (sp.inst > 1 ? sp.inst + ' payments of ' + m(sp.price / sp.inst) + ' · total ' + m(sp.price) : m(sp.price) + ' · one payment') : 'Price on request'), cta: sp.pub ? 'Request this package' : 'Request pricing' },
+      pick: (e) => this.setState({ sel: e.currentTarget.getAttribute('data-id') }),
+      pickKey: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.setState({ sel: e.currentTarget.getAttribute('data-id') }); } }
+    };
+  }
+}
+</script>
+<script src="assets/components.js"></script><script>(function(m){var o={};for(var k in m)o["./"+k]=new Blob([m[k]],{type:"text/html"});window.__resourceBlobs=o;window.__resources={};})(window.__VZ_SRC||{});</script><script src="assets/vendor/react.production.min.js"></script><script src="assets/vendor/react-dom.production.min.js"></script><script src="assets/vendor/dc-runtime.js"></script><script src="assets/prototype-map.js"></script><script src="assets/proto-bar.js"></script>
+</body>
+</html>

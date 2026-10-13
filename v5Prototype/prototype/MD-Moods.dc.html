@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Mood picker exploration</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="ds/venzza/components/bundle.css">
+<link rel="stylesheet" href="shared/venzza-dark.css">
+<link rel="stylesheet" href="shared/venzza-app.css">
+<script src="ds/venzza/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+@property --ma { syntax: '<color>'; inherits: true; initial-value: #2a2a33; }
+@property --mb { syntax: '<color>'; inherits: true; initial-value: #18181d; }
+body{margin:0;background:#0b0b0e}
+.md{position:relative;min-height:100vh;display:flex;flex-direction:column;overflow:hidden;color:var(--text-primary);font-family:var(--font-product);background:#0b0b0e;transition:--ma 1.2s ease,--mb 1.2s ease}
+.md-atmo{position:absolute;inset:-20%;pointer-events:none;background:radial-gradient(40% 45% at 50% 52%,color-mix(in srgb,var(--ma) 34%,transparent),transparent 70%),radial-gradient(30% 35% at 70% 30%,color-mix(in srgb,var(--mb) 26%,transparent),transparent 70%);filter:blur(30px);animation:md-drift 18s ease-in-out infinite alternate}
+@keyframes md-drift{to{transform:translate(2%,-2%) scale(1.04)}}
+.md-top{position:relative;z-index:2;display:flex;align-items:center;gap:16px;height:64px;padding:0 28px}
+.md-top b{font-size:14px}
+.md-top span{font-size:13px;color:var(--text-tertiary)}
+.md-prog{display:flex;gap:6px;margin-left:24px}
+.md-prog i{width:44px;height:4px;border-radius:2px;background:rgba(255,255,255,.14)}
+.md-prog i.on{background:rgba(255,255,255,.85)}
+.md-x{margin-left:auto}
+.md-head{position:relative;z-index:2;text-align:center;padding:8px 24px 0}
+.md-eyebrow{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-tertiary)}
+.md-head h1{margin:10px 0 8px;font-family:var(--font-marketing);font-size:40px;font-weight:700;letter-spacing:-.025em}
+.md-head p{margin:0 auto;max-width:560px;font-size:15px;line-height:1.55;color:var(--text-secondary)}
+.md-head.b{padding-right:400px}
+.md.emb{min-height:0;background:transparent;overflow:visible}
+.md.emb .md-stage{min-height:530px;zoom:.76;margin-top:-30px}
+.md-esum{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;min-height:32px;margin-top:36px;font-size:13px;color:var(--text-secondary)}
+.md-reset{border:0;background:none;color:var(--text-tertiary);font:600 12.5px/1 var(--font-product);cursor:pointer;padding:6px 8px;border-radius:8px}
+.md-reset:hover{color:var(--text-primary)}
+.md-hint{height:22px;margin-top:10px;font-size:13px;color:var(--status-warning-text);transition:opacity .2s}
+.md-stage{position:relative;z-index:1;flex:1;min-height:560px}
+.md-b{position:absolute;left:0;top:0;border:0;padding:0;background:none;cursor:pointer;color:#fff;transition:transform .9s cubic-bezier(.22,1.2,.36,1),width .9s cubic-bezier(.22,1.2,.36,1),height .9s cubic-bezier(.22,1.2,.36,1);border-radius:50%;-webkit-tap-highlight-color:transparent}
+.md-b:focus-visible{outline:none}
+.md-b:focus-visible .md-orb{box-shadow:0 0 0 3px #0b0b0e,0 0 0 6px #fff}
+.md-breathe{position:absolute;inset:0;animation:md-breathe var(--dur,6s) ease-in-out var(--dl,0s) infinite}
+@keyframes md-breathe{0%,100%{transform:translate(0,0) scale(1)}35%{transform:translate(var(--dx,2px),var(--dy,-4px)) scale(1.035)}70%{transform:translate(calc(var(--dx,2px) * -.6),calc(var(--dy,-4px) * -.5)) scale(.985)}}
+.md-orb{position:absolute;inset:0;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;background:color-mix(in srgb,var(--c1) 14%,rgba(255,255,255,.02));box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--c1) 55%,transparent);backdrop-filter:blur(6px);transition:transform .25s cubic-bezier(.3,1.4,.5,1),box-shadow .45s,filter .3s,background .45s;overflow:hidden}
+.md-gloss{position:absolute;inset:0;border-radius:50%;opacity:0;transform:scale(.92);background:radial-gradient(120% 120% at 28% 22%,rgba(255,255,255,.55),transparent 34%),radial-gradient(90% 90% at 70% 80%,var(--c2),transparent 70%),linear-gradient(140deg,var(--c1),var(--c2));box-shadow:inset 0 -12px 30px rgba(0,0,0,.25),inset 0 0 0 1px rgba(255,255,255,.14);transition:opacity .45s ease,transform .55s cubic-bezier(.3,1.4,.5,1)}
+.md-b:hover .md-gloss,.md-b.pri .md-gloss,.md-b.sup .md-gloss,.md-hero .md-gloss,.md-sat .md-gloss,.md-b:focus-visible .md-gloss{opacity:1;transform:scale(1)}
+.md-b:hover .md-orb,.md-b.pri .md-orb,.md-b.sup .md-orb{box-shadow:0 14px 50px -10px var(--c2)}
+.md-b.sug .md-orb{background:color-mix(in srgb,var(--c1) 24%,rgba(255,255,255,.03));box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--c1) 85%,transparent),0 0 30px -8px var(--c1)}
+.md-orb::after{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,transparent,rgba(255,255,255,.18),transparent 30%);animation:md-spin 9s linear infinite;mix-blend-mode:overlay;opacity:0;transition:opacity .45s}
+.md-b:hover .md-orb::after,.md-b.pri .md-orb::after,.md-b.sup .md-orb::after,.md-hero .md-orb::after{opacity:1}
+@keyframes md-spin{to{transform:rotate(360deg)}}
+.md-b:hover .md-orb{transform:scale(1.07);filter:saturate(1.1) brightness(1.05)}
+.md-b:active .md-orb{transform:scale(.93);transition-duration:.08s}
+.md-b.dim .md-orb{opacity:.6}
+.md-b.dim:hover .md-orb{opacity:1}
+
+.md-nm{position:relative;z-index:1;font-weight:700;letter-spacing:-.01em;text-shadow:0 1px 8px rgba(0,0,0,.35);font-size:var(--fs,14px);line-height:1.1;padding:0 8px}
+.md-ds{position:relative;z-index:1;max-width:80%;max-height:0;overflow:hidden;font-size:12px;line-height:1.3;opacity:0;transform:translateY(4px);transition:opacity .25s,transform .25s,max-height .25s;text-shadow:0 1px 6px rgba(0,0,0,.4)}
+.md-b:hover .md-ds,.md-b.pri .md-ds{opacity:.92;transform:none;max-height:40px}
+.md-under{position:absolute;left:50%;top:calc(100% + 8px);transform:translateX(-50%);white-space:nowrap;font-size:10.5px;font-weight:600;letter-spacing:.04em;color:var(--text-secondary)}
+.md-tag{position:relative;z-index:1;padding:2px 8px;border-radius:999px;background:rgba(10,10,14,.45);backdrop-filter:blur(6px);font-size:10.5px;font-weight:600;letter-spacing:.02em}
+.md-ring{position:absolute;inset:-7px;border-radius:50%;border:2px solid rgba(255,255,255,.0);transition:border-color .3s,inset .3s;pointer-events:none}
+.md-b.pri .md-ring{border-color:#fff;inset:-9px}
+.md-b.sup .md-ring{border-color:rgba(255,255,255,.7);border-style:dashed}
+.md-ck{position:absolute;right:6%;top:6%;width:24px;height:24px;border-radius:50%;background:#fff;color:#0b0b0e;display:grid;place-items:center;z-index:2;transform:scale(0);transition:transform .3s cubic-bezier(.3,1.6,.5,1)}
+.md-ck svg{width:14px;height:14px}
+.md-b.pri .md-ck,.md-b.sup .md-ck{transform:scale(1)}
+.md-pulse{position:absolute;inset:0;border-radius:50%;pointer-events:none;box-shadow:0 0 0 0 var(--c1)}
+.md-b.p1 .md-pulse{animation:md-pulse1 .9s ease-out}
+.md-b.p2 .md-pulse{animation:md-pulse2 .9s ease-out}
+@keyframes md-pulse1{from{box-shadow:0 0 0 0 color-mix(in srgb,var(--c1) 70%,transparent)}to{box-shadow:0 0 0 46px transparent}}
+@keyframes md-pulse2{from{box-shadow:0 0 0 0 color-mix(in srgb,var(--c1) 70%,transparent)}to{box-shadow:0 0 0 46px transparent}}
+.md-b.shake{animation:md-shake .42s}
+@keyframes md-shake{20%,60%{margin-left:-7px}40%,80%{margin-left:7px}}
+.md-mk{position:absolute;left:50%;transform:translate(-50%,6px);z-index:3;padding:5px 10px;border-radius:999px;border:0;background:#fff;color:#0b0b0e;font:600 11.5px/1 var(--font-product);white-space:nowrap;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;box-shadow:0 6px 18px rgba(0,0,0,.4)}
+.md-slot:hover .md-mk,.md-mk:focus-visible{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.md-slot:hover,.md-slot:focus-within{z-index:20}
+.md-slot.c{left:50%;top:50%}
+.md-slot.a{left:50%;top:0}
+.md-slot{position:absolute;left:0;top:0;transition:transform .9s cubic-bezier(.22,1.2,.36,1)}
+.md-foot{position:relative;z-index:2;display:flex;align-items:center;gap:16px;padding:16px 28px;border-top:1px solid rgba(255,255,255,.08);background:rgba(11,11,14,.6);backdrop-filter:blur(14px)}
+.md-sum{flex:1;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13.5px;color:var(--text-secondary)}
+.md-chip{display:inline-flex;align-items:center;gap:7px;height:28px;padding:0 12px 0 6px;border-radius:999px;background:rgba(255,255,255,.08);color:var(--text-primary);font-size:13px;font-weight:600}
+.md-chip i{width:18px;height:18px;border-radius:50%;background:linear-gradient(140deg,var(--c1),var(--c2))}
+.md-chip.p{background:#fff;color:#0b0b0e}
+.md-chip small{font-weight:500;opacity:.6}
+.md-or{display:flex;gap:10px;align-items:center}
+.md-cnt{font-size:12.5px;color:var(--text-tertiary)}
+@media (prefers-reduced-motion: reduce){.md-breathe,.md-orb::after,.md-atmo,.md-sats{animation:none!important}.md-b,.md-slot{transition:none!important}}
+.md-b2stage{position:relative;z-index:1;flex:1;display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:12px;padding:0 28px 12px;min-height:600px}
+.md-arcwrap{position:relative}
+.md-hero{position:absolute;left:50%;top:var(--hy,330px);width:250px;height:250px;margin:-125px 0 0 -125px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px}
+.md-hero .md-orb{transition:background 1s}
+.md-hero.empty{border:1.5px dashed rgba(255,255,255,.25);color:var(--text-tertiary);font-size:14px;line-height:1.5;padding:30px}
+.md-hero .big{position:relative;z-index:1;font-family:var(--font-marketing);font-size:34px;font-weight:700;letter-spacing:-.02em;text-shadow:0 2px 14px rgba(0,0,0,.35)}
+.md-hero .sub{position:relative;z-index:1;max-width:70%;font-size:13px;line-height:1.4;opacity:.92}
+.md-hero .k{position:relative;z-index:1;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;opacity:.8}
+.md-sats{position:absolute;left:50%;top:var(--hy,330px);width:0;height:0;animation:md-orbit 60s linear infinite}
+@keyframes md-orbit{to{transform:rotate(360deg)}}
+.md-sat{position:absolute;width:62px;height:62px;margin:-31px 0 0 -31px;border-radius:50%}
+.md-sat .md-orb{font-size:10.5px;font-weight:700;animation:md-orbit 60s linear infinite reverse}
+.md-sat .md-orb::after{display:none}
+.md-prev{align-self:center;display:flex;flex-direction:column;gap:14px}
+.md-prev .k{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-tertiary)}
+.md-card{border-radius:18px;overflow:hidden;background:#141418;border:1px solid rgba(255,255,255,.08);box-shadow:0 30px 80px -30px color-mix(in srgb,var(--ma) 60%,transparent);transition:box-shadow 1.2s}
+.md-cv{position:relative;height:170px;background:url(assets/img/sahara-main-stage.jpg) center 42%/cover}
+.md-cv::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,color-mix(in srgb,var(--ma) 30%,transparent),color-mix(in srgb,var(--mb) 55%,transparent));mix-blend-mode:soft-light;transition:background 1.2s}
+.md-cv .md-chip{position:absolute;left:12px;top:12px;z-index:1;background:rgba(10,10,14,.6);backdrop-filter:blur(8px);color:#fff}
+.md-ci{padding:14px 16px 16px}
+.md-ci b{display:block;font-size:15px}
+.md-ci span{display:block;margin-top:3px;font-size:12.5px;color:var(--text-tertiary)}
+.md-ci .md-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.md-ci .md-row em{padding:3px 9px;border-radius:999px;border:1px solid rgba(255,255,255,.18);font-size:11.5px;font-style:normal;color:var(--text-secondary)}
+.md-why{font-size:12.5px;line-height:1.5;color:var(--text-tertiary)}
+.md-why b{color:var(--text-secondary)}
+.md-sw{display:flex;gap:6px}
+.md-sw i{flex:1;height:8px;border-radius:4px;background:linear-gradient(90deg,var(--ma),var(--mb));transition:--ma 1.2s,--mb 1.2s}
+</style>
+</helmet>
+<div class="{{mdCls}}" style="--ma: {{atmo.a}}; --mb: {{atmo.b}}">
+<sc-if value="{{notEmb}}" hint-placeholder-val="{{true}}"><div class="md-atmo" aria-hidden="true"></div>
+<div class="md-top"><b>New project</b><span>Guided setup · Step 3 of 5</span><span class="md-prog" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span><button type="button" class="pe-ibtn md-x" aria-label="Exit setup"><svg class="vz-icon" aria-hidden="true"><use href="#i-x"></use></svg></button></div>
+<div class="{{headCls}}"><div class="md-eyebrow">Mood</div><h1>What’s the feeling?</h1><p>{{lead}}</p><div class="md-hint" role="status">{{hint}}</div></div></sc-if>
+
+<sc-if value="{{isA}}" hint-placeholder-val="{{true}}"><div class="md-stage" role="group" aria-label="Moods">
+<sc-for list="{{nodes}}" as="n" hint-placeholder-count="12"><div class="md-slot c" style="transform: translate({{n.x}}px, {{n.y}}px)"><button type="button" class="{{n.cls}}" style="width: {{n.d}}px; height: {{n.d}}px; transform: translate(-50%, -50%); --c1: {{n.c1}}; --c2: {{n.c2}}; --fs: {{n.fs}}px" aria-pressed="{{n.on}}" aria-label="{{n.aria}}" data-id="{{n.id}}" onClick="{{tap}}"><span class="md-breathe" style="--dur: {{n.dur}}s; --dl: {{n.dl}}s; --dx: {{n.dx}}px; --dy: {{n.dy}}px"><span class="md-pulse"></span><span class="md-orb"><span class="md-gloss"></span><sc-if value="{{n.isPri}}" hint-placeholder-val="{{false}}"><span class="md-tag">Main mood</span></sc-if><span class="md-nm">{{n.name}}</span><span class="md-ds">{{n.desc}}</span><sc-if value="{{n.showSug}}" hint-placeholder-val="{{false}}"><span class="md-tag">Suggested</span></sc-if></span><span class="md-ring"></span><span class="md-ck"><svg class="vz-icon" aria-hidden="true"><use href="#i-check"></use></svg></span></span></button><sc-if value="{{n.isSup}}" hint-placeholder-val="{{false}}"><button type="button" class="md-mk" data-id="{{n.id}}" onClick="{{makePri}}" style="top: {{n.mkTop}}px">Make main mood</button></sc-if></div></sc-for>
+</div></sc-if>
+
+<sc-if value="{{isB}}" hint-placeholder-val="{{false}}"><div class="md-b2stage">
+<div class="md-arcwrap" role="group" aria-label="Moods" style="--hy: {{hy}}px">
+<sc-for list="{{arc}}" as="n" hint-placeholder-count="12"><div class="md-slot a" style="transform: translate({{n.x}}px, {{n.y}}px)"><button type="button" class="{{n.cls}}" style="width: {{n.d}}px; height: {{n.d}}px; transform: translate(-50%, -50%); --c1: {{n.c1}}; --c2: {{n.c2}}; --fs: 12.5px" aria-pressed="{{n.on}}" aria-label="{{n.aria}}" data-id="{{n.id}}" onClick="{{tap}}"><span class="md-breathe" style="--dur: {{n.dur}}s; --dl: {{n.dl}}s; --dx: {{n.dx}}px; --dy: {{n.dy}}px"><span class="md-pulse"></span><span class="md-orb"><span class="md-gloss"></span><span class="md-nm">{{n.name}}</span></span><span class="md-ring"></span><sc-if value="{{n.showSug}}" hint-placeholder-val="{{false}}"><span class="md-under">✦ Suggested</span></sc-if><span class="md-ck"><svg class="vz-icon" aria-hidden="true"><use href="#i-check"></use></svg></span></span></button><sc-if value="{{n.isSup}}" hint-placeholder-val="{{false}}"><button type="button" class="md-mk" data-id="{{n.id}}" onClick="{{makePri}}" style="top: 44px">Make main</button></sc-if></div></sc-for>
+<sc-if value="{{hasPri}}" hint-placeholder-val="{{true}}"><div class="md-hero" style="--c1: {{pri.c1}}; --c2: {{pri.c2}}"><span class="md-breathe" style="--dur: 7s; --dx: 0px; --dy: -5px"><span class="md-orb" style="gap:6px"><span class="md-gloss"></span><span class="k">Main mood</span><span class="big">{{pri.name}}</span><span class="sub">{{pri.desc}}</span></span></span></div>
+<div class="md-sats" aria-hidden="true"><sc-for list="{{sats}}" as="t" hint-placeholder-count="2"><span class="md-sat" style="left: {{t.x}}px; top: {{t.y}}px; --c1: {{t.c1}}; --c2: {{t.c2}}"><span class="md-orb"><span class="md-gloss"></span><span class="md-nm" style="font-size:10.5px;padding:0 4px">{{t.name}}</span></span></span></sc-for></div></sc-if>
+<sc-if value="{{noPri}}" hint-placeholder-val="{{false}}"><div class="md-hero empty">Pick the mood that best describes your project. It goes here, at the centre.</div></sc-if>
+</div>
+<aside class="md-prev" aria-label="Preview">
+<span class="k">How it carries through</span>
+<div class="md-card"><div class="md-cv"><sc-if value="{{hasPri}}" hint-placeholder-val="{{true}}"><span class="md-chip" style="--c1: {{pri.c1}}; --c2: {{pri.c2}}"><i></i>{{pri.name}}</span></sc-if></div><div class="md-ci"><b>Sahara Sound Festival 2027</b><span>Music festival · Indio, CA · From $50,000</span><div class="md-row"><sc-for list="{{supNames}}" as="t" hint-placeholder-count="2"><em>{{t}}</em></sc-for></div></div></div>
+<div class="md-sw" aria-hidden="true"><i></i></div>
+<p class="md-why">{{why}}</p>
+</aside>
+</div></sc-if>
+
+<sc-if value="{{isEmb}}" hint-placeholder-val="{{false}}"><div class="md-esum" aria-live="polite"><sc-if value="{{hasPri}}" hint-placeholder-val="{{true}}"><span class="md-chip p" style="--c1: {{pri.c1}}; --c2: {{pri.c2}}"><i></i>{{pri.name}}<small>main</small></span><sc-for list="{{supChips}}" as="c" hint-placeholder-count="2"><span class="md-chip" style="--c1: {{c.c1}}; --c2: {{c.c2}}"><i></i>{{c.name}}</span></sc-for><span class="md-cnt">{{cnt}}</span><button type="button" class="md-reset" onClick="{{reset}}">Start over</button></sc-if><sc-if value="{{noPri}}" hint-placeholder-val="{{false}}"><span class="md-cnt">{{embHint}}</span></sc-if></div></sc-if>
+<sc-if value="{{notEmb}}" hint-placeholder-val="{{true}}"><div class="md-foot">
+<button type="button" class="vz-btn vz-btn--ghost">Back</button>
+<div class="md-sum" aria-live="polite"><sc-if value="{{hasPri}}" hint-placeholder-val="{{true}}"><span class="md-chip p" style="--c1: {{pri.c1}}; --c2: {{pri.c2}}"><i></i>{{pri.name}}<small>main</small></span><sc-for list="{{supChips}}" as="c" hint-placeholder-count="2"><span class="md-chip" style="--c1: {{c.c1}}; --c2: {{c.c2}}"><i></i>{{c.name}}</span></sc-for><span class="md-cnt">{{cnt}}</span></sc-if><sc-if value="{{noPri}}" hint-placeholder-val="{{false}}"><span>Pick a main mood to continue. Supporting moods are optional.</span></sc-if></div>
+<div class="md-or"><button type="button" class="vz-btn vz-btn--ghost" onClick="{{reset}}" disabled="{{noPri}}">Start over</button><button type="button" class="vz-btn vz-btn--primary" disabled="{{noPri}}">Continue<svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></button></div>
+</div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"variant":{"editor":"enum","options":["cluster","orbit"],"default":"cluster","section":"State"},"embed":{"editor":"boolean","default":false,"section":"Embed"},"primary":{"editor":"string","default":"","section":"Embed"},"sup":{"editor":"string","default":"","section":"Embed"},"suggest":{"editor":"string","default":"","section":"Embed"},"preset":{"editor":"enum","options":["suggested","picked","full"],"default":"suggested","section":"State"},"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  componentDidMount() { document.documentElement.setAttribute('data-theme', 'dark'); if (window.Venzza) window.Venzza.mountIcons(); }
+  componentWillUnmount() { clearTimeout(this.ht); clearTimeout(this.sh); }
+  componentDidUpdate() { const s = this.state || {}, P = this.props; if (s.p === undefined && !s.sup) return; const c = (v) => String(v || '').split(',').map((x) => x.trim()).filter(Boolean); const pp = s.p !== undefined ? s.p : (P.primary || ''); const ss = s.sup || c(P.sup); const key = pp + '|' + ss.join(','); if (key !== this._last) { this._last = key; window.dispatchEvent(new CustomEvent('md-change', { detail: { p: pp, sup: ss } })); } }
+  moods() {
+    return [
+      { id: 'energetic', name: 'Energetic', desc: 'High tempo, big crowds', c1: '#FF6A3D', c2: '#C2185B' },
+      { id: 'euphoric', name: 'Euphoric', desc: 'Hands up, peak moments', c1: '#FF4FB0', c2: '#6A3BD8' },
+      { id: 'chill', name: 'Chill', desc: 'Easy and unhurried', c1: '#46C7F0', c2: '#2C5FB8' },
+      { id: 'dreamy', name: 'Dreamy', desc: 'Soft, hazy, cinematic', c1: '#C8A8F0', c2: '#E58EB8' },
+      { id: 'bold', name: 'Bold', desc: 'Loud, graphic, confident', c1: '#FF3B5C', c2: '#FF9F1C' },
+      { id: 'underground', name: 'Underground', desc: 'Raw, insider, after dark', c1: '#5B5B66', c2: '#2A1F3D' },
+      { id: 'premium', name: 'Premium', desc: 'Refined and high-end', c1: '#D9B77A', c2: '#7A5A2E' },
+      { id: 'playful', name: 'Playful', desc: 'Light, fun, colourful', c1: '#FFC94A', c2: '#FF6F7D' },
+      { id: 'wholesome', name: 'Wholesome', desc: 'Warm, family, community', c1: '#7FD48A', c2: '#2E9C8A' },
+      { id: 'artsy', name: 'Artsy', desc: 'Curious and expressive', c1: '#8E8CF0', c2: '#4CB3C9' },
+      { id: 'adventurous', name: 'Adventurous', desc: 'Outdoors, epic, explore', c1: '#2FB7A0', c2: '#1F5E8C' },
+      { id: 'nocturnal', name: 'Nocturnal', desc: 'Neon and night-time', c1: '#3D5AFE', c2: '#B026FF' }
+    ];
+  }
+  renderVals() {
+    const P = this.props, s = this.state || {};
+    const M = this.moods();
+    const csv = (v) => String(v || '').split(',').map((x) => x.trim()).filter(Boolean);
+    const EMB = P.embed === true || P.embed === 'true';
+    const SUG = csv(P.suggest).length ? csv(P.suggest) : ['euphoric', 'energetic', 'dreamy'];
+    const PRE = { suggested: { p: '', sup: [] }, picked: { p: 'euphoric', sup: ['dreamy', 'energetic'] }, full: { p: 'euphoric', sup: ['dreamy', 'energetic', 'nocturnal'] } }[P.preset || 'suggested'];
+    if (EMB) { PRE.p = P.primary || ''; PRE.sup = csv(P.sup); }
+    const pri = s.p !== undefined ? s.p : PRE.p;
+    const sup = s.sup || PRE.sup;
+    const isA = (P.variant || 'cluster') !== 'orbit';
+    const by = (id) => M.find((m) => m.id === id);
+    const W = 1440, H = EMB ? 520 : isA ? 560 : 600;
+    const cx = W / 2, cy = H / 2;
+    const SLOTS = [[0, 0], [1, 240], [1, 60], [1, 0], [1, 120], [1, 180], [1, 300], [2, 25], [2, 95], [2, 155], [2, 205], [2, 335]];
+    const ORD = SUG.concat(['chill', 'nocturnal', 'artsy', 'bold', 'premium', 'underground', 'playful', 'wholesome', 'adventurous', 'energetic', 'euphoric', 'dreamy', 'wholesome'].filter((x) => SUG.indexOf(x) < 0)).concat(M.map((m) => m.id)).filter((x, k, a) => a.indexOf(x) === k);
+    const RING = {}; ORD.slice(0, 12).forEach((id, k) => { RING[id] = SLOTS[k]; });
+    const HOME = M.map((m) => { const r = RING[m.id]; const a = r[1] * Math.PI / 180; return r[0] === 0 ? [0, 0] : r[0] === 1 ? [Math.cos(a) * 168, Math.sin(a) * 150] : [Math.cos(a) * 330, Math.sin(a) * 255]; });
+    const SPREAD = 1;
+    const nodes = M.map((m, i) => {
+      const role = m.id === pri ? 'pri' : sup.indexOf(m.id) > -1 ? 'sup' : SUG.indexOf(m.id) > -1 && !pri ? 'sug' : 'def';
+      const r = { pri: 128, sup: 86, sug: 70, def: 56 }[role];
+      const hx = HOME[i][0] * SPREAD, hy = HOME[i][1];
+      const tx = role === 'pri' ? 0 : role === 'sup' ? hx * 0.5 : hx, ty = role === 'pri' ? 0 : role === 'sup' ? hy * 0.5 : hy;
+      return { m, i, role, r, x: tx, y: ty, tx, ty };
+    });
+    for (let it = 0; it < 260; it++) {
+      for (const n of nodes) { const k = n.role === 'pri' ? 0.3 : 0.06; n.x += (n.tx - n.x) * k; n.y += (n.ty - n.y) * k; }
+      for (let a = 0; a < nodes.length; a++) for (let b = a + 1; b < nodes.length; b++) {
+        const A = nodes[a], B = nodes[b]; let dx = B.x - A.x, dy = B.y - A.y; let d = Math.sqrt(dx * dx + dy * dy) || 0.01; const min = A.r + B.r + 14;
+        if (d < min) { const o = (min - d); dx /= d; dy /= d; const wa = A.role === 'pri' ? 0.1 : B.role === 'pri' ? 0.9 : 0.5; A.x -= dx * o * wa; A.y -= dy * o * wa; B.x += dx * o * (1 - wa); B.y += dy * o * (1 - wa); }
+      }
+      for (const n of nodes) { n.x = Math.max(-cx + n.r + 30, Math.min(cx - n.r - 30, n.x)); n.y = Math.max(-cy + n.r + 6, Math.min(H - cy - n.r - 6, n.y)); }
+    }
+    { let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9; nodes.forEach((n) => { x0 = Math.min(x0, n.x - n.r); x1 = Math.max(x1, n.x + n.r); y0 = Math.min(y0, n.y - n.r); y1 = Math.max(y1, n.y + n.r); }); const ox = (x0 + x1) / 2, oy = (y0 + y1) / 2; nodes.forEach((n) => { n.x -= ox; n.y -= oy; }); }
+    const pulse = s.pulse || {}, shake = s.shake || '';
+    const DUR = [6.2, 7.4, 5.6, 8.1, 6.8, 7.1, 5.9, 7.8, 6.5, 8.4, 6.0, 7.2];
+    const common = (m, i, role) => ({ id: m.id, name: m.name, desc: m.desc, c1: m.c1, c2: m.c2, on: role === 'pri' || role === 'sup' ? 'true' : 'false', isPri: role === 'pri', isSup: role === 'sup', showSug: role === 'sug',
+      aria: m.name + ', ' + m.desc + (role === 'pri' ? ', main mood' : role === 'sup' ? ', supporting mood' : role === 'sug' ? ', suggested' : ''),
+      cls: 'md-b ' + role + (pri && role === 'def' ? ' dim' : '') + (pulse[m.id] ? ' p' + pulse[m.id] : '') + (shake === m.id ? ' shake' : ''),
+      dur: String(DUR[i]), dl: String(-(i * 0.7).toFixed(1)), dx: String((i % 3) - 1 + (i % 2 ? 2 : -2)), dy: String(i % 2 ? -4 : 3) });
+    const outNodes = nodes.map((n) => Object.assign(common(n.m, n.i, n.role), { x: Math.round(n.x), y: Math.round(n.y), d: n.r * 2, fs: n.role === 'pri' ? 26 : n.role === 'sup' ? 17 : n.role === 'sug' ? 15 : 13.5, mkTop: n.r - 40 }));
+    const AW = 1080 - 56 - 372;
+    const acx = 492, hy = 410, R = 300;
+    const ORDER = ['chill', 'wholesome', 'playful', 'bold', 'energetic', 'euphoric', 'dreamy', 'nocturnal', 'underground', 'premium', 'artsy', 'adventurous'];
+    const pts = []; let L = 0; let prev = null; for (let k = 0; k <= 400; k++) { const t = (188 + k * 164 / 400) * Math.PI / 180; const pt = [acx + 450 * Math.cos(t), hy + 235 * Math.sin(t)]; if (prev) L += Math.hypot(pt[0] - prev[0], pt[1] - prev[1]); pts.push([pt[0], pt[1], L]); prev = pt; }
+    const at = (f) => { const target = f * L; const q = pts.find((x) => x[2] >= target) || pts[pts.length - 1]; return q; };
+    const arc = ORDER.map((id) => M.find((m) => m.id === id)).map((m, i) => { const q = at(i / 11); const ang = 0; const role = m.id === pri ? 'pri' : sup.indexOf(m.id) > -1 ? 'sup' : SUG.indexOf(m.id) > -1 && !pri ? 'sug' : 'def'; return Object.assign(common(m, i, role), { x: Math.round(q[0] - acx), y: Math.round(q[1]), d: role === 'sug' ? 78 : 70 }); });
+    const p = by(pri);
+    const supM = sup.map(by).filter(Boolean);
+    const sats = supM.map((m, i) => { const a = (i / Math.max(supM.length, 1)) * Math.PI * 2 - Math.PI / 2 + 0.6; return { name: m.name, c1: m.c1, c2: m.c2, x: Math.round(Math.cos(a) * 168), y: Math.round(Math.sin(a) * 168) }; });
+    const flashHint = (t) => { this.setState({ hint: t }); clearTimeout(this.ht); this.ht = setTimeout(() => this.setState({ hint: '' }), 2600); };
+    const bump = (id) => Object.assign({}, pulse, { [id]: pulse[id] === 1 ? 2 : 1 });
+    return {
+      headCls: isA ? 'md-head' : 'md-head b',
+      isA, isB: !isA, nodes: outNodes, arc, hy: String(hy), sats,
+      lead: 'Pick the main mood of Sahara Sound Festival 2027, then up to three that support it. Sponsors use moods to find projects that feel right for their campaigns.',
+      hint: s.hint || (pri ? '' : 'We’ve suggested three based on your title and description.'),
+      hasPri: !!p, noPri: !p, pri: p || { name: '', desc: '', c1: '#333', c2: '#222' },
+      atmo: p ? { a: p.c1, b: p.c2 } : { a: '#2a2a33', b: '#18181d' },
+      supChips: supM.map((m) => ({ name: m.name, c1: m.c1, c2: m.c2 })), supNames: supM.map((m) => m.name),
+      cnt: sup.length ? sup.length + ' of 3 supporting' : 'Add up to 3 supporting moods',
+      why: p ? 'Sponsors searching for “' + p.name + '” see this project first. The mood also tints your project page and marketplace card, so everything feels like one place.' : 'Your main mood tints the project page and marketplace card.',
+      mdCls: EMB ? 'md emb' : 'md', isEmb: EMB, notEmb: !EMB, embHint: 'Tap the mood that fits best. It becomes your main mood.',
+      tap: (e) => {
+        const id = e.currentTarget.getAttribute('data-id');
+        if (id === pri) { const n = sup[0] || ''; this.setState({ p: n, sup: sup.slice(1), pulse: bump(id) }); return; }
+        if (sup.indexOf(id) > -1) { this.setState({ sup: sup.filter((x) => x !== id), pulse: bump(id) }); return; }
+        if (!pri) { this.setState({ p: id, pulse: bump(id) }); return; }
+        if (sup.length < 3) { this.setState({ sup: sup.concat([id]), pulse: bump(id) }); return; }
+        this.setState({ shake: id }); clearTimeout(this.sh); this.sh = setTimeout(() => this.setState({ shake: '' }), 450); flashHint('Up to 3 supporting moods. Tap one to remove it first.');
+      },
+      makePri: (e) => { e.stopPropagation(); const id = e.currentTarget.getAttribute('data-id'); this.setState({ p: id, sup: (pri ? [pri] : []).concat(sup.filter((x) => x !== id)), pulse: bump(id) }); },
+      reset: () => this.setState({ p: '', sup: [] })
+    };
+  }
+}
+</script>
+<script src="assets/components.js"></script><script>(function(m){var o={};for(var k in m)o["./"+k]=new Blob([m[k]],{type:"text/html"});window.__resourceBlobs=o;window.__resources={};})(window.__VZ_SRC||{});</script><script src="assets/vendor/react.production.min.js"></script><script src="assets/vendor/react-dom.production.min.js"></script><script src="assets/vendor/dc-runtime.js"></script><script src="assets/prototype-map.js"></script><script src="assets/proto-bar.js"></script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Notifications · Creator, sponsor and both</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="ds/venzza/components/bundle.css">
+<link rel="stylesheet" href="shared/venzza-dark.css">
+<link rel="stylesheet" href="shared/venzza-app.css">
+<script src="ds/venzza/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--bg-canvas)}
+.nr{padding:56px 64px 72px;color:var(--text-primary);font-family:var(--font-product)}
+.nr h1{margin:0 0 8px;font-family:var(--font-marketing);font-size:28px;font-weight:700;letter-spacing:-.02em}
+.nr>p{margin:0 0 32px;font-size:15px;line-height:1.6;color:var(--text-secondary);max-width:860px}
+.nr-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.nr-col{background:var(--bg-surface-deep);border:var(--bw-hairline) solid var(--border-on-deep);border-radius:var(--radius-xl);padding:22px 22px 18px}
+.nr-col h2{display:flex;align-items:center;gap:10px;margin:0 0 6px;font-size:17px;font-weight:700}
+.nr-col h2 .ic{width:32px;height:32px;border-radius:var(--radius-md);display:grid;place-items:center;background:var(--cta-subtle-bg);color:var(--lime-400)}
+.nr-col h2 .vz-icon{width:16px;height:16px}
+.nr-col>p{margin:0 0 16px;font-size:13.5px;line-height:1.55;color:var(--text-secondary)}
+.nr-k{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-tertiary);margin:16px 0 8px}
+.nr-ev{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.nr-ev li{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.45;color:var(--text-secondary)}
+.nr-ev li b{color:var(--text-primary);font-weight:600}
+.nr-ev .t{flex:none;margin-top:2px;width:18px;height:18px;border-radius:50%;display:grid;place-items:center}
+.nr-ev .t .vz-icon{width:10px;height:10px;stroke-width:2.6}
+.nr-ev .t.warn{background:var(--status-warning-solid);color:var(--neutral-950)}
+.nr-ev .t.ok{background:var(--status-success-solid);color:var(--neutral-950)}
+.nr-ev .t.info{background:var(--status-info-solid);color:var(--neutral-950)}
+.nr-ev .t.sys{background:var(--neutral-200);color:var(--neutral-950)}
+.nr-ev .t.muted{background:var(--neutral-600);color:var(--neutral-50)}
+.nr-diff{margin-top:28px;border:var(--bw-hairline) solid var(--border-subtle);border-radius:var(--radius-xl);padding:22px 26px}
+.nr-diff h2{margin:0 0 14px;font-size:16px;font-weight:700}
+.nr-diff table{width:100%;border-collapse:collapse;font-size:13px}
+.nr-diff th{text-align:left;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;color:var(--text-tertiary);padding:0 12px 10px 0;border-bottom:var(--bw-hairline) solid var(--border-subtle)}
+.nr-diff td{padding:11px 12px 11px 0;border-bottom:var(--bw-hairline) solid var(--border-subtle);color:var(--text-secondary);vertical-align:top;line-height:1.45}
+.nr-diff td:first-child{color:var(--text-primary);font-weight:600;width:200px}
+.nr-diff tr:last-child td{border-bottom:0}
+.nr-next{margin-top:20px;font-size:13px;color:var(--text-tertiary)}
+</style>
+</helmet>
+<div class="nr">
+<h1>Who gets which notifications</h1>
+<p>Some accounts only create projects, some only sponsor through campaigns, and some do both. The notification system is the same for all three. What changes is which events arrive and how much context each row needs.</p>
+<div class="nr-cols">
+<div class="nr-col"><h2><span class="ic"><svg class="vz-icon"><use href="#i-briefcase"></use></svg></span>Creator</h2><p>Owns projects. Notifications are about sponsors reacting to a project and its packages.</p>
+<div class="nr-k">Needs action</div><ul class="nr-ev">
+<li><span class="t warn"><svg class="vz-icon"><use href="#i-arrow-left-right"></use></svg></span><span><b>Offer or counter-offer</b> on a package</span></li>
+<li><span class="t warn"><svg class="vz-icon"><use href="#i-clock"></use></svg></span><span><b>Offer expiring</b> in 2 days or less</span></li></ul>
+<div class="nr-k">Updates</div><ul class="nr-ev">
+<li><span class="t ok"><svg class="vz-icon"><use href="#i-check"></use></svg></span><span><b>Offer approved</b>, next step is the agreement</span></li>
+<li><span class="t info"><svg class="vz-icon"><use href="#i-bookmark"></use></svg></span><span><b>Saved to a wishlist</b>, grouped when several sponsors do it</span></li>
+<li><span class="t sys"><svg class="vz-icon"><use href="#i-rocket"></use></svg></span><span><b>Ready to publish</b> when setup is complete</span></li></ul></div>
+<div class="nr-col"><h2><span class="ic"><svg class="vz-icon"><use href="#i-target"></use></svg></span>Sponsor</h2><p>Runs campaigns. Notifications are about creators answering offers and new projects that fit a brief.</p>
+<div class="nr-k">Needs action</div><ul class="nr-ev">
+<li><span class="t warn"><svg class="vz-icon"><use href="#i-arrow-left-right"></use></svg></span><span><b>Creator replied</b> with a counter-offer</span></li>
+<li><span class="t warn"><svg class="vz-icon"><use href="#i-clock"></use></svg></span><span><b>Your offer is expiring</b> without a reply</span></li></ul>
+<div class="nr-k">Updates</div><ul class="nr-ev">
+<li><span class="t sys"><svg class="vz-icon"><use href="#i-sparkle"></use></svg></span><span><b>New matches</b> for a campaign</span></li>
+<li><span class="t info"><svg class="vz-icon"><use href="#i-package"></use></svg></span><span><b>A wishlisted project changed</b>, e.g. a new package</span></li>
+<li><span class="t muted"><svg class="vz-icon"><use href="#i-x"></use></svg></span><span><b>Offer declined</b>, with similar creators to try</span></li></ul></div>
+<div class="nr-col"><h2><span class="ic"><svg class="vz-icon"><use href="#i-users"></use></svg></span>Both</h2><p>Has projects and campaigns. Gets both sets of events in one list, so every row has to say which side it's about.</p>
+<div class="nr-k">What's added</div><ul class="nr-ev">
+<li><span class="t muted"><svg class="vz-icon"><use href="#i-briefcase"></use></svg></span><span>A <b>Creator</b> or <b>Sponsor</b> tag on every row, next to the project or campaign name</span></li>
+<li><span class="t muted"><svg class="vz-icon"><use href="#i-filter"></use></svg></span><span><b>As creator / As sponsor</b> filter on the Notifications page</span></li>
+<li><span class="t muted"><svg class="vz-icon"><use href="#i-home"></use></svg></span><span>Home shows <b>both panels</b>; the attention strip mixes both, most urgent first</span></li></ul></div>
+</div>
+<div class="nr-diff"><h2>What changes by account type</h2>
+<table><thead><tr><th>Surface</th><th>Creator only</th><th>Sponsor only</th><th>Both</th></tr></thead><tbody>
+<tr><td>Row context</td><td>Project name (briefcase)</td><td>Campaign name (target)</td><td>Name plus a Creator or Sponsor tag</td></tr>
+<tr><td>Panel filters</td><td>All · Needs action</td><td>All · Needs action</td><td>All · Needs action</td></tr>
+<tr><td>Notifications page</td><td>All · Needs action · Unread</td><td>All · Needs action · Unread</td><td>Same, plus As creator / As sponsor</td></tr>
+<tr><td>Home</td><td>Projects panel only, full width</td><td>Campaigns panel only, full width</td><td>Both panels</td></tr>
+<tr><td>Needs your attention</td><td>Offers on your projects</td><td>Replies to your offers</td><td>Both, most urgent first (max 3)</td></tr>
+</tbody></table></div>
+<p class="nr-next">Next: one-off flows for each role (responding to a counter-offer as a creator, reviewing a reply as a sponsor) and an email/push settings page.</p>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1150}}'>
+class Component extends DCLogic {
+  componentDidMount() { document.documentElement.setAttribute('data-theme', 'dark'); if (window.Venzza) window.Venzza.mountIcons(); }
+  renderVals() { return {}; }
+}
+</script>
+<script src="assets/components.js"></script><script>(function(m){var o={};for(var k in m)o["./"+k]=new Blob([m[k]],{type:"text/html"});window.__resourceBlobs=o;window.__resources={};})(window.__VZ_SRC||{});</script><script src="assets/vendor/react.production.min.js"></script><script src="assets/vendor/react-dom.production.min.js"></script><script src="assets/vendor/dc-runtime.js"></script><script src="assets/prototype-map.js"></script><script src="assets/proto-bar.js"></script>
+</body>
+</html>

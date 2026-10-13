@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Create · campaign or project</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="ds/venzza/components/bundle.css">
+<link rel="stylesheet" href="shared/venzza-dark.css">
+<link rel="stylesheet" href="shared/venzza-app.css">
+<script src="ds/venzza/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--bg-canvas)}
+.cr-top{position:sticky;top:60px;z-index:20;display:flex;align-items:center;gap:12px;height:56px;padding:0 clamp(24px,3.2vw,64px);background:color-mix(in srgb,var(--bg-canvas) 90%,transparent);backdrop-filter:blur(10px);border-bottom:var(--bw-hairline) solid var(--border-subtle);font-family:var(--font-product)}
+.cr-crumb{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--text-secondary)}
+.cr-crumb a{color:var(--text-secondary);text-decoration:none}
+.cr-crumb a:hover{color:var(--text-primary)}
+.cr-crumb .vz-icon{width:14px;height:14px}
+.cr-crumb b{color:var(--text-primary);font-weight:650}
+.cr-state{margin-left:auto;font-size:12.5px;color:var(--text-tertiary)}
+.cr-state.err{color:var(--status-danger-text,#ff8a8f)}
+.cr{max-width:1120px;margin:0 auto;padding:32px 32px 96px;color:var(--text-primary);font-family:var(--font-product)}
+.cr-head h1{margin:0;font-family:var(--font-marketing);font-size:30px;font-weight:700;letter-spacing:-.02em}
+.cr-head p{margin:6px 0 0;max-width:680px;font-size:14.5px;line-height:1.55;color:var(--text-secondary)}
+.cr-grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:24px;align-items:start;margin-top:24px}
+.cr-main{display:flex;flex-direction:column;gap:16px;min-width:0}
+.cr-card{display:grid;gap:20px}
+.cr-card h2{margin:0;font-size:16px;font-weight:700}
+.cr-card h2+.cr-sub{margin-top:-14px}
+.cr-sub{margin:0;font-size:13px;color:var(--text-tertiary)}
+.cr-card .pe-f{margin:0}
+.cr-dates{display:flex;align-items:center;gap:10px}
+.cr-dates span{color:var(--text-tertiary)}
+.cr-money{position:relative}
+.cr-money>span{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text-tertiary);font-size:14px}
+.cr-money .pe-in{padding-left:26px}
+.pe-in.err{border-color:var(--status-danger-border,rgba(229,72,77,.6));box-shadow:0 0 0 3px color-mix(in srgb,var(--status-danger-solid,#e5484d) 14%,transparent)}
+.cr-ferr{display:flex;align-items:center;gap:6px;margin:7px 0 0;font-size:12.5px;color:var(--status-danger-text,#ff8a8f)}
+.cr-ferr .vz-icon{width:14px;height:14px}
+.cr-err{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:var(--radius-lg);background:var(--status-danger-bg,rgba(229,72,77,.1));border:var(--bw-hairline) solid var(--status-danger-border,rgba(229,72,77,.4));font-size:13.5px;color:var(--text-primary)}
+.cr-err .vz-icon{flex:none;width:16px;height:16px;margin-top:2px;color:var(--status-danger-text,#ff8a8f)}
+.cr-more{display:flex;align-items:center;gap:10px;width:100%;padding:14px 18px;border-radius:var(--radius-xl);border:1.5px dashed var(--border-default);background:none;color:var(--text-primary);font:600 14px/1.3 var(--font-product);text-align:left;cursor:pointer}
+.cr-more:hover{border-color:var(--border-strong);background:var(--bg-surface)}
+.cr-more:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.cr-more>.vz-icon{width:16px;height:16px;flex:none}
+.cr-more span{font-weight:400;font-size:13px;color:var(--text-tertiary)}
+.cr-more .chev{margin-left:auto;transition:transform .15s}
+.cr-more[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.cr-foot{display:flex;align-items:center;gap:10px;padding-top:8px}
+.cr-foot p{margin:0 auto 0 0;font-size:12.5px;color:var(--text-tertiary)}
+.cr-aside{position:sticky;top:140px;display:flex;flex-direction:column;gap:12px}
+.cr-box{padding:18px;border-radius:var(--radius-xl);background:var(--bg-surface);border:var(--bw-hairline) solid var(--border-subtle)}
+.cr-box h3{display:flex;align-items:center;gap:8px;margin:0 0 6px;font-size:14px;font-weight:650}
+.cr-box h3 .vz-icon{width:16px;height:16px;color:var(--text-secondary)}
+.cr-box p{margin:0;font-size:13px;line-height:1.55;color:var(--text-secondary)}
+.cr-box .vz-btn{margin-top:12px}
+.cr-box small{display:block;margin-top:8px;font-size:11.5px;color:var(--text-tertiary)}
+.cr-busy{margin-top:12px;height:6px;border-radius:var(--radius-pill);background:var(--bg-inset);overflow:hidden}
+.cr-busy i{display:block;height:100%;width:40%;border-radius:var(--radius-pill);background:var(--text-secondary);animation:crb 1.1s ease-in-out infinite}
+@keyframes crb{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
+@media (prefers-reduced-motion:reduce){.cr-busy i{animation:none;width:60%}}
+.cr-done{display:flex;gap:8px;margin-top:10px;font-size:13px;color:var(--text-primary)}
+.cr-done .vz-icon{flex:none;width:16px;height:16px;color:var(--status-success-text)}
+.cr-lnk{margin-top:8px;padding:0;border:0;background:none;color:var(--text-secondary);font:600 12.5px/1.4 var(--font-product);text-decoration:underline;cursor:pointer}
+.cr-next{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:10px;counter-reset:n}
+.cr-next li{display:flex;gap:10px;font-size:13px;line-height:1.5;color:var(--text-secondary)}
+.cr-next li::before{counter-increment:n;content:counter(n);flex:none;display:grid;place-items:center;width:20px;height:20px;border-radius:50%;border:var(--bw-hairline) solid var(--border-default);font-size:11px;font-weight:700;color:var(--text-primary)}
+.cr-next b{color:var(--text-primary);font-weight:600}
+.cr-alt{font-size:12.5px;color:var(--text-tertiary)}
+.cr-alt a{color:var(--text-primary);font-weight:600}
+.cr-cover-add{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;width:100%;min-height:150px;padding:20px;border-radius:var(--radius-lg);border:1.5px dashed var(--border-default);background:var(--bg-inset);color:var(--text-primary);font-family:var(--font-product);cursor:pointer;text-align:center}
+.cr-cover-add:hover{border-color:var(--border-strong)}
+.cr-cover-add:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.cr-cover-add .vz-icon{width:24px;height:24px;color:var(--text-tertiary)}
+.cr-cover-add b{font-size:14px}
+.cr-cover-add span{max-width:420px;font-size:12.5px;line-height:1.5;color:var(--text-tertiary)}
+.cr-cover{position:relative;border-radius:var(--radius-lg);overflow:hidden;aspect-ratio:1440/364;border:var(--bw-hairline) solid var(--border-subtle)}
+.cr-cover img{width:100%;height:100%;object-fit:cover;display:block}
+.cr-cover-a{position:absolute;right:10px;bottom:10px;display:flex;gap:6px}
+.cr-cover-a .vz-btn{background:rgba(0,0,0,.66);border-color:rgba(255,255,255,.22);color:#fff}
+.cr-cover-a .vz-btn:hover{background:rgba(0,0,0,.8)}
+.cr-imp{position:relative}
+</style>
+</helmet>
+<dc-import name="TopNav" flow-links="true" active="{{navActive}}" bell="rest" brand="lockup" brand-tone="white" brand-size="24" nav-layout="centered" search-mode="takeover" header-width="fluid" tone="raised" account="avatar" hint-size="100%,60px"></dc-import>
+<div class="cr-top"><nav class="cr-crumb" aria-label="Breadcrumb"><a href="{{backHref}}">{{backLbl}}</a><svg class="vz-icon" aria-hidden="true"><use href="#i-chevron-right"></use></svg><b>{{title}}</b></nav><span class="{{stateCls}}" role="status">{{stateTxt}}</span><a class="vz-btn vz-btn--ghost sm" href="{{backHref}}">Cancel</a><sc-if value="{{valid}}" hint-placeholder-val="{{false}}"><a class="vz-btn pe-solid sm" href="{{doneHref}}">{{createLbl}}</a></sc-if><sc-if value="{{invalid}}" hint-placeholder-val="{{true}}"><button type="button" class="vz-btn pe-solid sm" onClick="{{tryCreate}}">{{createLbl}}</button></sc-if></div>
+<main class="cr">
+<div class="cr-head"><h1>{{title}}</h1><p>{{lead}}</p></div>
+<div class="cr-grid">
+<div class="cr-main">
+<sc-if value="{{showErr}}" hint-placeholder-val="{{false}}"><div class="cr-err" role="alert"><svg class="vz-icon" aria-hidden="true"><use href="#i-alert-circle"></use></svg><span>{{errSummary}}</span></div></sc-if>
+<section class="pe-card cr-card" aria-labelledby="cr-h-basics"><h2 id="cr-h-basics">Basics</h2>
+<sc-if value="{{isCamp}}" hint-placeholder-val="{{true}}"><div class="pe-f"><label for="cr-name">Campaign name</label><input id="cr-name" class="{{nameCls}}" type="text" placeholder="e.g. Desert Vibes Festival 2026" value="{{d.name}}" data-k="name" onInput="{{field}}" onChange="{{field}}"><sc-if value="{{errName}}" hint-placeholder-val="{{false}}"><p class="cr-ferr" id="cr-name-err"><svg class="vz-icon" aria-hidden="true"><use href="#i-alert-circle"></use></svg>{{errNameTxt}}</p></sc-if></div><div class="pe-f"><label for="cr-brand">Brand</label><input id="cr-brand" class="pe-in" type="text" placeholder="Your brand" value="{{d.brand}}" data-k="brand" onInput="{{field}}" onChange="{{field}}"><p class="hint">From your account. Change it if this campaign is for another brand.</p></div><div class="pe-f"><label for="cr-start">Campaign dates</label><div class="cr-dates"><input id="cr-start" class="{{datesCls}}" type="{{dateType}}" aria-label="Start date" value="{{d.start}}" data-k="start" onInput="{{field}}" onChange="{{field}}"><span aria-hidden="true">→</span><input class="{{datesCls}}" type="{{dateType}}" aria-label="End date" value="{{d.end}}" data-k="end" onInput="{{field}}" onChange="{{field}}"></div><sc-if value="{{errDates}}" hint-placeholder-val="{{false}}"><p class="cr-ferr"><svg class="vz-icon" aria-hidden="true"><use href="#i-alert-circle"></use></svg>{{errDatesTxt}}</p></sc-if></div><div class="pe-f"><label for="cr-desc">Description <small>Optional</small></label><textarea id="cr-desc" class="pe-in" rows="4" placeholder="Objectives, who you want to reach, and the message you want to land" value="{{d.desc}}" data-k="desc" onInput="{{field}}" onChange="{{field}}"></textarea><p class="hint">Recommended. The more we know, the better your matches.</p></div><div class="pe-f"><span class="lb">Tags <small>Optional</small></span><div class="vzchips" role="group" aria-label="Campaign tags"><sc-for list="{{campTags}}" as="c" hint-placeholder-count="5"><button type="button" class="vzchip" aria-pressed="{{c.on}}" data-g="{{c.g}}" data-v="{{c.v}}" onClick="{{chip}}">{{c.v}}</button></sc-for></div></div></sc-if>
+<sc-if value="{{isProj}}" hint-placeholder-val="{{false}}"><div class="pe-f"><span class="lb">Cover image <small>Optional</small></span><sc-if value="{{noCover}}" hint-placeholder-val="{{true}}"><button type="button" class="cr-cover-add" onClick="{{addCover}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-image"></use></svg><b>Add a cover image</b><span>Shown full width at the top of your project. You can position it later in Project basics.</span></button></sc-if><sc-if value="{{hasCover}}" hint-placeholder-val="{{false}}"><div class="cr-cover"><img src="assets/img/sahara-main-stage.jpg" alt=""><div class="cr-cover-a"><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{addCover}}">Replace</button><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{rmCover}}">Remove</button></div></div></sc-if></div><div class="pe-f"><label for="cr-pname">Project name</label><input id="cr-pname" class="{{nameCls}}" type="text" placeholder="e.g. Sahara Sound Festival 2027" value="{{d.name}}" data-k="name" onInput="{{field}}" onChange="{{field}}"><sc-if value="{{errName}}" hint-placeholder-val="{{false}}"><p class="cr-ferr" id="cr-pname-err"><svg class="vz-icon" aria-hidden="true"><use href="#i-alert-circle"></use></svg>{{errNameTxt}}</p></sc-if></div><div class="pe-2"><div class="pe-f"><label for="cr-cat">Category</label><select id="cr-cat" class="{{catCls}}" value="{{d.cat}}" data-k="cat" onChange="{{field}}"><option value="">Choose a category</option><sc-for list="{{catOpts}}" as="o" hint-placeholder-count="8"><option value="{{o}}">{{o}}</option></sc-for></select><sc-if value="{{errCat}}" hint-placeholder-val="{{false}}"><p class="cr-ferr" id="cr-cat-err"><svg class="vz-icon" aria-hidden="true"><use href="#i-alert-circle"></use></svg>{{errCatTxt}}</p></sc-if></div><div class="pe-f"><label for="cr-loc">Location</label><input id="cr-loc" class="{{locCls}}" type="text" placeholder="City, country" value="{{d.loc}}" data-k="loc" onInput="{{field}}" onChange="{{field}}"><sc-if value="{{errLoc}}" hint-placeholder-val="{{false}}"><p class="cr-ferr" id="cr-loc-err"><svg class="vz-icon" aria-hidden="true"><use href="#i-alert-circle"></use></svg>{{errLocTxt}}</p></sc-if><p class="hint">Helps sponsors find local opportunities.</p></div></div><div class="pe-f"><label for="cr-tag">Tagline <small>Optional</small></label><input id="cr-tag" class="pe-in" type="text" placeholder="A one-line pitch for sponsors" value="{{d.tag}}" data-k="tag" onInput="{{field}}" onChange="{{field}}"><p class="hint">Shown under the name on your project page.</p></div><div class="pe-f"><label for="cr-pdesc">Description <small>Optional</small></label><textarea id="cr-pdesc" class="pe-in" rows="4" placeholder="What it is, who it reaches, and why it’s a great fit for sponsors" value="{{d.desc}}" data-k="desc" onInput="{{field}}" onChange="{{field}}"></textarea></div><div class="pe-f"><span class="lb">Tags <small>Optional</small></span><div class="vzchips" role="group" aria-label="Project tags"><sc-for list="{{projTags}}" as="c" hint-placeholder-count="5"><button type="button" class="vzchip" aria-pressed="{{c.on}}" data-g="{{c.g}}" data-v="{{c.v}}" onClick="{{chip}}">{{c.v}}</button></sc-for></div><p class="hint">Suggested from your category and description. Turn off any you don’t want.</p></div></sc-if>
+</section>
+<button type="button" class="cr-more" aria-expanded="{{moreA}}" onClick="{{toggleMore}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-plus"></use></svg>Add more details <span>{{moreSub}}</span><svg class="vz-icon chev" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
+<sc-if value="{{moreOpen}}" hint-placeholder-val="{{false}}"><sc-if value="{{isCamp}}" hint-placeholder-val="{{true}}"><section class="pe-card cr-card"><h2>Audience</h2><p class="cr-sub">The strongest signal for matching.</p><div class="pe-f"><span class="lb">Age groups</span><div class="vzchips" role="group" aria-label="Age groups"><sc-for list="{{ages}}" as="c" hint-placeholder-count="5"><button type="button" class="vzchip" aria-pressed="{{c.on}}" data-g="{{c.g}}" data-v="{{c.v}}" onClick="{{chip}}">{{c.v}}</button></sc-for></div></div><div class="pe-f"><span class="lb">Interests</span><div class="vzchips" role="group" aria-label="Interests"><sc-for list="{{interests}}" as="c" hint-placeholder-count="5"><button type="button" class="vzchip" aria-pressed="{{c.on}}" data-g="{{c.g}}" data-v="{{c.v}}" onClick="{{chip}}">{{c.v}}</button></sc-for></div></div></section><section class="pe-card cr-card"><h2>Budget &amp; goal</h2><p class="cr-sub">Keeps matches realistic.</p><div class="pe-2"><div class="pe-f"><label for="cr-budget">Total budget</label><div class="cr-money"><span>$</span><input id="cr-budget" class="pe-in" type="text" placeholder="40,000" value="{{d.budget}}" data-k="budget" onInput="{{field}}" onChange="{{field}}"></div></div><div class="pe-f"><span class="lb">Primary KPI <small>Pick one · add more in the campaign later</small></span><div class="vzchips" role="radiogroup" aria-label="Primary KPI"><sc-for list="{{goals}}" as="c" hint-placeholder-count="5"><button type="button" class="vzchip" aria-pressed="{{c.on}}" data-g="{{c.g}}" data-v="{{c.v}}" onClick="{{chip}}">{{c.v}}</button></sc-for></div></div></div></section></sc-if><sc-if value="{{isProj}}" hint-placeholder-val="{{false}}"><section class="pe-card cr-card"><h2>Dates &amp; organizer</h2><div class="pe-2"><div class="pe-f"><label for="cr-ps">Starts</label><input id="cr-ps" class="pe-in" type="{{dateType}}" placeholder="" value="{{d.start}}" data-k="start" onInput="{{field}}" onChange="{{field}}"></div><div class="pe-f"><label for="cr-pe">Ends</label><input id="cr-pe" class="pe-in" type="{{dateType}}" placeholder="" value="{{d.end}}" data-k="end" onInput="{{field}}" onChange="{{field}}"></div></div><div class="pe-f"><label for="cr-org">Organizer</label><input id="cr-org" class="pe-in" type="text" placeholder="Your organization" value="{{d.org}}" data-k="org" onInput="{{field}}" onChange="{{field}}"></div></section><section class="pe-card cr-card"><h2>Audience &amp; reach</h2><p class="cr-sub">Who a sponsor gets in front of.</p><div class="pe-f"><label for="cr-reach">Estimated reach</label><input id="cr-reach" class="pe-in" type="text" placeholder="e.g. 480,000" value="{{d.reach}}" data-k="reach" onInput="{{field}}" onChange="{{field}}"><p class="hint">Followers, subscribers or attendees across your channels.</p></div><div class="pe-f"><span class="lb">Audience interests</span><div class="vzchips" role="group" aria-label="Audience interests"><sc-for list="{{interests}}" as="c" hint-placeholder-count="5"><button type="button" class="vzchip" aria-pressed="{{c.on}}" data-g="{{c.g}}" data-v="{{c.v}}" onClick="{{chip}}">{{c.v}}</button></sc-for></div></div></section></sc-if></sc-if>
+<div class="cr-foot"><p>{{footNote}}</p><a class="vz-btn vz-btn--ghost" href="{{backHref}}">Cancel</a><sc-if value="{{valid}}" hint-placeholder-val="{{false}}"><a class="vz-btn pe-solid" href="{{doneHref}}">{{createLbl}}</a></sc-if><sc-if value="{{invalid}}" hint-placeholder-val="{{true}}"><button type="button" class="vz-btn pe-solid" onClick="{{tryCreate}}">{{createLbl}}</button></sc-if></div>
+</div>
+<aside class="cr-aside">
+<div class="cr-box cr-imp"><h3><svg class="vz-icon" aria-hidden="true"><use href="#i-file-text"></use></svg>{{impTitle}}</h3><p>{{impText}}</p>
+<sc-if value="{{impIdle}}" hint-placeholder-val="{{true}}"><button type="button" class="vz-btn vz-btn--secondary sm" onClick="{{runImport}}"><svg class="vz-icon" aria-hidden="true"><use href="#i-upload"></use></svg>Upload a document</button><small>PDF, DOCX, pitch deck or media kit</small></sc-if>
+<sc-if value="{{impBusy}}" hint-placeholder-val="{{false}}"><div class="cr-busy" role="progressbar" aria-label="Reading document"><i></i></div><small>Reading {{impFile}}…</small></sc-if>
+<sc-if value="{{impDone}}" hint-placeholder-val="{{false}}"><div class="cr-done"><svg class="vz-icon" aria-hidden="true"><use href="#i-check-circle"></use></svg><span>Filled in from <b>{{impFile}}</b>. Check the details before you create.</span></div><button type="button" class="cr-lnk" onClick="{{undoImport}}">Undo import</button></sc-if>
+</div>
+<div class="cr-box"><h3><svg class="vz-icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg>What happens next</h3><ol class="cr-next"><sc-for list="{{next}}" as="n" hint-placeholder-count="3"><li><span><b>{{n.b}}</b> {{n.t}}</span></li></sc-for></ol></div>
+<p class="cr-alt">{{altPre}} <a href="{{altHref}}">{{altLnk}}</a></p>
+</aside>
+</div>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"mode":{"editor":"enum","options":["campaign","project"],"default":"campaign","section":"State"},"state":{"editor":"enum","options":["empty","filled","error","importing","imported"],"default":"empty","section":"State"},"more":{"editor":"boolean","default":false,"section":"State"},"$preview":{"width":1440,"height":1200}}'>
+class Component extends DCLogic {
+  componentDidMount() { document.documentElement.setAttribute('data-theme', 'dark'); document.documentElement.classList.add('vz-color'); if (window.Venzza) window.Venzza.mountIcons(); }
+  componentWillUnmount() { clearTimeout(this.it); }
+  componentDidUpdate(prev) { const P = this.props; if (prev.mode !== P.mode || prev.state !== P.state || prev.more !== P.more) this.setState({ d: undefined, more: undefined, err: undefined, imp: undefined }); }
+  isP() { return this.props.mode === 'project'; }
+  blank() { return this.isP() ? { name: '', cat: '', loc: '', tag: '', desc: '', start: '', end: '', org: 'Coastline Sports', reach: '', cover: false, tags: [], interests: [] } : { name: '', brand: 'Coachella Festival', start: '', end: '', desc: '', budget: '', tags: [], ages: [], interests: [], goals: [] }; }
+  full() { return this.isP() ? { name: 'Coastline Cup 2027', cat: 'Sports', loc: 'Ericeira, Portugal', tag: 'Pro surf competition with a global livestream', desc: 'A four-day pro surf competition on Portugal’s Atlantic coast, streamed live worldwide.', start: '2027-09-14', end: '2027-09-17', org: 'Coastline Sports', reach: '1,100,000', cover: true, tags: ['Surf', 'Outdoors', 'Livestream'], interests: ['Sports', 'Travel'] } : { name: 'Summer Road Trip', brand: 'Coachella Festival', start: '2027-06-01', end: '2027-08-31', desc: 'Reach 18–34 travellers and music fans on the road this summer with creators who film long-form trips.', budget: '45,000', tags: ['Travel', 'Music', 'Outdoors'], ages: ['18–24', '25–34'], interests: ['Travel', 'Music'], goals: ['Reach'] }; }
+  st() {
+    const s = this.state || {}, P = this.props, sc = P.state || 'empty';
+    const d = s.d || ((sc === 'filled' || sc === 'imported') ? this.full() : this.blank());
+    return { d, more: s.more !== undefined ? s.more : (P.more === true || P.more === 'true'), err: s.err !== undefined ? s.err : sc === 'error', imp: s.imp || (sc === 'importing' ? 'busy' : sc === 'imported' ? 'done' : 'idle') };
+  }
+  renderVals() {
+    const isP = this.isP(), st = this.st(), d = st.d;
+    const miss = isP ? { name: !d.name.trim(), cat: !d.cat, loc: !d.loc.trim() } : { name: !d.name.trim(), dates: !d.start || !d.end };
+    const missList = Object.keys(miss).filter((k) => miss[k]);
+    const valid = missList.length === 0, showE = st.err && !valid;
+    const lbl = { name: isP ? 'a project name' : 'a campaign name', cat: 'a category', loc: 'a location', dates: 'start and end dates' };
+    const join = (a) => a.length <= 1 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1];
+    const set = (k, v) => this.setState({ d: Object.assign({}, this.st().d, { [k]: v }) });
+    const ch = (g, opts) => opts.map((v) => ({ g, v, on: (d[g] || []).indexOf(v) > -1 ? 'true' : 'false' }));
+    const filled = (isP ? ['tag', 'desc', 'start', 'reach'] : ['desc', 'budget']).filter((k) => d[k]).length + (d.tags.length ? 1 : 0);
+    return {
+      d: Object.assign({}, d), dateType: 'date', isCamp: !isP, isProj: isP, navActive: isP ? 'projects' : 'campaigns',
+      title: isP ? 'New project' : 'New campaign',
+      lead: isP ? 'Add the essentials to create a draft. Only you can see it until you publish. Packages come next.' : 'Add the essentials and Venzza starts matching projects right away. You can add audience, budget and goals now or later.',
+      backHref: isP ? 'PN-Projects.dc.html' : 'CP-Campaigns.dc.html', backLbl: isP ? 'Projects' : 'Campaigns',
+      createLbl: isP ? 'Create project' : 'Create campaign', doneHref: isP ? 'PN-New-Overview.dc.html' : 'CG-Campaign-New.dc.html',
+      valid, invalid: !valid,
+      stateTxt: showE ? 'Add ' + join(missList.map((k) => lbl[k])) + ' to continue' : valid ? 'Ready to create' : 'Not created yet', stateCls: 'cr-state' + (showE ? ' err' : ''),
+      showErr: showE, errSummary: 'Add ' + join(missList.map((k) => lbl[k])) + ' to create this ' + (isP ? 'project' : 'campaign') + '.',
+      errName: showE && miss.name, errNameTxt: isP ? 'Add a project name' : 'Add a campaign name', nameCls: 'pe-in' + (showE && miss.name ? ' err' : ''),
+      errDates: showE && !!miss.dates, errDatesTxt: 'Add a start and end date', datesCls: 'pe-in' + (showE && miss.dates ? ' err' : ''),
+      errCat: showE && !!miss.cat, errCatTxt: 'Choose a category', catCls: 'pe-in' + (showE && miss.cat ? ' err' : ''),
+      errLoc: showE && !!miss.loc, errLocTxt: 'Add a location', locCls: 'pe-in' + (showE && miss.loc ? ' err' : ''),
+      tryCreate: () => { this.setState({ err: true }); setTimeout(() => { const f = document.querySelector('.pe-in.err'); if (f) { f.focus(); f.scrollIntoView({ block: 'center' }); } }, 40); },
+      field: (e) => set(e.currentTarget.getAttribute('data-k'), e.target.value),
+      chip: (e) => { const g = e.currentTarget.getAttribute('data-g'), v = e.currentTarget.getAttribute('data-v'); const cur = this.st().d[g] || []; set(g, g === 'goals' ? (cur.indexOf(v) > -1 ? [] : [v]) : cur.indexOf(v) > -1 ? cur.filter((x) => x !== v) : cur.concat([v])); },
+      campTags: ch('tags', ['Music', 'Festivals', 'Art & culture', 'Outdoors', 'Fitness', 'Travel', 'Food & drink']), projTags: ch('tags', ['Surf', 'Outdoors', 'Livestream', 'Music', 'Festival', 'Art']),
+      ages: ch('ages', ['18–24', '25–34', '35–44', '45–54', '55+']), interests: ch('interests', ['Music', 'Art & culture', 'Fashion', 'Beauty', 'Food & drink', 'Travel', 'Sports', 'Fitness', 'Wellness', 'Gaming', 'Technology', 'Outdoors']), goals: ch('goals', ['Reach', 'Engagement rate', 'Conversions', 'Brand awareness', 'Website traffic', 'Sales revenue', 'Lead generation', 'Social followers', 'Video views', 'Click-through rate']),
+      catOpts: ['Music', 'Live events', 'Art & culture', 'Film & series', 'Sports', 'Food & drink', 'Technology', 'Gaming', 'Fashion & beauty', 'Travel & outdoors'],
+      noCover: !d.cover, hasCover: !!d.cover, addCover: () => set('cover', true), rmCover: () => set('cover', false),
+      moreOpen: st.more, moreA: st.more ? 'true' : 'false', toggleMore: () => this.setState({ more: !st.more }),
+      moreSub: isP ? 'Dates, organizer, audience and reach' : 'Audience, budget and main goal',
+      footNote: isP ? 'Name, category and location are needed. Everything else can wait.' : 'Name and dates are needed. Everything else can wait.',
+      impTitle: isP ? 'Have a deck or media kit?' : 'Have a brief or media kit?',
+      impText: 'Upload it and we’ll fill in this form for you to check.',
+      impIdle: st.imp === 'idle', impBusy: st.imp === 'busy', impDone: st.imp === 'done', impFile: isP ? 'coastline-cup-deck.pdf' : 'summer-road-trip-brief.pdf',
+      runImport: () => { this.setState({ imp: 'busy' }); clearTimeout(this.it); this.it = setTimeout(() => this.setState({ imp: 'done', d: this.full(), err: false }), 1400); },
+      undoImport: () => this.setState({ imp: 'idle', d: this.blank() }),
+      next: isP ? [{ b: 'Draft created.', t: 'Only you can see it.' }, { b: 'Add packages', t: 'and the other sections in the editor.' }, { b: 'Preview and publish', t: 'when it’s ready for sponsors.' }]
+        : [{ b: 'Matching starts', t: 'as soon as it’s created.' }, { b: 'Review matches', t: 'and save projects to its wishlist.' }, { b: 'Reach out', t: 'and negotiate on the campaign board.' }],
+      altPre: 'Prefer a step-by-step walkthrough?', altHref: isP ? 'OB-Project-Returning.dc.html' : 'OB-Campaign-Returning.dc.html', altLnk: 'Use guided setup'
+    };
+  }
+}
+</script>
+<script src="assets/components.js"></script><script>(function(m){var o={};for(var k in m)o["./"+k]=new Blob([m[k]],{type:"text/html"});window.__resourceBlobs=o;window.__resources={};})(window.__VZ_SRC||{});</script><script src="assets/vendor/react.production.min.js"></script><script src="assets/vendor/react-dom.production.min.js"></script><script src="assets/vendor/dc-runtime.js"></script><script src="assets/prototype-map.js"></script><script src="assets/proto-bar.js"></script>
+</body>
+</html>
